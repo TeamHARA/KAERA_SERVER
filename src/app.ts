@@ -11,7 +11,7 @@ class App {
     app.get("/health", (req: Request, res: Response, next: NextFunction) => {
       res.status(200).json({
         status: 200,
-        message: "===HARA-RELEASE-SERVER=== Healthy."
+        message: "===TESTING-KAERA-SERVER=== Healthy."
       });
     });
 
