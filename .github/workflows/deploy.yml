@@ -5,9 +5,9 @@ name: build and deploy
 
 on:
   push:
-    branches: [main]
+    branches: [ "main" ]
   pull_request:
-    branches: [main]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -42,6 +42,6 @@ jobs:
 
       - name: yarn run build
         working-directory: ./
-        run: yarn run build --if-present
+        run: yarn run build
         
       
