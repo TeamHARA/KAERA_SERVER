@@ -40,7 +40,7 @@ jobs:
         run: yarn run build  
 
       - name: zip file
-          run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma
+        run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
