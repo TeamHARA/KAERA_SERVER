@@ -7,7 +7,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id   Int    @id @default(autoincrement())
-  name String @unique @db.VarChar(50)
+model quote {
+  id      Int    @id @default(autoincrement())
+  content String @db.VarChar(100)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model review {
+  worry_id   Int
+  content    String   @db.VarChar(50)
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+  worry      worry    @relation(fields: [worry_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_worry_id_fk")
+
+  @@ignore
+}
+
+model template {
+  id        Int      @id @default(autoincrement())
+  info      String   @db.VarChar(100)
+  title     String   @db.VarChar(50)
+  shortInfo String?  @db.VarChar(50)
+  questions String[] @db.VarChar
+  worry     worry[]
+}
+
+model user {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(50)
+  email         String   @db.VarChar(50)
+  used_template Int[]
+  created_at    DateTime @db.Timestamp(6)
+  updated_at    DateTime @db.Timestamp(6)
+  worry         worry[]
+}
+
+model worry {
+  id           Int       @id @default(autoincrement())
+  template_id  Int
+  user_id      Int
+  title        String    @db.VarChar(50)
+  answers      String[]  @db.VarChar(100)
+  created_at   DateTime  @db.Timestamp(6)
+  updated_at   DateTime? @db.Timestamp(6)
+  deadline     DateTime  @db.Date
+  final_answer String    @db.VarChar(50)
+  review       review[]  @ignore
+  template     template  @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_template_id_fk")
+  user         user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_user_id_fk")
 }

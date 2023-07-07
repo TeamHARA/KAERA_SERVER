@@ -50,11 +50,11 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./kaera.zip s3://kaera-build/deploy/
+        run: aws s3 cp --region ap-northeast-2 ./kaera.zip s3://kaera-deploy-bucket/
 
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
           --application-name kaera-codedeploy
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name GROUP
-          --s3-location bucket=kaera-build,bundleType=zip,key=deploy/kaera.zip
+          --s3-location bucket=kaera-deploy-bucket,bundleType=zip,key=/kaera.zip
