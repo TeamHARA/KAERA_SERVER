@@ -1,4 +1,3 @@
-// import * as dotenv from 'dotenv';
 import App from './app';
 // import errorSender from './middlwares/errorSender';
 

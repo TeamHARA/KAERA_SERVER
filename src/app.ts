@@ -7,7 +7,7 @@ class App {
     let app = express();
     app.use(express.json());
 
-    app.use("/", router);
+    app.use("/api/v1", router);
     app.get("/health", (req: Request, res: Response, next: NextFunction) => {
       res.status(200).json({
         status: 200,
