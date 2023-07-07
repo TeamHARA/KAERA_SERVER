@@ -5,7 +5,39 @@ on:
     branches: [main]  
 
 jobs:  
-  steps:    
+  runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        node-version: [18.11.0]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+  steps:  
+    - name: Checkout source code.
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+        
+    - name: Create env file
+      working-directory: ./
+      run: |
+        pwd
+        touch .env
+        echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+        cat .env
+
+    - name: Install dependencies
+      working-directory: ./
+      run: yarn
+
+    - name: yarn run build
+      working-directory: ./
+      run: yarn run build  
+      
     - name: zip file
         run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma
 
