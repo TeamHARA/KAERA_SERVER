@@ -1,0 +1,26 @@
+import { Router } from "express";
+import { userController } from "../controller";
+import { auth, validation } from "../middlewares";
+import { param,body } from "express-validator";
+import validate from "../middlewares/validate";
+import { error } from "console";
+
+
+
+const router = Router();
+
+router.get("/:userId",
+    auth,
+    userController.getUserById
+);
+
+router.post("/",
+    [
+        body('name').notEmpty().withMessage("body 에 name 값이 존재하지 않습니다"),
+        // body('age').notEmpty(),
+        body('email').notEmpty().withMessage("body 에 email 값이 존재하지 않습니다"),
+    ],
+    validate,
+    userController.createUser);
+
+export default router;

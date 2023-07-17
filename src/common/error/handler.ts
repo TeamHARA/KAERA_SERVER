@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import statusCode from "../../constants/statusCode";
 import responseMessage from "../../constants/responseMessage";
 import { fail } from "../../constants/response";
+
 const globalExceptionHandler = async (
   err: any,
   req: Request,
