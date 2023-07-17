@@ -38,7 +38,7 @@ jobs:
         working-directory: ./
         run: yarn
 
-      - name: yarn run build
+      - name: Yarn run build
         working-directory: ./
         run: yarn run build
         

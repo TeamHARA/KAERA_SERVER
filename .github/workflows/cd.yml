@@ -35,11 +35,11 @@ jobs:
         working-directory: ./
         run: yarn
 
-      - name: yarn run build
+      - name: Yarn run build
         working-directory: ./
         run: yarn run build  
 
-      - name: zip file
+      - name: Zip file
         run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma
 
       - name: AWS configure credentials
@@ -49,12 +49,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./kaera.zip s3://kaera-build/deploy/
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./kaera.zip s3://kaera-deploy-bucket/deploy/
 
-      - name: deploy with AWS codeDeploy
+      - name: Deploy with AWS codeDeploy
         run: aws deploy create-deployment
           --application-name kaera-codedeploy
           --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name GROUP
-          --s3-location bucket=kaera-build,bundleType=zip,key=deploy/kaera.zip
+          --deployment-group-name dev
+          --s3-location bucket=kaera-deploy-bucket,bundleType=zip,key=deploy/kaera.zip
