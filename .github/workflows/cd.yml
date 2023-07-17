@@ -58,3 +58,4 @@ jobs:
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name dev
           --s3-location bucket=kaera-deploy-bucket,bundleType=zip,key=deploy/kaera.zip
+
