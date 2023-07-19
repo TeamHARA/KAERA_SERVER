@@ -12,15 +12,12 @@ model quote {
   content String @db.VarChar(100)
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model review {
-  worry_id   Int
+  worry_id   Int      @id
   content    String   @db.VarChar(50)
   created_at DateTime @db.Timestamp(6)
   updated_at DateTime @db.Timestamp(6)
   worry      worry    @relation(fields: [worry_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_worry_id_fk")
-
-  @@ignore
 }
 
 model template {
@@ -28,7 +25,10 @@ model template {
   info      String   @db.VarChar(100)
   title     String   @db.VarChar(50)
   shortInfo String?  @db.VarChar(50)
-  questions String[] @db.VarChar
+  questions String[] @db.VarChar(50)
+  guideline String?  @db.VarChar(50)
+  hints     String[] @db.VarChar(50)
+  subtitles String[] @db.VarChar(50)
   worry     worry[]
 }
 
@@ -52,7 +52,7 @@ model worry {
   updated_at   DateTime? @db.Timestamp(6)
   deadline     DateTime  @db.Date
   final_answer String    @db.VarChar(50)
-  review       review[]  @ignore
+  review       review?
   template     template  @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_template_id_fk")
   user         user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_user_id_fk")
 }

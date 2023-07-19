@@ -34,7 +34,16 @@ export default {
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
 
-  // 
+  // 템플릿
+  READ_TEMPLATE_SUCCESS: "템플릿 조회 성공",
+  READ_TEMPLATE_FAIL: "템플릿 조회 실패",
+  READ_ALL_TEMPLATES_SUCCESS: "모든 템플릿 조회 성공",
+  READ_ALL_TEMPLATES_FAIL: "모든 템플릿 조회 실패",
+  UPDATE_TEMPLATE_SUCCESS: "템플릿 수정 성공",
+  UPDATE_TEMPLATE_FAIL: "템플릿 수정 실패",
+  DELETE_TEMPLATE_SUCCESS: "템플릿 탈퇴 성공",
+  DELETE_TEMPLATE_FAIL: "템플릿 탈퇴 실패",
+  NO_TEMPLATE: "존재하지 않는 템플릿 아이디입니다."
 
 
 
