@@ -11,7 +11,7 @@ const router = Router();
 
 router.get("/:templateId",
     [
-        param('templateId').notEmpty().withMessage("필요한 Param 값이 없습니다."),
+        param('templateId').isInt().withMessage("필요한 Param 값이 없습니다."),
     ],
     validate,
     templateController.getTemplateById
