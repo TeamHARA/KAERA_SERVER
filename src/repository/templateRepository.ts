@@ -8,7 +8,18 @@ const findTemplateById = async (templateId: number) => {
     });
 };
 
+prisma.template.findMany
+
+const findAllTemplate = async () => {
+    return await prisma.template.findMany({
+        orderBy: {
+            id: 'asc',   //id 기준 오름차순
+          },
+    });
+};
+
+
 export default{
     findTemplateById,
-
+    findAllTemplate,
 }

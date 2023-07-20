@@ -9,7 +9,15 @@ const sign = (userId: number) => {
     userId,
   };
 
-  const accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "2h" });
+  var accessToken;
+  // dev user일 경우
+  if(userId == 8){
+    accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "1y" });
+  }
+  else{
+    accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "2h" });
+  }
+
   return accessToken;
 };
 

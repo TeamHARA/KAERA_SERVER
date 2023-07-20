@@ -1,6 +1,8 @@
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
+import { userRepository } from "../repository";
 import templateRepository from "../repository/templateRepository";
+import userService from "./userService";
 
 const getTemplateById =async (templateId: number) => {
     const template = await templateRepository.findTemplateById(templateId);
@@ -20,6 +22,31 @@ const getTemplateById =async (templateId: number) => {
 
 }
 
+const getAllTemplate =async (userId: number) => {
+
+    const templates = await templateRepository.findAllTemplate();
+    if (!templates) {
+        throw new ClientException(rm.NO_TEMPLATES);
+    }
+
+    const user = await userService.getUserById(userId);
+    const usedTemplate = user.used_template;
+    
+
+    const data :Array<object> = [];
+    for(var i=0;i<templates.length;i++){
+        data.push({
+            templateId: templates[i].id,
+            title: templates[i].title,
+            info: templates[i].info,
+            hasUsed: usedTemplate.includes(templates[i].id),
+        })
+    }
+
+    return data;
+}
+
 export default{
     getTemplateById,
+    getAllTemplate,
 }
