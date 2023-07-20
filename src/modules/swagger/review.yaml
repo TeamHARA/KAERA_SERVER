@@ -1,0 +1,57 @@
+components:
+  schemas:
+    putReview:
+      properties:
+        worryId: 
+          type: number
+          description: 고민 id
+        review: 
+          type: string 
+          description: 나의 기록
+
+  examples:
+    putReviewExample: {
+      "worryId": 1,
+      "review": "후기이이ㅣㅣㅣㅣㅣ~!"
+    }
+
+
+
+
+/review:
+  put:
+    tags:
+      - Review
+    summary: 나의 기록 등록 및 수정하기
+    consumes:
+      - application/json
+    requestBody:
+      x-name: body
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/putReview'
+          example:
+            $ref: '#/components/examples/putReviewExample'
+    
+    responses:
+      '200':
+        description: 나의 기록 등록 및 수정 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+              "status": 200,
+                "success": true,
+                "message": "나의 기록 등록 및 수정 성공",
+                "data": {
+               		"quote": "고민하면서 길을 찾는 사람들, 그들은 참된 인간상이다.",
+                  "updatedAt" : "2019.10.01"           
+                }
+              }
+      '400':
+        $ref: './openapi.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: './openapi.yaml#/components/responses/InternalServerError'

@@ -1,0 +1,101 @@
+/template:
+  get:
+    tags:
+      - Template
+    summary: 템플릿 종류 조회
+    responses:
+      '200':
+        description: 템플릿 종류 조회 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+              "status": 200,
+                "success": true,
+                "message": "템플릿 종류 조회 성공",
+                "data": [
+                  {
+                    "templateId": 1,
+                    "title": "템플릿1",
+                    "info": "템플릿 1 설명!~!~!",
+                    "hasUsed": true
+                  },
+                  {
+                    "templateId": 2,
+                    "title": "템플릿2",
+                    "info": "템플릿 2 설명!~!~!",
+                    "hasUsed": false
+                  },
+                  {
+                    "templateId": 3,
+                    "title": "템플릿3",
+                    "info": "템플릿 3 설명!~!~!",
+                    "hasUsed": true
+                  },
+                  {
+                    "templateId": 4,
+                    "title": "템플릿4",
+                    "info": "템플릿 4 설명!~!~!",
+                    "hasUsed": false
+                  },
+                  {
+                    "templateId": 5,
+                    "title": "템플릿5",
+                    "info": "템플릿 5 설명!~!~!",
+                    "hasUsed": false
+                  }
+                ]
+              }
+
+
+
+
+/template/{templateId}:
+  get:
+    tags:
+      - Template
+    summary: 템플릿 질문 조회
+    parameters:
+      - in: path
+        name: templateId
+        required: true
+        description: 템플릿 id
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 템플릿 질문 조회 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+              "status": 200,
+                "success": true,
+                "message": "템플릿 질문 조회 성공",
+                "data": {
+                    "title": "걱정을 극복하는 자기 관리론",
+                    "info": "뭐 이 고민은 취업에 어쩌구 저쩌구",
+                    "guideline": "고민의 장단점을 비교하며 깊게 생각해보세요.",
+                    "questions": [
+                      "고민의 선택지를 나열해보세요.",
+                      "선택지들의 장점을 생각해보세요",
+                      "선택지들의 단점을 생각해보세요.",
+                      "장점과 단점을 비교해보세요!",
+                    ],
+                    "hints": [
+                      "걱정하고 있는 걸 사실대로 써봅시다." ,
+                      "내가 지금 할 수 있는 해결방안이나 행동을 적어봅시다." ,
+                      "내가 선택한 방법을 적어봅시다." ,
+                      "내가 선택한 방법을 적어봅시다."
+                    ]
+                }
+              }
+      '400':
+        $ref: './openapi.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: './openapi.yaml#/components/responses/InternalServerError'
+
+
+
