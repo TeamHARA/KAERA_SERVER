@@ -8,7 +8,7 @@ import { fail, success } from "../constants/response";
 export default async (req: Request, res: Response, next: NextFunction) => {
    
     const error = validationResult(req);
-    console.log(error);
+    // console.log(error);
 
     if (!error.isEmpty()) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, error.array()[0].msg));

@@ -1,6 +1,6 @@
 // src/modules/jwtHandler.ts
 import jwt from "jsonwebtoken";
-import tokenType from "../../constants/tokenType";
+import tokenType from "../constants/tokenType";
 // import { tokenType } from ".../constants/";
 
 //* 받아온 userId를 담는 access token 생성

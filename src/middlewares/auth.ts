@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { rm, sc, tokenType } from "../constants";
 import { fail } from "../constants/response";
-import jwtHandler from "../common/utils/jwtHandler";
+import jwtHandler from "../modules/jwtHandler";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   // dev
@@ -29,7 +29,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     req.body.userId = userId;
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
