@@ -9,6 +9,8 @@ servers:
   - url: https://api.kaera.site/v1
   - url: http://localhost:3000/v1 #자신의 포트번호
 
+host: localhost:3000/v1
+
 #Paths api 경로 지정
 paths: 
   #user  

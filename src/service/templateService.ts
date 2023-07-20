@@ -2,6 +2,7 @@ import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import { userRepository } from "../repository";
 import templateRepository from "../repository/templateRepository";
+import userService from "./userService";
 
 const getTemplateById =async (templateId: number) => {
     const template = await templateRepository.findTemplateById(templateId);
@@ -28,7 +29,7 @@ const getAllTemplate =async (userId: number) => {
         throw new ClientException(rm.NO_TEMPLATES);
     }
 
-    const user = await userRepository.findUserById(userId);
+    const user = await userService.getUserById(userId);
     const usedTemplate = user.used_template;
     
 
