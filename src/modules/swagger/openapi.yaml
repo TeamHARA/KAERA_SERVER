@@ -6,8 +6,8 @@ info:
   license:
     name: yelin kim
 servers:
-  - url: http://localhost:3000/v1 #자신의 포트번호
   - url: https://api.kaera.site/v1
+  - url: http://localhost:3000/v1 #자신의 포트번호
 
 #Paths api 경로 지정
 paths: 

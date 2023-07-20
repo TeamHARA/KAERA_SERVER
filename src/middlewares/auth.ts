@@ -5,9 +5,6 @@ import { fail } from "../constants/response";
 import jwtHandler from "../common/utils/jwtHandler";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  // dev
-  // req.body.userId = 3;
-  // next();
 
   const token = req.headers.authorization?.split(" ").reverse()[0]; //? Bearer ~~ 에서 토큰만 파싱
   if (!token) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EMPTY_TOKEN));
@@ -29,7 +26,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     req.body.userId = userId;
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };

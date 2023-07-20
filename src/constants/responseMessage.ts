@@ -43,7 +43,9 @@ export default {
   UPDATE_TEMPLATE_FAIL: "템플릿 수정 실패",
   DELETE_TEMPLATE_SUCCESS: "템플릿 탈퇴 성공",
   DELETE_TEMPLATE_FAIL: "템플릿 탈퇴 실패",
-  NO_TEMPLATE: "존재하지 않는 템플릿 아이디입니다."
+  NO_TEMPLATE: "존재하지 않는 템플릿 아이디입니다.",
+  NO_TEMPLATES: "템플릿이 존재하지 않습니다."
+
 
 
 
