@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "api-docs": "swagger-cli bundle ./swagger/openapi.yaml --outfile swagger.yaml --type yaml",
+    "api-docs": "swagger-cli bundle ./src/modules/swagger/openapi.yaml --outfile swagger.yaml --type yaml",
     "predev": "npm run api-docs",
     "dev": "nodemon",
     "build": "tsc",
