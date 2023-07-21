@@ -8,6 +8,8 @@ info:
 servers:
   - url: 'https://api.kaera.site/v1'
   - url: 'http://localhost:3000/v1'
+security:
+  - bearerAuth: []
 paths:
   /user:
     post:
@@ -520,6 +522,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   parameters: null
   schemas:
     User:

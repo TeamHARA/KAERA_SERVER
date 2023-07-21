@@ -17,7 +17,7 @@ const sign = (userId: number) => {
   else{
     accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "2h" });
   }
-
+  
   return accessToken;
 };
 
