@@ -8,7 +8,9 @@ info:
 servers:
   - url: https://api.kaera.site/v1
   - url: http://localhost:3000/v1 #자신의 포트번호
-
+  
+security:
+  - bearerAuth: []
 
 #Paths api 경로 지정
 paths: 
@@ -50,6 +52,13 @@ paths:
 
 
 components:
+  # security scheme
+  securitySchemes:
+    bearerAuth:           
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
   parameters: null
   #Schemas : model 정보
   schemas:

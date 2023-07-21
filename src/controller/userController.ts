@@ -6,7 +6,7 @@ import statusCode from "../constants/statusCode";
 import { userService } from "../service";
 import { userCreateDTO } from "../interfaces/userDTO";
 import { validationResult } from "express-validator";
-import jwtHandler from "../common/utils/jwtHandler";
+import jwtHandler from "../modules/jwtHandler";
 
 const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
