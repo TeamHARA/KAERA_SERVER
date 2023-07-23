@@ -24,7 +24,7 @@ const getAllTemplate =async (req: Request, res: Response, next: NextFunction) =>
         
         const data = await templateService.getAllTemplate(userId);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.READ_TEMPLATE_SUCCESS, data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.READ_ALL_TEMPLATES_SUCCESS, data));
 
     } catch (error) {
         next(error);

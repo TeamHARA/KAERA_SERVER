@@ -193,8 +193,8 @@ paths:
                   success: true
                   message: 고민 작성 성공
                   data:
-                    createdAt: 2022.09.01
-                    deadline: 2022.09.06
+                    createdAt: '2023-07-22'
+                    deadline: '2023-07-27'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -251,7 +251,7 @@ paths:
                   success: true
                   message: 고민 수정 성공
                   data:
-                    updatedAt: 2022.10.10
+                    updatedAt: '2022-10-10'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -318,15 +318,13 @@ paths:
                       - 답변2
                       - 답변3
                       - 답변4
-                    createdAt: 2020.01.01
-                    period: 2020.01.01~2020.03.03
-                    updatedAt: 2020.03.03
-                    deadline: 2020.03.02
+                    period: 2020-01-01 ~ 2020-03-03
+                    updatedAt: '2020-03-03'
+                    deadline: '2020-03-02'
                     finalAnswer: 해카라쿠배 지원하기
                     review:
                       content: 나의 후기~!~!
-                      createdAt: 2020.04.04
-                      updatedAt: 2020.04.23
+                      updatedAt: '2020-04-23'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -404,7 +402,7 @@ paths:
                   success: true
                   message: 데드라인 수정 성공
                   data:
-                    deadline: 2023.12.12
+                    deadline: '2023-12-12'
   '/worry/list/{isSolved}':
     get:
       tags:
@@ -469,13 +467,13 @@ paths:
                     worry:
                       - worryId: 1
                         title: 고민1
-                        period: 2023.01.01~2023.03.02
+                        period: 2023-01-01 ~ 2023-03-02
                       - worryId: 2
                         title: 고민2
-                        period: 2023.02.28~2023.03.14
+                        period: 2023-02-28 ~ 2023-03-14
                       - worryId: 3
                         title: 고민3
-                        period: 2020.11.11~2021.05.06
+                        period: 2020-11-11 ~ 2021-05-06
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -516,7 +514,7 @@ paths:
                   message: 나의 기록 등록 및 수정 성공
                   data:
                     quote: '고민하면서 길을 찾는 사람들, 그들은 참된 인간상이다.'
-                    updatedAt: 2019.10.01
+                    updatedAt: '2019-10-01'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':

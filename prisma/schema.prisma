@@ -51,7 +51,7 @@ model worry {
   created_at   DateTime  @db.Timestamp(6)
   updated_at   DateTime? @db.Timestamp(6)
   deadline     DateTime  @db.Date
-  final_answer String    @db.VarChar(50)
+  final_answer String?   @db.VarChar(50)
   review       review?
   template     template  @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_template_id_fk")
   user         user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_user_id_fk")
