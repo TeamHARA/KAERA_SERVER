@@ -1,9 +1,7 @@
 import { Router } from "express";
-import { userController } from "../controller";
 import { auth, validation } from "../middlewares";
 import { param,body } from "express-validator";
 import validate from "../middlewares/validate";
-import { error } from "console";
 import templateController from "../controller/templateController";
 
 
