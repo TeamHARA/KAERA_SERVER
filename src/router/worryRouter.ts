@@ -18,11 +18,14 @@ router.post("/",
     worryController.postWorry,
 );
 
-// router.path("/",
-//     [
-//         param('templateId').isInt().withMessage("필요한 Param 값이 없습니다."),
-//     ],
-//     validate,
-//     worryController.patchWorry
-// );
+router.patch("/",
+    auth,
+    [
+        body('worryId').notEmpty().withMessage("body 에 worryId 값이 존재하지 않습니다"),
+        body('title').notEmpty().withMessage("body 에 title 값이 존재하지 않습니다"),
+        body('answers').notEmpty().withMessage("body 에 answers 값이 존재하지 않습니다"),
+    ],
+    validate,
+    worryController.patchWorry,
+);
 export default router;

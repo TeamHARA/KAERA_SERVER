@@ -8,7 +8,6 @@ interface worryCreateDTO {
 
 interface worryUpdateDTO{
   worryId: number;
-  templateId: number;
   title: string;
   answers: Array<string>;
 }

@@ -49,6 +49,8 @@ export default {
   // 고민
   CREATE_WORRY_SUCCESS: "고민 생성 성공",
   CREATE_WORRY_FAIL: "고민 생성 실패",
+  UPDATE_WORRY_SUCCESS: "고민 수정 성공",
+  UPDATE_WORRY_FAIL: "고민 수정 실패",
 
 
 
