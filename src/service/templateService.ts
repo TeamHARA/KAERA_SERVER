@@ -37,6 +37,7 @@ const getAllTemplate =async (userId: number) => {
         data.push({
             templateId: templates[i].id,
             title: templates[i].title,
+            shortInfo: templates[i].shortInfo,
             info: templates[i].info,
             hasUsed: usedTemplate.includes(templates[i].id),
         })

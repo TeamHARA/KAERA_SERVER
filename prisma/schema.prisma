@@ -48,8 +48,8 @@ model worry {
   user_id      Int
   title        String   @db.VarChar(50)
   answers      String[] @db.VarChar(100)
-  created_at   DateTime @db.Timestamp(6)
-  updated_at   DateTime @db.Timestamp(6)
+  created_at   DateTime @db.Timestamptz(6)
+  updated_at   DateTime @db.Timestamptz(6)
   deadline     DateTime @db.Date
   final_answer String?  @db.VarChar(50)
   review       review?

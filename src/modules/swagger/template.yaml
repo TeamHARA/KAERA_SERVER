@@ -18,30 +18,35 @@
                   {
                     "templateId": 1,
                     "title": "템플릿1",
+                    "shortInfo": "간략설명",
                     "info": "템플릿 1 설명!~!~!",
                     "hasUsed": true
                   },
                   {
                     "templateId": 2,
                     "title": "템플릿2",
+                    "shortInfo": "간략설명",
                     "info": "템플릿 2 설명!~!~!",
                     "hasUsed": false
                   },
                   {
                     "templateId": 3,
                     "title": "템플릿3",
+                    "shortInfo": "간략설명",
                     "info": "템플릿 3 설명!~!~!",
                     "hasUsed": true
                   },
                   {
                     "templateId": 4,
                     "title": "템플릿4",
+                    "shortInfo": "간략설명",
                     "info": "템플릿 4 설명!~!~!",
                     "hasUsed": false
                   },
                   {
                     "templateId": 5,
                     "title": "템플릿5",
+                    "shortInfo": "간략설명",
                     "info": "템플릿 5 설명!~!~!",
                     "hasUsed": false
                   }
