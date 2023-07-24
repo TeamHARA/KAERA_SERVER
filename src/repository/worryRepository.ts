@@ -1,5 +1,5 @@
 import prisma from "./prismaClient"
-import { worryCreateDTO } from "../interfaces/worryDTO";
+import { worryCreateDTO, worryUpdateDTO} from "../interfaces/worryDTO";
 
 
 
@@ -22,6 +22,22 @@ const createWorry = async(worryCreateDTO: worryCreateDTO) => {
     })
 }
 
+const updateWorry = async(worryUpdateDTO: worryUpdateDTO) => {
+
+    return await prisma.worry.update({
+        where: {
+            id: worryUpdateDTO.worryId
+        },
+        data: {
+            title: worryUpdateDTO.title,
+            answers: worryUpdateDTO.answers,
+            updated_at: new Date(),
+        }
+    })
+}
+
 export default {
     createWorry,
+    updateWorry,
+
 }
