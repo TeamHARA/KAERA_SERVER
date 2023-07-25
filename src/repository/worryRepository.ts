@@ -36,8 +36,31 @@ const updateWorry = async(worryUpdateDTO: worryUpdateDTO) => {
     })
 }
 
+const deleteWorry = async(worryId:number) => {
+
+    return await prisma.worry.delete({
+        where: {
+            id: worryId
+        }
+    })
+
+}
+
+const findWorryById = async(worryId:number) => {
+
+    return await prisma.worry.findUnique({
+        where: {
+            id: worryId
+        }
+    })
+
+}
+
+
 export default {
     createWorry,
     updateWorry,
+    deleteWorry,
+    findWorryById,
 
 }

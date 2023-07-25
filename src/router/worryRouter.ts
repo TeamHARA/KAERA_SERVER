@@ -28,4 +28,9 @@ router.patch("/",
     validate,
     worryController.patchWorry,
 );
+
+router.delete("/:worryId",
+    auth,
+    worryController.deleteWorry,
+);
 export default router;
