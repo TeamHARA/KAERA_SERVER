@@ -51,10 +51,25 @@ const deleteWorry = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const getWorryDetail = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { worryId } = req.params;
+        const { userId }= req.body;
+
+        const data = await worryService.getWorryDetail(+worryId,userId);
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_DETAIL_SUCCESS,data));
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export default{
     postWorry,
     patchWorry,
     deleteWorry,
+    getWorryDetail,
 
 }
