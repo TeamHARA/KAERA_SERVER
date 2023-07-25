@@ -51,6 +51,8 @@ export default {
   CREATE_WORRY_FAIL: "고민 생성 실패",
   UPDATE_WORRY_SUCCESS: "고민 수정 성공",
   UPDATE_WORRY_FAIL: "고민 수정 실패",
+  DELETE_WORRY_SUCCESS: "고민 삭제 성공",
+  DELETE_WORRY_FAIL: "고민 삭제 실패",
 
 
 

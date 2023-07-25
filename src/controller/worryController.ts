@@ -13,6 +13,7 @@ const postWorry = async (req: Request, res: Response, next: NextFunction) => {
         const { userId } = req.body;
         const worryCreateDTO: worryCreateDTO = req.body;
         worryCreateDTO.userId = userId;
+        console.log(worryCreateDTO);
 
         const data = await worryService.postWorry(worryCreateDTO);
 
@@ -36,9 +37,24 @@ const patchWorry = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const deleteWorry = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { worryId } = req.params;
+        const { userId }= req.body;
+
+        await worryService.deleteWorry(+worryId,userId);
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.DELETE_WORRY_SUCCESS));
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export default{
     postWorry,
     patchWorry,
+    deleteWorry,
 
 }
