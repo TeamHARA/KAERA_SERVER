@@ -33,4 +33,10 @@ router.delete("/:worryId",
     auth,
     worryController.deleteWorry,
 );
+
+router.get("/:worryId",
+    auth,
+    worryController.getWorryDetail,
+);
+
 export default router;

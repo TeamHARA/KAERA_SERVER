@@ -53,6 +53,9 @@ export default {
   UPDATE_WORRY_FAIL: "고민 수정 실패",
   DELETE_WORRY_SUCCESS: "고민 삭제 성공",
   DELETE_WORRY_FAIL: "고민 삭제 실패",
+  GET_WORRY_DETAIL_SUCCESS: "고민 상세조회 성공",
+  GET_WORRY_DETAIL_FAIL: "고민 상세조회 실패",
+
 
 
 

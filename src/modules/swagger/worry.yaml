@@ -82,12 +82,12 @@ components:
       ]
     }
 
-    patchDeadlineExample: {
+    patchDeadlineBodyExample: {
       "worryId" : 1,
 	    "dayCount": 13
     }
 
-    patchFinalAnswerExample: {
+    patchFinalAnswerBodyExample: {
       "worryId" : 1,
 	    "finalAnswer": "해카라쿠배 지원하기"
     }
@@ -278,7 +278,7 @@ components:
           schema:
             $ref: '#/components/schemas/patchFinalAnswer'
           example:
-            $ref: '#/components/examples/patchFinalAnswerExample'
+            $ref: '#/components/examples/patchFinalAnswerBodyExample'
 
     responses:
       '200':
@@ -314,7 +314,7 @@ components:
           schema:
             $ref: '#/components/schemas/patchDeadline'
           example:
-            $ref: '#/components/examples/patchDeadlineExample'
+            $ref: '#/components/examples/patchDeadlineBodyExample'
     responses:
       '200':
         description: 데드라인 수정 성공
