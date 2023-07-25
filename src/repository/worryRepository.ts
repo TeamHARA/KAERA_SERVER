@@ -1,13 +1,18 @@
 import prisma from "./prismaClient"
 import { worryCreateDTO, worryUpdateDTO} from "../interfaces/worryDTO";
 
-
+// created_at, updated_at 은 디비에 저장시 utc 값으로 저장
+// deadline은 kst 값으로 저장
 
 const createWorry = async(worryCreateDTO: worryCreateDTO) => {
     const d_day = worryCreateDTO.deadline;
-    const date = new Date();
-    const deadline_date = new Date();
-    deadline_date.setDate(date.getDate()+d_day);
+    
+    const date = new Date(); // utc기준 현재시간
+    
+    // moment() = kst기준 현재시간
+    const moment = require('moment');
+    const deadline_date = moment().add(d_day, 'days').format('YYYY-MM-DD');
+
 
     return await prisma.worry.create({
         data: {
@@ -17,7 +22,7 @@ const createWorry = async(worryCreateDTO: worryCreateDTO) => {
             answers: worryCreateDTO.answers,
             created_at: date,
             updated_at: date,
-            deadline: deadline_date,
+            deadline: new Date(deadline_date),
         }
     })
 }

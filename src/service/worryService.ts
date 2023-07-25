@@ -65,10 +65,9 @@ const getWorryDetail =async (worryId: number,userId: number) => {
     }
 
 
-    // d-day 계산
+    // d-day 계산 (날짜 차이 계산을 위해 today 와 deadline을 moment 객체로 만들어줌)
     const today = moment(moment().format('YYYY-MM-DD'));
     const deadline = moment(moment(worry.deadline).format('YYYY-MM-DD'));
-    // const deadline = moment(worry.deadline.toISOString().substring(0,10));
     const gap = deadline.diff(today, 'days')
 
     // local time = kst(korean standard time) 는 utc 기준 +9시간이므로 offset 9로 설정
@@ -82,7 +81,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         "answers": worry.answers,
         "period": "",
         "updatedAt": kst_updated_at,
-        "deadline": worry.deadline,
+        "deadline": worry.deadline.toISOString().substring(0,10),
         "d-day": gap,
         "finalAnswer": worry.final_answer,
         "review": {
