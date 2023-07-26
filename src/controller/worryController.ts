@@ -13,7 +13,7 @@ const postWorry = async (req: Request, res: Response, next: NextFunction) => {
         const { userId } = req.body;
         const worryCreateDTO: worryCreateDTO = req.body;
         worryCreateDTO.userId = userId;
-        console.log(worryCreateDTO);
+        // console.log(worryCreateDTO);
 
         const data = await worryService.postWorry(worryCreateDTO);
 

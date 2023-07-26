@@ -6,24 +6,29 @@ import { worryCreateDTO, worryUpdateDTO} from "../interfaces/worryDTO";
 
 const createWorry = async(worryCreateDTO: worryCreateDTO) => {
     const d_day = worryCreateDTO.deadline;
-    
     const date = new Date(); // utc기준 현재시간
+    const moment = require('moment');   // moment() = kst기준 현재시간
+    let deadline_date;
+
+    const createData:any = {
+        template_id: worryCreateDTO.templateId,
+        user_id: worryCreateDTO.userId,
+        title: worryCreateDTO.title,
+        answers: worryCreateDTO.answers,
+        created_at: date,
+        updated_at: date,
+    }
+
+    if(d_day != -1){
+        deadline_date = moment().add(d_day, 'days').format('YYYY-MM-DD');
+        createData.deadline = new Date(deadline_date);
+    }
+    else{
+        createData.deadline = null;
+    }
     
-    // moment() = kst기준 현재시간
-    const moment = require('moment');
-    const deadline_date = moment().add(d_day, 'days').format('YYYY-MM-DD');
-
-
     return await prisma.worry.create({
-        data: {
-            template_id: worryCreateDTO.templateId,
-            user_id: worryCreateDTO.userId,
-            title: worryCreateDTO.title,
-            answers: worryCreateDTO.answers,
-            created_at: date,
-            updated_at: date,
-            deadline: new Date(deadline_date),
-        }
+        data: createData
     })
 }
 
