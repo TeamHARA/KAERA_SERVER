@@ -1,4 +1,4 @@
-import { userCreateDTO } from "../interfaces/userDTO";
+import { userCreateDTO } from "../interfaces/DTO/userDTO";
 import prisma from "./prismaClient";
 
 

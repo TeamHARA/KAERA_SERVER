@@ -4,7 +4,7 @@ import { rm, sc } from "../constants";
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import statusCode from "../constants/statusCode";
 import { userService } from "../service";
-import { userCreateDTO } from "../interfaces/userDTO";
+import { userCreateDTO } from "../interfaces/DTO/userDTO";
 import { validationResult } from "express-validator";
 import jwtHandler from "../modules/jwtHandler";
 

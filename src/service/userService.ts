@@ -1,6 +1,6 @@
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
-import { userCreateDTO } from "../interfaces/userDTO";
+import { userCreateDTO } from "../interfaces/DTO/userDTO";
 import { userRepository } from "../repository"
 
 // const userop = new userRepository();
