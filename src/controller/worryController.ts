@@ -3,18 +3,15 @@ import { rm , sc} from "../constants";
 import { success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import worryService from "../service/worryService";
-import { worryCreateDTO, worryUpdateDTO } from "../interfaces/worryDTO";
-
+import { worryCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
 
 
 
 const postWorry = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { userId } = req.body;
-        const worryCreateDTO: worryCreateDTO = req.body;
-        worryCreateDTO.userId = userId;
-        // console.log(worryCreateDTO);
 
+        const  worryCreateDTO: worryCreateDTO = req.body;
+        // console.log(worryCreateDTO)
         const data = await worryService.postWorry(worryCreateDTO);
 
         return res.status(sc.OK).send(success(statusCode.OK, rm.CREATE_WORRY_SUCCESS, data));

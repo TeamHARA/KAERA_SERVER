@@ -1,15 +1,37 @@
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import worryRepository from "../repository/worryRepository"
-import { worryCreateDTO,worryUpdateDTO } from "../interfaces/worryDTO";
+import { worryCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { worryCreateDAO, worryUpdateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
 const moment = require('moment');
 
 const postWorry =async (worryCreateDTO: worryCreateDTO) => {
-    const worry = await worryRepository.createWorry(worryCreateDTO);
+    const date = new Date(); // utc기준 현재시간
+    const d_day = worryCreateDTO.deadline;
+    const moment = require('moment');   // moment() = kst기준 현재시간
+    
+    let deadlineDate;
+    if(d_day != -1){
+        const deadline = moment().add(d_day, 'days').format('YYYY-MM-DD');
+        deadlineDate = new Date(deadline);
+    }
+    else{
+        deadlineDate = null;
+    }
+    const worryCreateDAO: worryCreateDAO = {
+        ...worryCreateDTO,
+        createdAt: date,
+        updatedAt: date,
+        deadlineDate: deadlineDate
+    }
+    // console.log(worryCreateDAO)
+
+    const worry = await worryRepository.createWorry(worryCreateDAO);
     if (!worry) {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
+
 
     const data = {
         createdAt: moment().format('YYYY-MM-DD'),
