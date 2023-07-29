@@ -13,16 +13,23 @@ interface worryUpdateDTO{
   answers: Array<string>;
 }
 
-interface makeFinalAnswerDTO{
+interface finalAnswerCreateDTO{
   worryId: number;
   userId: number;
   finalAnswer: string;
 }
 
+interface deadlineUpdateDTO{
+  worryId: number;
+  userId: number;
+  dayCount: number;
+}
+
 export {
   worryCreateDTO,
   worryUpdateDTO,
-  makeFinalAnswerDTO
+  finalAnswerCreateDTO,
+  deadlineUpdateDTO
 }
 
 

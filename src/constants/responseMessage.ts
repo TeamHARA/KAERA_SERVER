@@ -57,6 +57,8 @@ export default {
   GET_WORRY_DETAIL_FAIL: "고민 상세조회 실패",
   MAKE_FINAL_ANSWER_SUCCESS: "최종결정 등록 성공",
   MAKE_FINAL_ANSWER_FAIL: "최종결정 등록 실패",
+  UPDATE_DEADLINE_SUCCESS: "데드라인 수정 성공",
+  UPDATE_DEADLINE_FAIL: "데드라인 수정 실패",
 
 
 

@@ -11,8 +11,14 @@ worryId: number;
 title: string;
 answers: Array<string>;
 }
+
+interface deadlineUpdateDAO{
+  worryId: number;
+  deadline: Date | null;
+}
   
-  export {
-    worryCreateDAO,
-    worryUpdateDAO
-  }
+export {
+  worryCreateDAO,
+  worryUpdateDAO,
+  deadlineUpdateDAO
+}

@@ -1,5 +1,5 @@
 import prisma from "./prismaClient"
-import { worryCreateDAO } from "../interfaces/DAO/worryDAO";
+import { worryCreateDAO,deadlineUpdateDAO } from "../interfaces/DAO/worryDAO";
 import { makeFinalAnswerDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
 // created_at, updated_at 은 디비에 저장시 utc 값으로 저장
 // deadline은 kst 값으로 저장
@@ -65,12 +65,25 @@ const makeFinalAnswer = async(makeFinalAnswerDTO: makeFinalAnswerDTO) => {
     })
 }
 
+const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
+
+    return await prisma.worry.update({
+        where: {
+            id: deadlineUpdateDAO.worryId
+        },
+        data: {
+            deadline: deadlineUpdateDAO.deadline
+        }
+    })
+}
+
 
 export default {
     createWorry,
     updateWorry,
     deleteWorry,
     findWorryById,
-    makeFinalAnswer
+    makeFinalAnswer,
+    updateDeadline
 
 }

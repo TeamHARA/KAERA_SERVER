@@ -1,7 +1,7 @@
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import worryRepository from "../repository/worryRepository"
-import { makeFinalAnswerDTO, worryCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { makeFinalAnswerDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
 import { worryCreateDAO, worryUpdateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
 const moment = require('moment');
@@ -141,6 +141,34 @@ const patchFinalAnswer =async (makeFinalAnswerDTO: makeFinalAnswerDTO) => {
     
 }
 
+const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
+    
+    const d_day = deadlineUpdateDTO.dayCount;
+    const moment = require('moment');   // moment() = kst기준 현재시간
+    
+    let deadlineDate = null;
+    if(d_day != -1){
+        const deadline = moment().add(d_day, 'days').format('YYYY-MM-DD');
+        deadlineDate = new Date(deadline);
+    }
+    const deadlineUpdateDAO = {
+        worryId: deadlineUpdateDTO.worryId,
+        deadline: deadlineDate
+    }
+
+
+    const worry = await worryRepository.updateDeadline(deadlineUpdateDAO);
+    if (!worry) {
+        throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
+    }
+    if (worry.user_id != deadlineUpdateDTO.userId) {
+        throw new ClientException("고민글 작성자만 데드라인을 수정할 수 있습니다.");
+    }
+    
+    
+    
+}
+
 
 export default{
     postWorry,
@@ -148,6 +176,7 @@ export default{
     deleteWorry,
     getWorryDetail,
     patchFinalAnswer,
+    patchDeadline
 
 
 }

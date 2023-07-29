@@ -3,7 +3,7 @@ import { rm , sc} from "../constants";
 import { success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import worryService from "../service/worryService";
-import { makeFinalAnswerDTO, worryCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
 
 
 
@@ -64,12 +64,26 @@ const getWorryDetail = async (req: Request, res: Response, next: NextFunction) =
 
 const patchFinalAnswer = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const makeFinalAnswer:makeFinalAnswerDTO = req.body;
+        const finalAnswerCreateDTO: finalAnswerCreateDTO = req.body;
 
 
-        await worryService.patchFinalAnswer(makeFinalAnswer);
+        await worryService.patchFinalAnswer(finalAnswerCreateDTO);
 
         return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS));
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+const patchDeadline = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const deadlineUpdateDTO: deadlineUpdateDTO = req.body;
+
+
+        await worryService.patchDeadline(deadlineUpdateDTO);
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.UPDATE_DEADLINE_SUCCESS));
 
     } catch (error) {
         next(error);
@@ -82,6 +96,7 @@ export default{
     patchWorry,
     deleteWorry,
     getWorryDetail,
-    patchFinalAnswer
+    patchFinalAnswer,
+    patchDeadline
 
 }
