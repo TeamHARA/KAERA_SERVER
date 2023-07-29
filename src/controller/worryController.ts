@@ -3,7 +3,7 @@ import { rm , sc} from "../constants";
 import { success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import worryService from "../service/worryService";
-import { worryCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { makeFinalAnswerDTO, worryCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
 
 
 
@@ -62,11 +62,26 @@ const getWorryDetail = async (req: Request, res: Response, next: NextFunction) =
     }
 };
 
+const patchFinalAnswer = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const makeFinalAnswer:makeFinalAnswerDTO = req.body;
+
+
+        await worryService.patchFinalAnswer(makeFinalAnswer);
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS));
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export default{
     postWorry,
     patchWorry,
     deleteWorry,
     getWorryDetail,
+    patchFinalAnswer
 
 }

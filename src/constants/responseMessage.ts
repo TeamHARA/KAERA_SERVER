@@ -55,6 +55,8 @@ export default {
   DELETE_WORRY_FAIL: "고민 삭제 실패",
   GET_WORRY_DETAIL_SUCCESS: "고민 상세조회 성공",
   GET_WORRY_DETAIL_FAIL: "고민 상세조회 실패",
+  MAKE_FINAL_ANSWER_SUCCESS: "최종결정 등록 성공",
+  MAKE_FINAL_ANSWER_FAIL: "최종결정 등록 실패",
 
 
 
