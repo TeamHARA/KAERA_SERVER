@@ -1,7 +1,7 @@
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import worryRepository from "../repository/worryRepository"
-import { makeFinalAnswerDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
 import { worryCreateDAO, worryUpdateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
 const moment = require('moment');
@@ -128,14 +128,14 @@ const getWorryDetail =async (worryId: number,userId: number) => {
     
 }
 
-const patchFinalAnswer =async (makeFinalAnswerDTO: makeFinalAnswerDTO) => {
-    const worry = await worryRepository.makeFinalAnswer(makeFinalAnswerDTO);
+const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
+    const worry = await worryRepository.makeFinalAnswer(finalAnswerCreateDTO);
     console.log(worry)
     if (!worry) {
         throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
     }
 
-    if (worry.user_id != makeFinalAnswerDTO.userId) {
+    if (worry.user_id != finalAnswerCreateDTO.userId) {
         throw new ClientException("고민글 작성자만 최종결정할 수 있습니다.");
     }
     
