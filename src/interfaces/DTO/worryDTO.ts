@@ -8,13 +8,28 @@ interface worryCreateDTO {
 
 interface worryUpdateDTO{
   worryId: number;
+  userId: number;
   title: string;
   answers: Array<string>;
 }
 
+interface finalAnswerCreateDTO{
+  worryId: number;
+  userId: number;
+  finalAnswer: string;
+}
+
+interface deadlineUpdateDTO{
+  worryId: number;
+  userId: number;
+  dayCount: number;
+}
+
 export {
   worryCreateDTO,
-  worryUpdateDTO
+  worryUpdateDTO,
+  finalAnswerCreateDTO,
+  deadlineUpdateDTO
 }
 
 

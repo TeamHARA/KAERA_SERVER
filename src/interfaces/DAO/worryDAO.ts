@@ -6,13 +6,13 @@ interface worryCreateDAO extends worryCreateDTO{
     updatedAt: Date;
 }
   
-interface worryUpdateDAO{
-worryId: number;
-title: string;
-answers: Array<string>;
+
+interface deadlineUpdateDAO{
+  worryId: number;
+  deadline: Date | null;
 }
   
-  export {
-    worryCreateDAO,
-    worryUpdateDAO
-  }
+export {
+  worryCreateDAO,
+  deadlineUpdateDAO
+}

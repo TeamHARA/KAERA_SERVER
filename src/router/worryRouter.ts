@@ -39,4 +39,24 @@ router.get("/:worryId",
     worryController.getWorryDetail,
 );
 
+router.patch("/finalAnswer",
+    auth,
+    [
+        body('worryId').notEmpty().withMessage("body 에 worryId 값이 존재하지 않습니다"),
+        body('finalAnswer').notEmpty().withMessage("body 에 finalAnswer 값이 존재하지 않습니다"),
+    ],
+    validate,
+    worryController.patchFinalAnswer,
+);
+
+router.patch("/deadline",
+    auth,
+    [
+        body('worryId').notEmpty().withMessage("body 에 worryId 값이 존재하지 않습니다"),
+        body('dayCount').notEmpty().withMessage("body 에 dayCount 값이 존재하지 않습니다"),
+    ],
+    validate,
+    worryController.patchDeadline,
+);
+
 export default router;
