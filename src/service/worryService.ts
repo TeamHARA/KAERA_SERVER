@@ -9,7 +9,7 @@ const moment = require('moment');
 const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     const date = new Date(); // utc기준 현재시간
     const d_day = worryCreateDTO.deadline;
-    const moment = require('moment');   // moment() = kst기준 현재시간
+    // const moment = require('moment');   // moment() = kst기준 현재시간
     
     let deadlineDate;
     if(d_day != -1){
@@ -119,7 +119,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         }
     }
     if(worry.final_answer != null)
-        data.period = kst_created_at+"~"+kst_updated_at;
+        data.period = kst_created_at+" ~ "+kst_updated_at;
 
     if(worry.deadline != null)
         data.deadline = worry.deadline.toISOString().substring(0,10)
@@ -213,6 +213,35 @@ const getWorryList =async (isSolved: number, userId: number) => {
   
 }
 
+const getWorryListByTemplate =async (templateId: number, userId: number) => {
+  
+    const worry = await worryRepository.findWorryListByTemplate(templateId,userId);
+  
+    if (!worry) {
+        throw new ClientException(rm.GET_WORRY_LIST_BY_TEMPLATE_FAIL);
+    }
+
+    const worry_list :Array<object> = [];
+    for(var i=0;i<worry.length;i++){
+        const kst_created_at = moment(worry[i].created_at).utc().utcOffset(9).format('YYYY-MM-DD');
+        const kst_updated_at = moment(worry[i].updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
+        
+        worry_list.push({
+            "worryId": worry[i].id,
+            "title": worry[i].title,
+            "period": kst_created_at + " ~ " + kst_updated_at
+        })   
+    }
+
+    const data = {
+        "totalNum": worry_list.length,
+        "worry": worry_list,
+    }
+    
+    return data;
+  
+}
+
 
 export default{
     postWorry,
@@ -221,7 +250,8 @@ export default{
     getWorryDetail,
     patchFinalAnswer,
     patchDeadline,
-    getWorryList
+    getWorryList,
+    getWorryListByTemplate
 
 
 }

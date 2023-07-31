@@ -2,7 +2,7 @@ import { Router } from "express";
 import { auth } from "../middlewares";
 import worryController from "../controller/worryController";
 import validate from "../middlewares/validate";
-import { body } from "express-validator";
+import { body,query } from "express-validator";
 
 const router = Router();
 
@@ -27,6 +27,15 @@ router.patch("/",
     ],
     validate,
     worryController.patchWorry,
+);
+
+router.get("/",
+    auth,
+    [
+        query('templateId').notEmpty().withMessage("query string 에 templateId 값이 존재하지 않습니다")
+    ],
+    validate,
+    worryController.getWorryListByTemplate,
 );
 
 router.delete("/:worryId",
@@ -59,10 +68,15 @@ router.patch("/deadline",
     worryController.patchDeadline,
 );
 
+
+
 router.get("/list/:isSolved",
     auth,
     validate,
     worryController.getWorryList,
 );
+
+
+
 
 export default router;

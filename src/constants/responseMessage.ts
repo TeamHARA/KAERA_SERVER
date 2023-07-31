@@ -61,6 +61,8 @@ export default {
   UPDATE_DEADLINE_FAIL: "데드라인 수정 실패",
   GET_WORRY_LIST_SUCCESS: "고민목록 조회 성공",
   GET_WORRY_LIST_FAIL: "고민목록 조회 실패",
+  GET_WORRY_LIST_BY_TEMPLATE_SUCCESS: "템플릿별 고민목록 조회 성공",
+  GET_WORRY_LIST_BY_TEMPLATE_FAIL: "템플릿별 고민목록 조회 실패",
 
 
 

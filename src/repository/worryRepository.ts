@@ -117,6 +117,27 @@ const findWorryListUnsolved = async(userId: number) => {
     })
 }
 
+const findWorryListByTemplate = async(templateId: number,userId: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            title:true,
+            created_at:true,
+            updated_at:true
+        },
+        where: {
+            user_id: userId,
+            template_id: templateId,
+            final_answer: {
+                not: null
+            }
+        }, 
+        orderBy:{
+            created_at: 'asc'
+        }
+    })
+}
 
 export default {
     createWorry,
@@ -126,6 +147,7 @@ export default {
     makeFinalAnswer,
     updateDeadline,
     findWorryListSolved,
-    findWorryListUnsolved
+    findWorryListUnsolved,
+    findWorryListByTemplate
 
 }
