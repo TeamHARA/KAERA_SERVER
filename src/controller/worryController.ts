@@ -90,6 +90,20 @@ const patchDeadline = async (req: Request, res: Response, next: NextFunction) =>
     }
 };
 
+const getWorryList = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { isSolved } = req.params;
+        const { userId }= req.body;
+
+        const data = await worryService.getWorryList(+isSolved,userId);
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_SUCCESS,data));
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export default{
     postWorry,
@@ -97,6 +111,7 @@ export default{
     deleteWorry,
     getWorryDetail,
     patchFinalAnswer,
-    patchDeadline
+    patchDeadline,
+    getWorryList
 
 }

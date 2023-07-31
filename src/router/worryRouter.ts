@@ -59,4 +59,10 @@ router.patch("/deadline",
     worryController.patchDeadline,
 );
 
+router.get("/list/:isSolved",
+    auth,
+    validate,
+    worryController.getWorryList,
+);
+
 export default router;
