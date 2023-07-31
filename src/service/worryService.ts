@@ -2,7 +2,7 @@ import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import worryRepository from "../repository/worryRepository"
 import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
-import { worryCreateDAO, worryUpdateDAO } from "../interfaces/DAO/worryDAO";
+import { deadlineUpdateDAO, worryCreateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
 const moment = require('moment');
 
@@ -146,15 +146,25 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
     const d_day = deadlineUpdateDTO.dayCount;
     const moment = require('moment');   // moment() = kst기준 현재시간
     
+    //deadline 계산
     let deadlineDate = null;
     if(d_day != -1){
         const deadline = moment().add(d_day, 'days').format('YYYY-MM-DD');
         deadlineDate = new Date(deadline);
     }
-    const deadlineUpdateDAO = {
+    const deadlineUpdateDAO: deadlineUpdateDAO = {
         worryId: deadlineUpdateDTO.worryId,
         deadline: deadlineDate
     }
+
+    //d-day 계산
+    let gap = -1;                   // (데드라인 존재하지 않을 경우) : gap = -1
+    if (deadlineDate != null){      // (데드라인 존재하는 경우) : gap = d-day에 해당하는 값
+        const today = moment(moment().format('YYYY-MM-DD'));        // d-day 계산 (날짜 차이 계산을 위해 today 와 deadline을 moment 객체로 만들어줌)
+        const deadline = moment(moment(deadlineDate).format('YYYY-MM-DD'));
+        gap = deadline.diff(today, 'days')
+    }
+
 
 
     const worry = await worryRepository.updateDeadline(deadlineUpdateDAO);
@@ -165,8 +175,17 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
         throw new ClientException("고민글 작성자만 데드라인을 수정할 수 있습니다.");
     }
     
-    
-    
+    const data = {
+        "deadline": "데드라인이 없습니다.",
+        "d-day": gap,
+    }
+
+    if(worry.deadline != null)
+        data.deadline = worry.deadline.toISOString().substring(0,10)
+
+
+    return data;    
+
 }
 
 

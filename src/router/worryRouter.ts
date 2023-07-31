@@ -53,7 +53,7 @@ router.patch("/deadline",
     auth,
     [
         body('worryId').notEmpty().withMessage("body 에 worryId 값이 존재하지 않습니다"),
-        body('deadline').notEmpty().withMessage("body 에 deadline 값이 존재하지 않습니다"),
+        body('dayCount').notEmpty().withMessage("body 에 dayCount 값이 존재하지 않습니다"),
     ],
     validate,
     worryController.patchDeadline,

@@ -81,9 +81,9 @@ const patchDeadline = async (req: Request, res: Response, next: NextFunction) =>
         const deadlineUpdateDTO: deadlineUpdateDTO = req.body;
 
 
-        await worryService.patchDeadline(deadlineUpdateDTO);
+        const data = await worryService.patchDeadline(deadlineUpdateDTO);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.UPDATE_DEADLINE_SUCCESS));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.UPDATE_DEADLINE_SUCCESS,data));
 
     } catch (error) {
         next(error);
