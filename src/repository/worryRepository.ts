@@ -77,6 +77,46 @@ const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
     })
 }
 
+const findWorryListSolved = async(userId: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            user_id:true,
+            template_id:true,
+            title:true
+        },    
+        where: {
+            user_id: userId,
+            final_answer:{
+                not: null
+            }
+        },
+        orderBy:{
+            created_at: 'asc'
+        } 
+    })
+}
+
+const findWorryListUnsolved = async(userId: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            user_id:true,
+            template_id:true,
+            title:true
+        },
+        where: {
+            user_id: userId,
+            final_answer: null
+        }, 
+        orderBy:{
+            created_at: 'asc'
+        }
+    })
+}
+
 
 export default {
     createWorry,
@@ -84,6 +124,8 @@ export default {
     deleteWorry,
     findWorryById,
     makeFinalAnswer,
-    updateDeadline
+    updateDeadline,
+    findWorryListSolved,
+    findWorryListUnsolved
 
 }

@@ -130,7 +130,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
 
 const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
     const worry = await worryRepository.makeFinalAnswer(finalAnswerCreateDTO);
-    console.log(worry)
+
     if (!worry) {
         throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
     }
@@ -188,6 +188,31 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
 
 }
 
+const getWorryList =async (isSolved: number, userId: number) => {
+    let worry = null;
+    if(isSolved)
+        worry = await worryRepository.findWorryListSolved(userId);
+    else
+        worry = await worryRepository.findWorryListUnsolved(userId);
+
+    if (!worry) {
+        throw new ClientException(rm.GET_WORRY_LIST_FAIL);
+    }
+
+    const data :Array<object> = [];
+    for(var i=0;i<worry.length;i++){
+        data.push({
+            "worryId": worry[i].id,
+            "templateId": worry[i].template_id,
+            "title": worry[i].title
+        })
+        
+    }
+    
+    return data;
+  
+}
+
 
 export default{
     postWorry,
@@ -195,7 +220,8 @@ export default{
     deleteWorry,
     getWorryDetail,
     patchFinalAnswer,
-    patchDeadline
+    patchDeadline,
+    getWorryList
 
 
 }
