@@ -4,6 +4,7 @@ import { success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import worryService from "../service/worryService";
 import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { ClientException } from "../common/error/exceptions/customExceptions";
 
 
 
@@ -104,6 +105,21 @@ const getWorryList = async (req: Request, res: Response, next: NextFunction) => 
     }
 };
 
+const getWorryListByTemplate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { templateId } = req.query;
+        if(!templateId)
+            throw new ClientException("templateId 값이 존재하지 않습니다.");
+        const { userId }= req.body;
+        const data = await worryService.getWorryListByTemplate(+templateId,userId);
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_SUCCESS,data));
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export default{
     postWorry,
@@ -112,6 +128,7 @@ export default{
     getWorryDetail,
     patchFinalAnswer,
     patchDeadline,
-    getWorryList
+    getWorryList,
+    getWorryListByTemplate
 
 }

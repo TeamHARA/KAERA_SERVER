@@ -11,7 +11,7 @@ const sign = (userId: number) => {
 
   var accessToken;
   // dev user일 경우
-  if(userId == 8){
+  if(userId == 11){
     accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "90d" });
   }
   else{
