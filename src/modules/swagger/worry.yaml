@@ -291,6 +291,9 @@ components:
                 "status": 200,
                 "success": true,
                 "message": "최종결정 등록 성공",
+                "data": {
+                  "quote": "고민하면서 길을 찾는 사람들, 그들은 참된 인간상이다."
+                }
               }
       '400':
         $ref: './openapi.yaml#/components/responses/BadRequest'
