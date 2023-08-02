@@ -8,7 +8,6 @@ const findTemplateById = async (templateId: number) => {
     });
 };
 
-prisma.template.findMany
 
 const findAllTemplate = async () => {
     return await prisma.template.findMany({

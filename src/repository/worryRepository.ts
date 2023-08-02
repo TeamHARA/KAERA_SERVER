@@ -1,6 +1,6 @@
 import prisma from "./prismaClient"
-import { worryCreateDAO } from "../interfaces/DAO/worryDAO";
-import { worryUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { worryCreateDAO,deadlineUpdateDAO } from "../interfaces/DAO/worryDAO";
+import { finalAnswerCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
 // created_at, updated_at 은 디비에 저장시 utc 값으로 저장
 // deadline은 kst 값으로 저장
 
@@ -53,11 +53,101 @@ const findWorryById = async(worryId:number) => {
 
 }
 
+const makeFinalAnswer = async(finalAnswerCreateDTO: finalAnswerCreateDTO) => {
+
+    return await prisma.worry.update({
+        where: {
+            id: finalAnswerCreateDTO.worryId
+        },
+        data: {
+            final_answer: finalAnswerCreateDTO.finalAnswer
+        }
+    })
+}
+
+const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
+
+    return await prisma.worry.update({
+        where: {
+            id: deadlineUpdateDAO.worryId
+        },
+        data: {
+            deadline: deadlineUpdateDAO.deadline
+        }
+    })
+}
+
+const findWorryListSolved = async(userId: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            user_id:true,
+            template_id:true,
+            title:true
+        },    
+        where: {
+            user_id: userId,
+            final_answer:{
+                not: null
+            }
+        },
+        orderBy:{
+            created_at: 'asc'
+        } 
+    })
+}
+
+const findWorryListUnsolved = async(userId: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            user_id:true,
+            template_id:true,
+            title:true
+        },
+        where: {
+            user_id: userId,
+            final_answer: null
+        }, 
+        orderBy:{
+            created_at: 'asc'
+        }
+    })
+}
+
+const findWorryListByTemplate = async(templateId: number,userId: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            title:true,
+            created_at:true,
+            updated_at:true
+        },
+        where: {
+            user_id: userId,
+            template_id: templateId,
+            final_answer: {
+                not: null
+            }
+        }, 
+        orderBy:{
+            created_at: 'asc'
+        }
+    })
+}
 
 export default {
     createWorry,
     updateWorry,
     deleteWorry,
     findWorryById,
+    makeFinalAnswer,
+    updateDeadline,
+    findWorryListSolved,
+    findWorryListUnsolved,
+    findWorryListByTemplate
 
 }
