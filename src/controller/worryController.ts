@@ -113,7 +113,7 @@ const getWorryListByTemplate = async (req: Request, res: Response, next: NextFun
         const { userId }= req.body;
         const data = await worryService.getWorryListByTemplate(+templateId,userId);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_SUCCESS,data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_BY_TEMPLATE_SUCCESS,data));
 
     } catch (error) {
         next(error);

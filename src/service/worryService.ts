@@ -213,9 +213,12 @@ const getWorryList =async (isSolved: number, userId: number) => {
 }
 
 const getWorryListByTemplate =async (templateId: number, userId: number) => {
-  
-    const worry = await worryRepository.findWorryListByTemplate(templateId,userId);
-  
+    let worry;
+    if(templateId == 0)
+        worry = await worryRepository.findWorryListSolved(userId);
+    else
+        worry = await worryRepository.findWorryListByTemplate(templateId,userId);
+    
     if (!worry) {
         throw new ClientException(rm.GET_WORRY_LIST_BY_TEMPLATE_FAIL);
     }
@@ -224,12 +227,14 @@ const getWorryListByTemplate =async (templateId: number, userId: number) => {
     for(var i=0;i<worry.length;i++){
         const kst_created_at = moment(worry[i].created_at).utc().utcOffset(9).format('YYYY-MM-DD');
         const kst_updated_at = moment(worry[i].updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
-        
+ 
         worry_list.push({
             "worryId": worry[i].id,
             "title": worry[i].title,
-            "period": kst_created_at + " ~ " + kst_updated_at
-        })   
+            "period": kst_created_at + " ~ " + kst_updated_at,
+            "templateId": worry[i].template_id,
+        })
+    
     }
 
     const data = {
