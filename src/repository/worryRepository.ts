@@ -84,7 +84,9 @@ const findWorryListSolved = async(userId: number) => {
             id:true,
             user_id:true,
             template_id:true,
-            title:true
+            title:true,
+            created_at:true,
+            updated_at:true
         },    
         where: {
             user_id: userId,
@@ -124,7 +126,8 @@ const findWorryListByTemplate = async(templateId: number,userId: number) => {
             id:true,
             title:true,
             created_at:true,
-            updated_at:true
+            updated_at:true,
+            template_id:true
         },
         where: {
             user_id: userId,
