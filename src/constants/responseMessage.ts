@@ -64,6 +64,12 @@ export default {
   GET_WORRY_LIST_BY_TEMPLATE_SUCCESS: "템플릿별 고민목록 조회 성공",
   GET_WORRY_LIST_BY_TEMPLATE_FAIL: "템플릿별 고민목록 조회 실패",
 
+  //리뷰
+  CREATE_REVIEW_SUCCESS: "리뷰 생성 성공",
+  CREATE_REVIEW_FAIL: "리뷰 생성 실패",
+  UPDATE_REVIEW_SUCCESS: "리뷰 수정 성공",
+  UPDATE_REVIEW_FAIL: "리뷰 수정 실패",
+
 
 
 

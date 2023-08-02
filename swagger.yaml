@@ -366,6 +366,8 @@ paths:
                   status: 200
                   success: true
                   message: 최종결정 등록 성공
+                  data:
+                    quote: '고민하면서 길을 찾는 사람들, 그들은 참된 인간상이다.'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -516,7 +518,6 @@ paths:
                   success: true
                   message: 나의 기록 등록 및 수정 성공
                   data:
-                    quote: '고민하면서 길을 찾는 사람들, 그들은 참된 인간상이다.'
                     updatedAt: '2019-10-01'
         '400':
           $ref: '#/components/responses/BadRequest'
