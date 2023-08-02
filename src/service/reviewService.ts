@@ -2,9 +2,13 @@ import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import reviewRepository from "../repository/reviewRepository";
 import { reviewDTO } from "../interfaces/DTO/reviewDTO"
+import worryRepository from "../repository/worryRepository";
 
 const putReview = async (reviewDTO: reviewDTO) => {
-
+    const worry = await worryRepository.findWorryById(reviewDTO.worryId);
+    if(!worry){
+        throw new ClientException("해당 worryId의 고민글이 존재하지 않습니다.");
+    }
     const exists = await reviewRepository.findreviewById(reviewDTO.worryId);
     let review;
     if (!exists) {
