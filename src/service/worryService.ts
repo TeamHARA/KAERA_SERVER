@@ -32,9 +32,8 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
 
-
     const data = {
-        createdAt: moment().format('YYYY-MM-DD'),
+        createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
         deadline: "데드라인이 없습니다."
     }
     if(worry.deadline != null)
@@ -51,7 +50,7 @@ const patchWorry =async (worryUpdateDTO: worryUpdateDTO) => {
     }
 
     const data = {
-        updatedAt: moment().format('YYYY-MM-DD'),
+        updatedAt: moment(worry.updated_at).utc().utcOffset(9).format('YYYY-MM-DD'),
     }
 
     return data;
