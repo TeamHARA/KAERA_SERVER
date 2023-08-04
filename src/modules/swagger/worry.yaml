@@ -231,11 +231,11 @@ components:
                 "data":  {
                   "title": "고민1",
                   "templateId": 1,
-                  "questions":[
-                    "질문1",
-                    "질문2",
-                    "질문3",
-                    "질문4",
+                  "subtitles":[
+                    "소제목1",
+                    "소제목2",
+                    "소제목3",
+                    "소제목4",
                   ],
                   "answers":[
                     "답변1",
