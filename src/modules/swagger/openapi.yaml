@@ -15,10 +15,10 @@ security:
 #Paths api 경로 지정
 paths: 
   #user  
-  /user:
-    $ref: './user.yaml#/~1user'
-  /user/{userId}:
-    $ref: './user.yaml#/~1user~1{userId}'
+  # /user:
+  #   $ref: './user.yaml#/~1user'
+  # /user/{userId}:
+  #   $ref: './user.yaml#/~1user~1{userId}'
 
   #template
   /template:
@@ -37,8 +37,8 @@ paths:
     $ref: './worry.yaml#/~1worry~1deadline'
   /worry/list/{isSolved}:
     $ref: './worry.yaml#/~1worry~1list~1{isSolved}'
-  /worry/?templateId={templateId}:
-    $ref: './worry.yaml#/~1worry~1?templateId={templateId}'
+  /worry?templateId={templateId}:
+    $ref: './worry.yaml#/~1worry?templateId={templateId}'
 
 
   #review

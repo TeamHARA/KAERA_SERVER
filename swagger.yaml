@@ -11,61 +11,6 @@ servers:
 security:
   - bearerAuth: []
 paths:
-  /user:
-    post:
-      tags:
-        - User
-      summary: 유저 생성
-      consumes:
-        - application/json
-      requestBody:
-        x-name: body
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-            examples:
-              userExample:
-                $ref: '#/components/examples/userExample'
-      responses:
-        '200':
-          $ref: '#/components/responses/successResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  '/user/{userId}':
-    get:
-      tags:
-        - User
-      summary: 유저 정보 조회
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          description: 유저 id
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 유저 조회 성공
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  status: 200
-                  success: true
-                  message: 유저 조회 성공
-                  data:
-                    _id: 6283a755c2f673e5e81a6fea
-                    name: 홍길동
-                    email: validateTest-email2@naver.com
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /template:
     get:
       tags:
@@ -81,7 +26,7 @@ paths:
                 example:
                   status: 200
                   success: true
-                  message: 템플릿 종류 조회 성공
+                  message: 모든 템플릿 조회 성공
                   data:
                     - templateId: 1
                       title: 템플릿1
@@ -130,10 +75,9 @@ paths:
                 example:
                   status: 200
                   success: true
-                  message: 템플릿 질문 조회 성공
+                  message: 템플릿 조회 성공
                   data:
                     title: 걱정을 극복하는 자기 관리론
-                    info: 뭐 이 고민은 취업에 어쩌구 저쩌구
                     guideline: 고민의 장단점을 비교하며 깊게 생각해보세요.
                     questions:
                       - 고민의 선택지를 나열해보세요.
@@ -177,15 +121,27 @@ paths:
                 deadline:
                   type: number
                   description: 데드라인
-            example:
-              templateId: 1
-              title: 졸업후의 나
-              answers:
-                - 11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
-                - 22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
-                - 33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
-                - 44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
-              deadline: 5
+            examples:
+              example_with_deadline:
+                value:
+                  templateId: 1
+                  title: 졸업후의 나
+                  answers:
+                    - 11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                    - 22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                    - 33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                    - 44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                  deadline: 5
+              example_with_no_deadline:
+                value:
+                  templateId: 1
+                  title: 졸업후의 나
+                  answers:
+                    - 11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                    - 22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                    - 33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                    - 44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
+                  deadline: -1
       responses:
         '200':
           description: 고민 작성 성공
@@ -445,7 +401,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/worry/?templateId={templateId}':
+  '/worry?templateId={templateId}':
     get:
       tags:
         - Worry

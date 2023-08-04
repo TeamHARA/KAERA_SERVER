@@ -59,17 +59,30 @@ components:
   
   #Examples
   examples:
-    postWorryBodyExample: {
-      "templateId": 1,
-      "title": "졸업후의 나",
-      "answers": [
-        "11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-        "22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-        "33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-        "44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다."
-      ],
-      "deadline": 5
-    }
+    postWorryBodyExampleDeadline: 
+      value: {
+        "templateId": 1,
+        "title": "졸업후의 나",
+        "answers": [
+          "11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
+          "22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
+          "33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
+          "44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다."
+        ],
+        "deadline": 5
+      }
+    postWorryBodyExampleNoDeadline: 
+      value: {
+        "templateId": 1,
+        "title": "졸업후의 나",
+        "answers": [
+          "11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
+          "22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
+          "33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
+          "44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다."
+        ],
+        "deadline": -1
+      }
 
     patchWorryBodyExample: {
       "worryId": 2,
@@ -109,8 +122,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/postWorry'
-          example: 
-            $ref: '#/components/examples/postWorryBodyExample'
+          examples: 
+            example_with_deadline:
+              $ref: '#/components/examples/postWorryBodyExampleDeadline'
+            example_with_no_deadline:
+              $ref: '#/components/examples/postWorryBodyExampleNoDeadline'
+          
        
     responses:
       '200':
@@ -381,8 +398,8 @@ components:
         $ref: './openapi.yaml#/components/responses/InternalServerError'
 
 
-/worry/?templateId={templateId}:
-  #[get] worry/?templateId=
+/worry?templateId={templateId}:
+  #[get] worry?templateId=
   get:
     tags:
       - Worry
