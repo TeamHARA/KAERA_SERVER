@@ -105,7 +105,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
     const data = {
         "title": worry.title,
         "templateId": worry.template_id,
-        "questions": template.questions,
+        "subtitles": template.subtitles,
         "answers": worry.answers,
         "period": "아직 고민중인 글입니다.",
         "updatedAt": kst_updated_at,
