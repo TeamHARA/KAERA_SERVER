@@ -13,7 +13,7 @@
               example: {
               "status": 200,
                 "success": true,
-                "message": "템플릿 종류 조회 성공",
+                "message": "모든 템플릿 조회 성공",
                 "data": [
                   {
                     "templateId": 1,
@@ -78,10 +78,9 @@
               example: {
               "status": 200,
                 "success": true,
-                "message": "템플릿 질문 조회 성공",
+                "message": "템플릿 조회 성공",
                 "data": {
                     "title": "걱정을 극복하는 자기 관리론",
-                    "info": "뭐 이 고민은 취업에 어쩌구 저쩌구",
                     "guideline": "고민의 장단점을 비교하며 깊게 생각해보세요.",
                     "questions": [
                       "고민의 선택지를 나열해보세요.",
