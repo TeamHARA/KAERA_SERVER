@@ -5,6 +5,7 @@ import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO
 import { deadlineUpdateDAO, worryCreateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
 import { calculate_Dday } from "../common/utils/calculate";
+import reviewRepository from "../repository/reviewRepository";
 const moment = require('moment');
 
 const postWorry =async (worryCreateDTO: worryCreateDTO) => {
@@ -77,14 +78,18 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         throw new ClientException("해당 id의 고민글이 존재하지 않습니다.");
     }
 
+    if (worry.user_id != userId) {
+        throw new ClientException("고민글 작성자만 조회할 수 있습니다.");
+    }
     const template = await templateRepository.findTemplateById(worry.template_id);
     if (!template) {
         throw new ClientException("해당 id의 템플릿이 존재하지 않습니다.");
     }
 
-    if (worry.user_id != userId) {
-        throw new ClientException("고민글 작성자만 조회할 수 있습니다.");
-    }
+    const review = await reviewRepository.findreviewById(worry.id);
+
+    
+
 
     const gap = calculate_Dday(worry.deadline);
    
@@ -93,21 +98,28 @@ const getWorryDetail =async (worryId: number,userId: number) => {
     const kst_created_at = moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD');
     const kst_updated_at = moment(worry.updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
 
-    const data = {
+    const data:any = {
         "title": worry.title,
         "templateId": worry.template_id,
-        "questions": template.questions,
+        "subtitles": template.subtitles,
         "answers": worry.answers,
         "period": "아직 고민중인 글입니다.",
         "updatedAt": kst_updated_at,
         "deadline": "데드라인이 없습니다.",
         "d-day": gap,
         "finalAnswer": worry.final_answer,
-        "review": {
-            "content": "" ,
-            "updatedAt": ""
+        "review": null
+    }
+
+    // if(!review)
+    //     data.review = "등록된 리뷰가 없습니다."
+    if(review != null){
+        data.review = {
+            "content" : review.content,
+            "updatedAt" : moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD')
         }
     }
+   
     if(worry.final_answer != null)
         data.period = kst_created_at+" ~ "+kst_updated_at;
 
