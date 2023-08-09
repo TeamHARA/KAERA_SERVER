@@ -4,8 +4,9 @@ import worryRepository from "../repository/worryRepository"
 import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
 import { deadlineUpdateDAO, worryCreateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
-import { calculate_Dday } from "../common/utils/calculate";
+import { calculate_d_day, calculate_random_num } from "../common/utils/calculate";
 import reviewRepository from "../repository/reviewRepository";
+import quoteRepository from "../repository/quoteRepository";
 const moment = require('moment');
 
 const postWorry =async (worryCreateDTO: worryCreateDTO) => {
@@ -91,7 +92,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
     
 
 
-    const gap = calculate_Dday(worry.deadline);
+    const gap = calculate_d_day(worry.deadline);
    
 
     // local time = kst(korean standard time) 는 utc 기준 +9시간이므로 offset 9로 설정
@@ -132,7 +133,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
 
 const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
     const worry = await worryRepository.makeFinalAnswer(finalAnswerCreateDTO);
-
+    
     if (!worry) {
         throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
     }
@@ -140,6 +141,15 @@ const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
     if (worry.user_id != finalAnswerCreateDTO.userId) {
         throw new ClientException("고민글 작성자만 최종결정할 수 있습니다.");
     }
+
+    const quotes = await quoteRepository.findAllQuote();
+    const random_quote = quotes[calculate_random_num(quotes.length)].content
+
+    const data = {
+        "quote": random_quote
+    }
+
+    return data;
     
 }
 
@@ -160,7 +170,7 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
     }
 
     //d-day 계산
-    const gap = calculate_Dday(deadlineDate)
+    const gap = calculate_d_day(deadlineDate)
 
 
 

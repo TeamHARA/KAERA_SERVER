@@ -1,5 +1,5 @@
    
-const calculate_Dday = (deadlineDate:Date|null) : number => {
+const calculate_d_day = (deadlineDate:Date|null) : number => {
     const moment = require('moment');
     //d-day 계산
     let gap = -888;                   // (데드라인 존재하지 않을 경우) : gap = -1
@@ -12,8 +12,15 @@ const calculate_Dday = (deadlineDate:Date|null) : number => {
     return gap;
 }  
 
+const calculate_random_num = (max: number) : number => {
+
+    return Math.floor(Math.random() * max);
+      
+}
+
 
 export {
-    calculate_Dday
+    calculate_d_day,
+    calculate_random_num
 }
    
