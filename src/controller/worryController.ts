@@ -68,9 +68,9 @@ const patchFinalAnswer = async (req: Request, res: Response, next: NextFunction)
         const finalAnswerCreateDTO: finalAnswerCreateDTO = req.body;
 
 
-        await worryService.patchFinalAnswer(finalAnswerCreateDTO);
+        const data = await worryService.patchFinalAnswer(finalAnswerCreateDTO);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS,data));
 
     } catch (error) {
         next(error);
