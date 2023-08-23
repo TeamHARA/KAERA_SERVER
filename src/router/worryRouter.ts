@@ -1,8 +1,10 @@
-import { Router } from "express";
+import { Router,Request } from "express";
 import { auth } from "../middlewares";
 import worryController from "../controller/worryController";
 import validate from "../middlewares/validate";
 import { body,query } from "express-validator";
+import { validateBody } from "../middlewares/validateDTO";
+import { worryCreateDTO, worryUpdateDTO,finalAnswerCreateDTO,deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
 
 const router = Router();
 
@@ -15,6 +17,7 @@ router.post("/",
         body('deadline').notEmpty().withMessage("body 에 deadline 값이 존재하지 않습니다"),
     ],
     validate,
+    validateBody(worryCreateDTO),
     worryController.postWorry,
 );
 
@@ -26,6 +29,8 @@ router.patch("/",
         body('answers').notEmpty().withMessage("body 에 answers 값이 존재하지 않습니다"),
     ],
     validate,
+    validateBody(worryUpdateDTO),
+
     worryController.patchWorry,
 );
 
@@ -55,6 +60,7 @@ router.patch("/finalAnswer",
         body('finalAnswer').notEmpty().withMessage("body 에 finalAnswer 값이 존재하지 않습니다"),
     ],
     validate,
+    validateBody(finalAnswerCreateDTO),
     worryController.patchFinalAnswer,
 );
 
@@ -65,6 +71,7 @@ router.patch("/deadline",
         body('dayCount').notEmpty().withMessage("body 에 dayCount 값이 존재하지 않습니다"),
     ],
     validate,
+    validateBody(deadlineUpdateDTO),
     worryController.patchDeadline,
 );
 
