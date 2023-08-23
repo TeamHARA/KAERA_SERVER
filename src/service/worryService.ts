@@ -165,7 +165,7 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
         deadlineDate = new Date(deadline);
     }
     const deadlineUpdateDAO: deadlineUpdateDAO = {
-        worryId: deadlineUpdateDTO.worryId,
+        worryId: deadlineUpdateDTO.worryId!,
         deadline: deadlineDate
     }
 
