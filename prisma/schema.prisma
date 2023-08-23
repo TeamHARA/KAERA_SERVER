@@ -27,7 +27,7 @@ model template {
   shortInfo String?  @db.VarChar(50)
   questions String[] @db.VarChar(50)
   guideline String?  @db.VarChar(50)
-  hints     String[] @db.VarChar(50)
+  hints     String[] @db.VarChar(100)
   subtitles String[] @db.VarChar(50)
   worry     worry[]
 }
@@ -47,7 +47,7 @@ model worry {
   template_id  Int
   user_id      Int
   title        String    @db.VarChar(50)
-  answers      String[]  @db.VarChar(100)
+  answers      String[]
   created_at   DateTime  @db.Timestamptz(6)
   updated_at   DateTime  @db.Timestamptz(6)
   deadline     DateTime? @db.Date

@@ -19,11 +19,7 @@ export function validateBody(schema: {new() : any}) {
           
         });
       }
-      
 
-   
-
-      
       next(error);
     
     }

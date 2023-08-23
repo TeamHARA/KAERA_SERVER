@@ -1,72 +1,72 @@
-import { IsString, IsDefined, IsNumber, IsArray} from 'class-validator';
+import { IsString, IsDefined, IsNumber, IsArray, IsNotEmpty} from 'class-validator';
 
 class worryCreateDTO {
 
   @IsDefined()
   @IsNumber()
-  templateId?: number;
+  templateId!: number;
 
   @IsDefined()
   @IsNumber()
-  userId?: number;
+  userId!: number;
 
   @IsDefined()
   @IsString()
-  title?: string;
+  title!: string;
 
   @IsDefined()
   @IsArray()
-  answers?: Array<string>;
+  answers!: Array<string>;
 
   @IsDefined()
   @IsNumber()
-  deadline?: number;
+  deadline!: number;
 }
 
 class worryUpdateDTO{
   @IsDefined()
   @IsNumber()
-  worryId?: number;
+  worryId!: number;
 
   @IsDefined()
   @IsNumber()
-  userId?: number;
+  userId!: number;
 
   @IsDefined()
   @IsString()
-  title?: string;
+  title!: string;
 
   @IsDefined()
   @IsArray()
-  answers?: Array<string>;
+  answers!: Array<string>;
 }
 
 class finalAnswerCreateDTO{
   @IsDefined()
   @IsNumber()
-  worryId?: number;
+  worryId!: number;
 
   @IsDefined()
   @IsNumber()
-  userId?: number;
+  userId!: number;
 
   @IsDefined()
   @IsString()
-  finalAnswer?: string;
+  finalAnswer!: string;
 }
 
 class deadlineUpdateDTO{
   @IsDefined()
   @IsNumber()
-  worryId?: number;
+  worryId!: number;
 
   @IsDefined()
   @IsNumber()
-  userId?: number;
+  userId!: number;
 
   @IsDefined()
   @IsNumber()
-  dayCount?: number;
+  dayCount!: number;
 }
 
 export {
