@@ -52,13 +52,13 @@ const kakaoLogin_getToken = async (req: Request, res: Response, next: NextFuncti
         })
     })
     const token = response.data
+
+    //발급받은 토큰을 사용해서 카카오 유저 정보 가져오기
     const user = await kakaoLogin_getUserKakaoInfo(token);
     if(!user)
       return res.redirect('/kakao/login');
     
-    const { id, properties } = user;
-    console.log(id, properties.nickname)
-    
+    return await serviceLogin(req,res,next,user);
 
     // return res.status(sc.OK).send(success(statusCode.OK, rm.KAKAO_LOGIN_SUCCESS, response.data));
 
@@ -82,12 +82,41 @@ const kakaoLogin_getUserKakaoInfo =async (token: any) => {
           'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         },
       })
+      // console.log(response.data)
       return response.data;
     } 
     // 엑세스 토큰이 없으면 로그인페이지로 리다이렉트
     else {
       return null;
     }
+
+}
+
+// 캐라 서비스의 로그인 함수
+const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:any) => {
+  try{
+    const { id, kakao_account } = user;
+
+    const foundUser = await userService.getUserByKakaoId(id);
+
+    //가입하지 않은 회원일 경우, 회원가입 진행
+    if(!foundUser){
+
+      req.body = {
+        "kakaoId": id,
+        "name": kakao_account.profile.nickname,
+        "email":kakao_account.email
+      }
+      return await createUser(req,res);
+
+    }
+
+    //가입한 회원일 경우, 로그인 진행
+    return await loginUser(req,res,foundUser);
+
+  }catch(error){
+    next(error)
+  }
 
 }
 
@@ -107,7 +136,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-//* 유저 생성
+
 const createUser = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -115,14 +144,15 @@ const createUser = async (req: Request, res: Response) => {
     }
   
     const userCreateDto: userCreateDTO = req.body;
+    console.log(userCreateDto)
+
     const data = await userService.createUser(userCreateDto);
   
     if (!data) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
     }
   
-    // ================== 여기 추가 ========================
-    //? 아까 만든 jwtHandler 내 sign 함수를 이용해 accessToken 생성
+    //accessToken 생성
     const accessToken = jwtHandler.sign(data.id);
   
     const result = {
@@ -134,10 +164,30 @@ const createUser = async (req: Request, res: Response) => {
     return res.status(sc.CREATED).send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
   };
 
+  const loginUser = async (req: Request, res: Response, user: any) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    }
+  
+    //accessToken 생성
+    const accessToken = jwtHandler.sign(user.id);
+  
+    const result = {
+      id: user.id,
+      name: user.name,
+      accessToken,
+    };
+  
+    return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
+  };
+
 
 export default{
     getUserById,
     createUser,
+    loginUser,
     kakaoLogin_getAuthorizedCode,
-    kakaoLogin_getToken
+    kakaoLogin_getToken,
+    serviceLogin,
 }

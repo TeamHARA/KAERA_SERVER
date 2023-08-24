@@ -15,6 +15,11 @@ const getUserById =async (userId: number) => {
 
 }
 
+const getUserByKakaoId =async (KakaoId: number) => {
+    return await userRepository.findUserByKakaoId(KakaoId);
+
+}
+
 const createUser =async (userCreateDTO:userCreateDTO) => {
    
     return await userRepository.createUser(userCreateDTO);
@@ -23,5 +28,6 @@ const createUser =async (userCreateDTO:userCreateDTO) => {
 
 export default{
     getUserById,
+    getUserByKakaoId,
     createUser,
 }

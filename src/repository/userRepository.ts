@@ -10,9 +10,19 @@ const findUserById = async (userId: number) => {
     });
 };
 
+const findUserByKakaoId = async (KakaoId: number) => {
+    return await prisma.user.findUnique({
+        where: {
+            kakao_id: KakaoId
+        }
+    });
+};
+
 const createUser = async(userCreateDTO:userCreateDTO) => {
     return await prisma.user.create({
         data:{
+            kakao_id: userCreateDTO.kakaoId,
+            apple_id: userCreateDTO.appleId,
             name: userCreateDTO.name,
             email: userCreateDTO.email,
             // used_template: 0,
@@ -42,4 +52,8 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
 //     }
 // }
 
-export default { findUserById,createUser };
+export default { 
+    findUserById,
+    createUser,
+    findUserByKakaoId
+ };
