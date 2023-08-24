@@ -34,6 +34,9 @@ jobs:
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo JWT_ALGO=${{ secrets.JWT_ALGO }} >> .env
+          echo KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} >> .env
+          echo KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }} >> .env
+          echo KAKAO_SECRET_KEY=${{ secrets.KAKAO_SECRET_KEY }} >> .env
           cat .env
 
       - name: Install dependencies
