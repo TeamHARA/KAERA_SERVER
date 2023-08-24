@@ -8,6 +8,9 @@ import validate from "../middlewares/validate";
 
 const router = Router();
 
+router.get("/kakao/login", userController.kakaoLogin_getAuthorizedCode)
+router.get("/kakao/token", userController.kakaoLogin_getToken)
+
 router.get("/:userId",
     auth,
     userController.getUserById

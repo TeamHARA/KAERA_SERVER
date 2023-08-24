@@ -24,7 +24,7 @@ export default {
   NO_USER: "탈퇴했거나 가입하지 않은 유저입니다.",
 
   // 토큰
-  CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
+  CREATE_TOKEN_SUCCESS: "토큰 발급 성공",
   EXPIRED_TOKEN: "토큰이 만료되었습니다.",
   EXPIRED_ALL_TOKEN: "모든 토큰이 만료되었습니다.",
   INVALID_TOKEN: "유효하지 않은 토큰입니다.",
@@ -70,8 +70,9 @@ export default {
   UPDATE_REVIEW_SUCCESS: "리뷰 수정 성공",
   UPDATE_REVIEW_FAIL: "리뷰 수정 실패",
 
-
-
+  //카카오로그인
+  KAKAO_LOGIN_SUCCESS: "카카오 로그인 성공",
+  KAKAO_LOGIN_FAIL: "카카오 로그인 실패",
 
 
  

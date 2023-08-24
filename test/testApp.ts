@@ -4,7 +4,7 @@ import App from '../src/app';
 import * as dotenv from 'dotenv';
 
 const testApp = new App().setup();
-dotenv.config();
+// dotenv.config();
 
 
 export default testApp;
