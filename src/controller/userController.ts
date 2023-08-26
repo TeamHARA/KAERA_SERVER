@@ -101,12 +101,15 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
 
     //가입하지 않은 회원일 경우, 회원가입 진행
     if(!foundUser){
-
+      //필수 동의만 했을 경우
       req.body = {
         "kakaoId": id,
         "name": kakao_account.profile.nickname,
-        "email":kakao_account.email
       }
+      //전체 동의 했을 경우
+      if(kakao_account.profile.email)
+        req.body.email = kakao_account.profile.email
+
       return await createUser(req,res);
 
     }
@@ -144,7 +147,7 @@ const createUser = async (req: Request, res: Response) => {
     }
   
     const userCreateDto: userCreateDTO = req.body;
-    console.log(userCreateDto)
+    // console.log(userCreateDto)
 
     const data = await userService.createUser(userCreateDto);
   
