@@ -25,6 +25,8 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
             apple_id: userCreateDTO.appleId,
             name: userCreateDTO.name,
             email: userCreateDTO.email,
+            age_range: userCreateDTO.ageRange,
+            gender: userCreateDTO.gender,
             // used_template: 0,
             created_at: new Date(),
             updated_at: new Date(),
