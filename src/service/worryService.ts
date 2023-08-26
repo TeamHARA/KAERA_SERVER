@@ -132,7 +132,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
 }
 
 const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
-    const worry = await worryRepository.makeFinalAnswer(finalAnswerCreateDTO);
+    const worry = await worryRepository.createFinalAnswer(finalAnswerCreateDTO);
     
     if (!worry) {
         throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
@@ -140,6 +140,10 @@ const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
 
     if (worry.user_id != finalAnswerCreateDTO.userId) {
         throw new ClientException("고민글 작성자만 최종결정할 수 있습니다.");
+    }
+
+    if (worry.final_answer){
+        throw new ClientException("한 번 내린 최종결정은 수정 불가합니다.");
     }
 
     const quotes = await quoteRepository.findAllQuote();
