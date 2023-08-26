@@ -53,7 +53,7 @@ const findWorryById = async(worryId:number) => {
 
 }
 
-const makeFinalAnswer = async(finalAnswerCreateDTO: finalAnswerCreateDTO) => {
+const createFinalAnswer = async(finalAnswerCreateDTO: finalAnswerCreateDTO) => {
 
     return await prisma.worry.update({
         where: {
@@ -147,7 +147,7 @@ export default {
     updateWorry,
     deleteWorry,
     findWorryById,
-    makeFinalAnswer,
+    createFinalAnswer,
     updateDeadline,
     findWorryListSolved,
     findWorryListUnsolved,
