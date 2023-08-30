@@ -107,8 +107,8 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
         "name": kakao_account.profile.nickname,
       }
       //선택 동의도 했을 경우
-      if(kakao_account.profile.email)
-        req.body.email = kakao_account.profile.email
+      if(kakao_account.email)
+        req.body.email = kakao_account.email
       if(kakao_account.age_range)
         req.body.ageRange = kakao_account.age_range
       if(kakao_account.gender)
