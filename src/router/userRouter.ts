@@ -11,7 +11,7 @@ const router = Router();
 // router.get("/kakao/login", userController.kakaoLogin_getAuthorizedCode)
 // router.get("/kakao/token", userController.kakaoLogin_getToken)
 
-router.get("/kakao/login", userController.kakaoLogin)
+router.post("/kakao/login", userController.kakaoLogin)
 
 
 router.get("/:userId",
