@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { fail, success } from "../constants/response";
-import { rm, sc } from "../constants";
+import { rm, sc, tokenType } from "../constants";
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import statusCode from "../constants/statusCode";
 import { userService } from "../service";
@@ -8,7 +8,9 @@ import { userCreateDTO } from "../interfaces/DTO/userDTO";
 import { validationResult } from "express-validator";
 import jwtHandler from "../modules/jwtHandler";
 import axios from 'axios';
-import qs from "qs";
+import tokenRepository from "../repository/tokenRepository";
+import { JwtPayload } from "jsonwebtoken";
+
 
 // const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: NextFunction) => {
 //   try{
@@ -134,7 +136,8 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
   try{
     const { id, kakao_account } = user;
 
-    const foundUser = await userService.getUserByKakaoId(id);
+    let isNew = false
+    let foundUser = await userService.getUserByKakaoId(id);
 
     //가입하지 않은 회원일 경우, 회원가입 진행
     if(!foundUser){
@@ -151,12 +154,40 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
       if(kakao_account.gender)
         req.body.gender = kakao_account.gender
 
-      return await createUser(req,res);
-
+      const createdUser = await userService.createUser(req.body);
+      foundUser = createdUser
+      isNew = true
     }
 
-    //가입한 회원일 경우, 로그인 진행
-    return await loginUser(req,res,foundUser);
+
+    //local accessToken, refreshToken 발급
+    const accessToken = jwtHandler.access(foundUser.id);
+    const refreshToken = jwtHandler.refresh();
+
+    const result = {
+      id: foundUser.id,
+      name: foundUser.name,
+      accessToken,
+      refreshToken
+    };
+
+    // 발급받은 refresh token 은 DB에 저장
+    const data = await tokenRepository.findRefreshTokenById(foundUser.id);
+    if(!data){
+      await tokenRepository.createRefreshToken(foundUser.id, refreshToken);
+    }
+    await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+
+
+
+    // 경우에 따라 다른 response message 출력
+    // - 회원가입한 경우
+    if(isNew){
+      return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, result));
+    }
+
+    // - 기존회원이 로그인한 경우
+    return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
 
   }catch(error){
     next(error)
@@ -165,74 +196,54 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
 }
 
 const getUserById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { userId } = req.params;
+  try {
+      const { userId } = req.params;
 
-        // if (!userId) {
-        //     throw new ClientException("필요한 Param 값이 없습니다.");
-        // }
-        const foundUser = await userService.getUserById(+userId);
+      // if (!userId) {
+      //     throw new ClientException("필요한 Param 값이 없습니다.");
+      // }
+      const foundUser = await userService.getUserById(+userId);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.READ_USER_SUCCESS, foundUser));
+      return res.status(sc.OK).send(success(statusCode.OK, rm.READ_USER_SUCCESS, foundUser));
 
-    } catch (error) {
-        next(error);
-    }
+  } catch (error) {
+      next(error);
+  }
 };
 
+const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+  try{
+    const { accessToken, refreshToken} = req.body;
+    const access_decoded = jwtHandler.accessVerify(accessToken);
+    const refresh_decoded = jwtHandler.refreshVerify(refreshToken);
 
-const createUser = async (req: Request, res: Response) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-  
-    const userCreateDto: userCreateDTO = req.body;
-    // console.log(userCreateDto)
+    // 잘못된 accessToken or refreshToken 일 경우
+    if ((access_decoded === tokenType.ACCESS_TOKEN_INVALID) || (refresh_decoded === tokenType.REFRESH_TOKEN_INVALID))
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_TOKEN));
 
-    const data = await userService.createUser(userCreateDto);
-  
-    if (!data) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
-    }
-  
-    //local accessToken 생성
-    const accessToken = jwtHandler.sign(data.id);
-  
-    const result = {
-      id: data.id,
-      name: data.name,
-      accessToken,
-    };
-  
-    return res.status(sc.CREATED).send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
-  };
+    // 기간이 만료된 경우 -> refreshToken을 이용하여 재발급
+    if (access_decoded === tokenType.ACCESS_TOKEN_EXPIRED){
+      // refresh token도 만료된 경우 (access,refresh 모두 만료)
+      if (refresh_decoded === tokenType.REFRESH_TOKEN_EXPIRED)
+        return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_ALL_TOKEN));
 
-  const loginUser = async (req: Request, res: Response, user: any) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+      const new_access_token = await userService.refreshToken(refreshToken);
+      return res.status(sc.OK).send(success(statusCode.OK, rm.REFRESH_TOKEN_SUCCESS, new_access_token));
+
     }
-  
-    //accessToken 생성
-    const accessToken = jwtHandler.sign(user.id);
-  
-    const result = {
-      id: user.id,
-      name: user.name,
-      accessToken,
-    };
-  
-    return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
-  };
+
+  }catch(error){
+    next(error)
+  }
+
+}
 
 
 export default{
     getUserById,
-    createUser,
-    loginUser,
     // kakaoLogin_getAuthorizedCode,
     // kakaoLogin_getToken,
     kakaoLogin,
     serviceLogin,
+    refreshToken
 }

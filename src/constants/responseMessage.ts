@@ -13,6 +13,8 @@ export default {
   INVALID_PASSWORD: "잘못된 비밀번호입니다.",
 
   // 유저
+  CREATE_USER_SUCCESS: "유저 생성 성공",
+  CREATE_USER_FAIL: "유저 생성 실패",
   READ_USER_SUCCESS: "유저 조회 성공",
   READ_USER_FAIL: "유저 조회 실패",
   READ_ALL_USERS_SUCCESS: "모든 유저 조회 성공",
@@ -25,6 +27,7 @@ export default {
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 발급 성공",
+  REFRESH_TOKEN_SUCCESS: "토큰 재발급 성공",
   EXPIRED_TOKEN: "토큰이 만료되었습니다.",
   EXPIRED_ALL_TOKEN: "모든 토큰이 만료되었습니다.",
   INVALID_TOKEN: "유효하지 않은 토큰입니다.",

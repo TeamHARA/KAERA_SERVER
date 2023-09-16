@@ -1,7 +1,9 @@
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import { userCreateDTO } from "../interfaces/DTO/userDTO";
+import jwtHandler from "../modules/jwtHandler";
 import { userRepository } from "../repository"
+import tokenRepository from "../repository/tokenRepository";
 
 // const userop = new userRepository();
 
@@ -26,8 +28,20 @@ const createUser =async (userCreateDTO:userCreateDTO) => {
     
 }
 
+const refreshToken =async (refreshToken:string) => {
+   
+    const user = await tokenRepository.findIdByRefreshToken(refreshToken)
+    if(!user){
+        throw new ClientException("refresh token not found in database");
+    }
+
+    return jwtHandler.access(user.user_id);
+}
+
+
 export default{
     getUserById,
     getUserByKakaoId,
     createUser,
+    refreshToken,
 }
