@@ -41,8 +41,9 @@ model user {
   updated_at    DateTime @db.Timestamptz(6)
   kakao_id      BigInt?  @unique
   apple_id      Int?     @unique
-  age_range     String?  @db.VarChar(50)
-  gender        String?  @db.VarChar(10)
+  age_range     String?  @db.VarChar(5)
+  gender        String?  @db.VarChar(6)
+  token         token?
   worry         worry[]
 }
 
@@ -59,4 +60,10 @@ model worry {
   review       review?
   template     template  @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_template_id_fk")
   user         user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_user_id_fk")
+}
+
+model token {
+  user_id       Int    @id
+  refresh_token String @unique @db.VarChar(150)
+  user          user   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "token_user_id_fk")
 }

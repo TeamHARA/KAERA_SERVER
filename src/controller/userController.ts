@@ -10,6 +10,7 @@ import jwtHandler from "../modules/jwtHandler";
 import axios from 'axios';
 import qs from "qs";
 import { create } from "domain";
+import tokenRepository from "../repository/tokenRepository";
 
 // const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: NextFunction) => {
 //   try{
@@ -159,10 +160,10 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
     }
 
 
-    //local accessToken, refreshToken 생성
+    //local accessToken, refreshToken 발급
     const accessToken = jwtHandler.sign(foundUser.id);
     const refreshToken = jwtHandler.refresh();
-
+    
     const result = {
       id: foundUser.id,
       name: foundUser.name,
@@ -170,12 +171,22 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
       refreshToken
     };
 
-    //회원가입한 경우
+    // 발급받은 refresh token 은 DB에 저장
+    const data = await tokenRepository.findRefreshTokenById(foundUser.id);
+    if(!data){
+      await tokenRepository.createRefreshToken(foundUser.id, refreshToken);
+    }
+    await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+
+
+
+    // 경우에 따라 다른 response message 출력
+    // - 회원가입한 경우
     if(isNew){
       return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, result));
     }
 
-    //기존회원이 로그인한 경우
+    // - 기존회원이 로그인한 경우
     return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
 
   }catch(error){
