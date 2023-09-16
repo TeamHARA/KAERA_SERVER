@@ -4,7 +4,7 @@ import tokenType from "../constants/tokenType";
 // import { tokenType } from ".../constants/";
 
 //* 받아온 userId를 담는 access token 생성
-const sign = (userId: number) => {
+const access = (userId: number) => {
   const payload = {
     userId,
   };
@@ -22,7 +22,7 @@ const sign = (userId: number) => {
 };
 
 //* access token 검사!
-const verify = (token: string) => {
+const accessVerify = (token: string) => {
   let decoded: string | jwt.JwtPayload;
 
   try {
@@ -66,8 +66,8 @@ const refreshVerify = (token: string) => {
 }
 
 export default {
-  sign,
-  verify,
+  access,
+  accessVerify,
   refresh,
   refreshVerify,
 

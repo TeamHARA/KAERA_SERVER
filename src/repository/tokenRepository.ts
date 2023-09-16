@@ -12,8 +12,22 @@ const createRefreshToken = async (userId: number, token: string) => {
 
 const findRefreshTokenById = async (userId: number) => {
     return await prisma.token.findUnique({
+        select: {
+            refresh_token:true
+        },
         where: {
             user_id: userId,
+        }
+    });
+};
+
+const findIdByRefreshToken = async (refreshToken: string) => {
+    return await prisma.token.findUnique({
+        select:{
+            user_id:true
+        },
+        where: {
+            refresh_token: refreshToken
         }
     });
 };
@@ -34,6 +48,7 @@ const updateRefreshTokenById = async (userId: number, token:string) => {
 export default { 
     createRefreshToken,
     findRefreshTokenById,
+    findIdByRefreshToken,
     updateRefreshTokenById,
     
 

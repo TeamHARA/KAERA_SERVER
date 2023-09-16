@@ -10,7 +10,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   if (!token) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EMPTY_TOKEN));
 
   try {
-    const decoded = jwtHandler.verify(token); //? jwtHandler에서 만들어둔 verify로 토큰 검사
+    const decoded = jwtHandler.accessVerify(token); //? jwtHandler에서 만들어둔 verify로 토큰 검사
 
     //? 토큰 에러 분기 처리
     if (decoded === tokenType.ACCESS_TOKEN_EXPIRED)

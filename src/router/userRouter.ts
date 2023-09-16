@@ -19,6 +19,8 @@ router.get("/:userId",
     userController.getUserById
 );
 
+router.post("/token/refresh", userController.refreshToken)
+
 // router.post("/",
 //     [
 //         body('name').notEmpty().withMessage("body 에 name 값이 존재하지 않습니다"),
