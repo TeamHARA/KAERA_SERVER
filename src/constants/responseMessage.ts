@@ -13,6 +13,8 @@ export default {
   INVALID_PASSWORD: "잘못된 비밀번호입니다.",
 
   // 유저
+  CREATE_USER_SUCCESS: "유저 생성 성공",
+  CREATE_USER_FAIL: "유저 생성 실패",
   READ_USER_SUCCESS: "유저 조회 성공",
   READ_USER_FAIL: "유저 조회 실패",
   READ_ALL_USERS_SUCCESS: "모든 유저 조회 성공",

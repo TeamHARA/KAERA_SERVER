@@ -9,6 +9,7 @@ import { validationResult } from "express-validator";
 import jwtHandler from "../modules/jwtHandler";
 import axios from 'axios';
 import qs from "qs";
+import { create } from "domain";
 
 // const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: NextFunction) => {
 //   try{
@@ -134,7 +135,8 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
   try{
     const { id, kakao_account } = user;
 
-    const foundUser = await userService.getUserByKakaoId(id);
+    let isNew = false
+    let foundUser = await userService.getUserByKakaoId(id);
 
     //가입하지 않은 회원일 경우, 회원가입 진행
     if(!foundUser){
@@ -151,12 +153,30 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
       if(kakao_account.gender)
         req.body.gender = kakao_account.gender
 
-      return await createUser(req,res);
-
+      const createdUser = await userService.createUser(req.body);
+      foundUser = createdUser
+      isNew = true
     }
 
-    //가입한 회원일 경우, 로그인 진행
-    return await loginUser(req,res,foundUser);
+
+    //local accessToken, refreshToken 생성
+    const accessToken = jwtHandler.sign(foundUser.id);
+    const refreshToken = jwtHandler.refresh();
+
+    const result = {
+      id: foundUser.id,
+      name: foundUser.name,
+      accessToken,
+      refreshToken
+    };
+
+    //회원가입한 경우
+    if(isNew){
+      return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, result));
+    }
+
+    //기존회원이 로그인한 경우
+    return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
 
   }catch(error){
     next(error)
@@ -181,56 +201,8 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 
-const createUser = async (req: Request, res: Response) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-  
-    const userCreateDto: userCreateDTO = req.body;
-    // console.log(userCreateDto)
-
-    const data = await userService.createUser(userCreateDto);
-  
-    if (!data) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
-    }
-  
-    //local accessToken 생성
-    const accessToken = jwtHandler.sign(data.id);
-  
-    const result = {
-      id: data.id,
-      name: data.name,
-      accessToken,
-    };
-  
-    return res.status(sc.CREATED).send(success(sc.CREATED, rm.SIGNUP_SUCCESS, result));
-  };
-
-  const loginUser = async (req: Request, res: Response, user: any) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-  
-    //accessToken 생성
-    const accessToken = jwtHandler.sign(user.id);
-  
-    const result = {
-      id: user.id,
-      name: user.name,
-      accessToken,
-    };
-  
-    return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
-  };
-
-
 export default{
     getUserById,
-    createUser,
-    loginUser,
     // kakaoLogin_getAuthorizedCode,
     // kakaoLogin_getToken,
     kakaoLogin,

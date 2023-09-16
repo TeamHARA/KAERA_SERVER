@@ -15,13 +15,13 @@ const sign = (userId: number) => {
     accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "90d" });
   }
   else{
-    accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "2h" });
+    accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "12h" });
   }
   
   return accessToken;
 };
 
-//* token 검사!
+//* access token 검사!
 const verify = (token: string) => {
   let decoded: string | jwt.JwtPayload;
 
@@ -29,18 +29,46 @@ const verify = (token: string) => {
     decoded = jwt.verify(token, process.env.JWT_SECRET as string);
   } catch (error: any) {
     if (error.message === "jwt expired") {
-      return tokenType.TOKEN_EXPIRED;
+      return tokenType.ACCESS_TOKEN_EXPIRED;
     } else if (error.message === "invalid token") {
-      return tokenType.TOKEN_INVALID;
+      return tokenType.ACCESS_TOKEN_INVALID;
     } else {
-      return tokenType.TOKEN_INVALID;
+      return tokenType.ACCESS_TOKEN_INVALID;
     }
   }
 
   return decoded;
 };
 
+// refresh token 발급
+const refresh = () => { 
+  //refresh token은 payload 없이 
+  return jwt.sign({},process.env.JWT_SECRET as string, { expiresIn: "14d" });
+}
+
+//* refresh token 검사!
+const refreshVerify = (token: string) => {
+  let decoded: string | jwt.JwtPayload;
+
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+  } catch (error: any) {
+    if (error.message === "jwt expired") {
+      return tokenType.REFRESH_TOKEN_EXPIRED;
+    } else if (error.message === "invalid token") {
+      return tokenType.REFRESH_TOKEN_INVALID;
+    } else {
+      return tokenType.REFRESH_TOKEN_INVALID;
+    }
+  }
+
+  return decoded;
+}
+
 export default {
   sign,
   verify,
+  refresh,
+  refreshVerify,
+
 };
