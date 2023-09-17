@@ -1,8 +1,8 @@
-/user:
+/user/kakao/login:
   post:
     tags:
       - User
-    summary: 유저 생성
+    summary: 유저 카카오 회원가입/로그인하기
     consumes:
       - application/json
     requestBody:
@@ -11,48 +11,92 @@
       content:
         application/json:
           schema:
-            $ref: './openapi.yaml#/components/schemas/User'
-          examples:
-            userExample:
-              $ref: './openapi.yaml#/components/examples/userExample'
+            type: object     
+            example: {
+              "accessToken" : "카카오 액세스토큰"
+            }
     responses:
       '200':
-        $ref: './openapi.yaml#/components/responses/successResponse'
+        description: 회원가입/로그인 성공
+        content:
+          application/json:
+            schema:
+              type: object
+            examples: 
+              login_example: 
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "로그인 성공",
+                  "data": {
+                    "id": 2,
+                    "name": "김캐라",
+                    "accessToken": "캐라의 jwt 액세스토큰",
+                    "refreshToken": "캐라의 jwt 리프레쉬토큰"
+                  }
+                }
+              signIn_example:
+                value:  {
+                  "status": 200,
+                  "success": true,
+                  "message": "회원가입 성공",
+                  "data": {
+                    "id": 2,
+                    "name": "김캐라",
+                    "accessToken": "캐라의 jwt 액세스토큰",
+                    "refreshToken": "캐라의 jwt 리프레쉬토큰"
+                  }
+                }              
       '400':
         $ref: './openapi.yaml#/components/responses/BadRequest'
       '500':
         $ref: './openapi.yaml#/components/responses/InternalServerError'
 
-/user/{userId}:
-  get:
+/user/token/refresh:
+  post:
     tags:
       - User
-    summary: 유저 정보 조회
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: 유저 id
-        schema:
-          type: string
+    summary: 유저 토큰 재발급하기
+    consumes:
+      - application/json
+    requestBody:
+      x-name: body
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object     
+            example: {
+              "accessToken" :"만료된 jwt 액세스토큰",
+	            "refreshToekn" : "jwt 리프레쉬토큰"
+            }
     responses:
       '200':
-        description: 유저 조회 성공
+        description: 토큰 재발급 성공
         content:
           application/json:
             schema:
               type: object
               example: {
-              "status": 200,
+                "status": 200,
                 "success": true,
-                "message": "유저 조회 성공",
+                "message": "토큰 재발급 성공",
                 "data": {
-                  "_id": "6283a755c2f673e5e81a6fea",
-                  "name": "홍길동",                
-                  "email": "validateTest-email2@naver.com",             
+                  "accessToken": "재발급받은 jwt 액세스토큰"
                 }
               }
       '400':
         $ref: './openapi.yaml#/components/responses/BadRequest'
+      '401':
+        description: 토큰 재발급 실패
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": 401,
+                "success": false,
+                "message": "모든 토큰이 만료되었습니다."
+              }      
       '500':
         $ref: './openapi.yaml#/components/responses/InternalServerError'
