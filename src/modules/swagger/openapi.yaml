@@ -15,10 +15,10 @@ security:
 #Paths api 경로 지정
 paths: 
   #user  
-  # /user:
-  #   $ref: './user.yaml#/~1user'
-  # /user/{userId}:
-  #   $ref: './user.yaml#/~1user~1{userId}'
+  /user/kakao/login:
+    $ref: './user.yaml#/~1user~1kakao~1login'
+  /user/refresh/token:
+    $ref: './user.yaml#/~1user~1token~1refresh'
 
   #template
   /template:
