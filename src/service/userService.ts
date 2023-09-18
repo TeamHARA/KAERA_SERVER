@@ -23,7 +23,7 @@ const getUserByKakaoId =async (KakaoId: number) => {
 }
 
 const getUserByAppleId =async (AppleId: number) => {
-    return await userRepository.findUserByKakaoId(AppleId);
+    return await userRepository.findUserByAppleId(AppleId);
 
 }
 

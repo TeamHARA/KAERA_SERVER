@@ -76,7 +76,8 @@ export default {
   //카카오로그인
   KAKAO_LOGIN_SUCCESS: "카카오 로그인 성공",
   KAKAO_LOGIN_FAIL: "카카오 로그인 실패",
-
+  APPLE_LOGIN_SUCCESS: "애플 로그인 성공",
+  APPLE_LOGIN_FAIL: "애플 로그인 실패",
 
  
 };

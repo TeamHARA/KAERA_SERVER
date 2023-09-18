@@ -142,7 +142,7 @@ const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
   try{
     const response = await axios({
       method: 'GET',
-      url: 'https://kapi.kakao.com/v2/user/me',
+      url: 'https://kapi.kakao.com/v2/user/me', // 바꿀 에정
       headers:{
         'Authorization': `Bearer ${accessToken}`,
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
