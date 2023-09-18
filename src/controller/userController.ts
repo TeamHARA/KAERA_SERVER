@@ -130,6 +130,40 @@ const kakaoLogin =async (req: Request, res:Response, next:NextFunction) => {
   }
 
 }
+const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
+  const token = req.body
+
+  // 엑세스 토큰이 없으면 에러 반환
+  if (!("accessToken" in token)){
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }
+
+  const { accessToken } = token;
+  try{
+    const response = await axios({
+      method: 'GET',
+      url: 'https://kapi.kakao.com/v2/user/me',
+      headers:{
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      },
+    })
+
+    // console.log(response.data)
+    return await serviceLogin(req,res,next,response.data);
+
+  }catch(error:any){
+
+    //토큰이 유효하지 않은 경우
+    if(error.response.data.msg == "this access token does not exist"){
+      return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+    }
+
+    return res.status(error.response.status).send(fail(error.response.status, error.response.data.msg));
+
+  }
+
+}
 
 // 캐라 서비스의 로그인 함수
 const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:any) => {
@@ -244,6 +278,7 @@ export default{
     // kakaoLogin_getAuthorizedCode,
     // kakaoLogin_getToken,
     kakaoLogin,
+    appleLogin,
     serviceLogin,
     refreshToken
 }

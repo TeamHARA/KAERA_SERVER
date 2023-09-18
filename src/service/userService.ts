@@ -22,6 +22,11 @@ const getUserByKakaoId =async (KakaoId: number) => {
 
 }
 
+const getUserByAppleId =async (AppleId: number) => {
+    return await userRepository.findUserByKakaoId(AppleId);
+
+}
+
 const createUser =async (userCreateDTO:userCreateDTO) => {
    
     return await userRepository.createUser(userCreateDTO);
@@ -42,6 +47,7 @@ const refreshToken =async (refreshToken:string) => {
 export default{
     getUserById,
     getUserByKakaoId,
+    getUserByAppleId,
     createUser,
     refreshToken,
 }
