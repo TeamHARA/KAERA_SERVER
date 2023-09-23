@@ -35,7 +35,12 @@ const refreshToken =async (refreshToken:string) => {
         throw new ClientException("refresh token not found in database");
     }
 
-    return jwtHandler.access(user.user_id);
+    const token = jwtHandler.access(user.user_id);
+    const data = {
+        "accessToken": token
+    }
+
+    return data;
 }
 
 
