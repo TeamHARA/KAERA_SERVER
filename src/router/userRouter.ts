@@ -21,13 +21,6 @@ router.get("/:userId",
 
 router.post("/token/refresh", userController.refreshToken)
 
-// router.post("/",
-//     [
-//         body('name').notEmpty().withMessage("body 에 name 값이 존재하지 않습니다"),
-//         // body('age').notEmpty(),
-//         body('email').notEmpty().withMessage("body 에 email 값이 존재하지 않습니다"),
-//     ],
-//     validate,
-//     userController.createUser);
+router.post("/logout", userController.serviceLogout)
 
 export default router;
