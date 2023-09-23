@@ -231,6 +231,12 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
       return res.status(sc.OK).send(success(statusCode.OK, rm.REFRESH_TOKEN_SUCCESS, new_access_token));
 
     }
+    
+    const data = {
+      "accessToken": accessToken
+    }
+
+    return res.status(sc.OK).send(success(statusCode.OK, "유효한 토큰입니다. 재발급이 불필요합니다.",data));
 
   }catch(error){
     next(error)
