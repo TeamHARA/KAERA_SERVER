@@ -195,6 +195,21 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
 
 }
 
+const serviceLogout = async (req: Request, res: Response, next: NextFunction) => {
+  try{
+    const { accessToken,refreshToken } = req.body
+
+
+    await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);
+
+  }catch(error){
+    next(error)
+  }
+
+
+
+}
+
 const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
       const { userId } = req.params;
@@ -245,5 +260,6 @@ export default{
     // kakaoLogin_getToken,
     kakaoLogin,
     serviceLogin,
+    serviceLogout,
     refreshToken
 }
