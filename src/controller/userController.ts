@@ -98,14 +98,7 @@ import tokenService from "../service/tokenService";
 // }
 
 const kakaoLogin =async (req: Request, res:Response, next:NextFunction) => {
-  const token = req.body
-
-  // 엑세스 토큰이 없으면 에러 반환
-  if (!("accessToken" in token)){
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-  }
-
-  const { accessToken } = token;
+  const { accessToken } = req.body;
   try{
     const response = await axios({
       method: 'GET',
@@ -200,7 +193,7 @@ const serviceLogout = async (req: Request, res: Response, next: NextFunction) =>
   try{
     const { accessToken } = req.body
 
-    
+
     // await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);
 
   }catch(error){
