@@ -11,7 +11,15 @@ const router = Router();
 // router.get("/kakao/login", userController.kakaoLogin_getAuthorizedCode)
 // router.get("/kakao/token", userController.kakaoLogin_getToken)
 
-router.post("/kakao/login", userController.kakaoLogin)
+router.post(
+    "/kakao/login",
+    [
+        body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),
+    ],
+    validate,
+    userController.kakaoLogin
+)
+
 
 
 router.get("/:userId",
@@ -19,8 +27,21 @@ router.get("/:userId",
     userController.getUserById
 );
 
-router.post("/token/refresh", userController.refreshToken)
+router.post("/token/refresh",
+    [
+        body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),
+        body('refreshToken').notEmpty().withMessage("body 에 'refreshToken' 값이 존재하지 않습니다")
+    ],
+    validate,
+    userController.refreshToken
+)
 
-router.post("/logout", userController.serviceLogout)
+router.post("/logout",
+    [
+        body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),
+    ],
+    validate,
+    userController.serviceLogout
+)
 
 export default router;
