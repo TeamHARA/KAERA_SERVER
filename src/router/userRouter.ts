@@ -8,8 +8,8 @@ import validate from "../middlewares/validate";
 
 const router = Router();
 
-// router.get("/kakao/login", userController.kakaoLogin_getAuthorizedCode)
-// router.get("/kakao/token", userController.kakaoLogin_getToken)
+router.get("/kakao/authorize", userController.kakaoLogin_getAuthorizedCode)
+router.get("/kakao/token", userController.kakaoLogin_getToken)
 
 router.post(
     "/kakao/login",
@@ -20,7 +20,13 @@ router.post(
     userController.kakaoLogin
 )
 
-
+router.post("/kakao/logout",
+    [
+        body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),
+    ],
+    validate,
+    userController.kakaoLogout
+)
 
 router.get("/:userId",
     auth,
@@ -36,12 +42,6 @@ router.post("/token/refresh",
     userController.refreshToken
 )
 
-router.post("/logout",
-    [
-        body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),
-    ],
-    validate,
-    userController.serviceLogout
-)
+
 
 export default router;
