@@ -7,10 +7,10 @@ export default {
   // 회원가입 및 로그인
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_FAIL: "회원 가입 실패",
-  SIGNIN_SUCCESS: "로그인 성공",
-  SIGNIN_FAIL: "로그인 실패",
-  ALREADY_NICKNAME: "이미 사용중인 닉네임입니다.",
-  INVALID_PASSWORD: "잘못된 비밀번호입니다.",
+  LOGIN_SUCCESS: "로그인 성공",
+  LOGIN_FAIL: "로그인 실패",
+  LOGOUT_SUCCESS: "로그아웃 성공",
+  LOGOUT_FAIL: "로그아웃 실패",
 
   // 유저
   CREATE_USER_SUCCESS: "유저 생성 성공",
@@ -76,7 +76,8 @@ export default {
   //카카오로그인
   KAKAO_LOGIN_SUCCESS: "카카오 로그인 성공",
   KAKAO_LOGIN_FAIL: "카카오 로그인 실패",
-
-
+  KAKAO_LOGOUT_SUCCESS: "카카오 로그아웃 성공",
+  KAKAO_LOGOUT_FAIL: "카카오 로그아웃 실패",
+  READ_KAKAO_TOKEN_SUCCESS: "카카오 토큰 조회 성공",
  
 };
