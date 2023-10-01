@@ -10,102 +10,75 @@ import jwtHandler from "../modules/jwtHandler";
 import axios from 'axios';
 import tokenRepository from "../repository/tokenRepository";
 import { JwtPayload } from "jsonwebtoken";
+import tokenService from "../service/tokenService";
+import qs from "qs";
 
 
-// const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: NextFunction) => {
-//   try{
-//     //인가코드 받기
-//     const baseUrl = "https://kauth.kakao.com/oauth/authorize";
-//     const config = {
-//       client_id: process.env.KAKAO_CLIENT_ID!,
-//       redirect_uri: process.env.KAKAO_REDIRECT_URI!,
-//       response_type: "code",
-//     };
-//     const params = new URLSearchParams(config).toString();
+const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: NextFunction) => {
+  try{
+    //인가코드 받기
+    const baseUrl = "https://kauth.kakao.com/oauth/authorize";
+    const config = {
+      client_id: process.env.KAKAO_CLIENT_ID!,
+      redirect_uri: process.env.KAKAO_REDIRECT_URI!,
+      response_type: "code",
+    };
+    const params = new URLSearchParams(config).toString();
 
-//     const finalUrl = `${baseUrl}?${params}`;
-//     return res.redirect(finalUrl);
+    const finalUrl = `${baseUrl}?${params}`;
+    return res.redirect(finalUrl);
   
-//   }catch (error) {
-//     next(error);
-//   }
-
-// };
-// const kakaoLogin_getToken = async (req: Request, res: Response, next: NextFunction) => {
-//   try{
-
-//     if(req.query.error){
-//       throw new ClientException("로그인 실패");
-//     }
-
-//     //토큰 받기
-//     const response = await axios({
-//         method: 'POST',
-//         url: 'https://kauth.kakao.com/oauth/token',
-//         headers:{
-//           'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-//         },
-//         data:qs.stringify({//객체를 string 으로 변환
-//             grant_type: 'authorization_code',             //해당 값으로 고정
-//             client_id:process.env.KAKAO_CLIENT_ID,
-//             client_secret:process.env.KAKAO_SECRET_KEY,  //보안 강화를 위함 (필수값은 아님)
-//             redirectUri:process.env.KAKAO_REDIRECT_URI,
-//             code:req.query.code,                         //kakaoLogin_getAuthorizeCode 를 통해 query string 으로 받은 인가 코드
-//         })
-//     })
-//     const token = response.data
-//     console.log(token)
-    
-
-//     //발급받은 토큰을 사용해서 카카오 유저 정보 가져오기
-//     const user = await kakaoLogin_getUserKakaoInfo(token);
-//     if(!user)
-//       return res.redirect('/kakao/login');
-    
-//     return await serviceLogin(req,res,next,user);
-
-//     // return res.status(sc.OK).send(success(statusCode.OK, rm.KAKAO_LOGIN_SUCCESS, response.data));
-
-
-//   } catch (error) {
-//     next(error);
-// }
-// }
-
-// const kakaoLogin_getUserKakaoInfo =async (token: any) => {
-      
-//   // 엑세스 토큰을 제대로 전달받은 경우
-//     if ("access_token" in token) {
-//       const { access_token } = token;
-//       // console.log(access_token);
-//       const response = await axios({
-//         method: 'GET',
-//         url: 'https://kapi.kakao.com/v2/user/me',
-//         headers:{
-//           'Authorization': `Bearer ${access_token}`,
-//           'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-//         },
-//       })
-//       // console.log(response.data)
-//       return response.data;
-//     } 
-//     // 엑세스 토큰이 없으면 로그인페이지로 리다이렉트
-//     else {
-//       return null;
-//     }
-
-// }
-
-const kakaoLogin =async (req: Request, res:Response, next:NextFunction) => {
-  const token = req.body
-
-  // 엑세스 토큰이 없으면 에러 반환
-  if (!("accessToken" in token)){
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+  }catch (error) {
+    next(error);
   }
 
-  const { accessToken } = token;
+};
+const kakaoLogin_getToken = async (req: Request, res: Response, next: NextFunction) => {
   try{
+
+    if(req.query.error){
+      throw new ClientException("로그인 실패");
+    }
+
+    //토큰 받기
+    const response = await axios({
+        method: 'POST',
+        url: 'https://kauth.kakao.com/oauth/token',
+        headers:{
+          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+        },
+        data:qs.stringify({//객체를 string 으로 변환
+            grant_type: 'authorization_code',             //해당 값으로 고정
+            client_id:process.env.KAKAO_CLIENT_ID,
+            client_secret:process.env.KAKAO_SECRET_KEY,  //보안 강화를 위함 (필수값은 아님)
+            redirectUri:process.env.KAKAO_REDIRECT_URI,
+            code:req.query.code,                         //kakaoLogin_getAuthorizeCode 를 통해 query string 으로 받은 인가 코드
+        })
+    })
+
+    return res.status(sc.OK).send(success(statusCode.OK, rm.READ_KAKAO_TOKEN_SUCCESS, response.data));
+
+    //발급받은 토큰을 사용해서 카카오 유저 정보 가져오기
+    // const user = await kakaoLogin_getUserKakaoInfo(token);
+    // if(!user)
+    //   return res.redirect('/kakao/login');
+    
+    // return await serviceLogin(req,res,next,user);
+
+    // // return res.status(sc.OK).send(success(statusCode.OK, rm.KAKAO_LOGIN_SUCCESS, response.data));
+
+
+  } catch (error) {
+    next(error);
+}
+}
+
+
+const kakaoLogin =async (req: Request, res:Response, next:NextFunction) => {
+  try{
+    const { accessToken } = req.body;
+
+    // get user kakao info
     const response = await axios({
       method: 'GET',
       url: 'https://kapi.kakao.com/v2/user/me',
@@ -124,6 +97,34 @@ const kakaoLogin =async (req: Request, res:Response, next:NextFunction) => {
     if(error.response.data.msg == "this access token does not exist"){
       return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
     }
+    console.log(error)
+    return res.status(error.response.status).send(fail(error.response.status, error.response.data.msg));
+
+  }
+
+}
+
+const kakaoLogout =async (req: Request, res:Response, next:NextFunction) => {
+  try{
+    const { accessToken } = req.body;
+
+    const response = await axios({
+      method: 'POST',
+      url: 'https://kapi.kakao.com/v1/user/logout',
+      headers:{
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    })
+
+    return res.status(sc.OK).send(success(statusCode.OK, rm.KAKAO_LOGOUT_SUCCESS, response.data.msg));
+
+  }catch(error:any){
+
+    //토큰이 유효하지 않은 경우
+    if(error.response.data.msg == "this access token does not exist"){
+      return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+    }
+    console.log(error)
 
     return res.status(error.response.status).send(fail(error.response.status, error.response.data.msg));
 
@@ -187,11 +188,26 @@ const serviceLogin = async (req: Request, res:Response,next:NextFunction, user:a
     }
 
     // - 기존회원이 로그인한 경우
-    return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, result));
+    return res.status(sc.OK).send(success(sc.OK, rm.LOGIN_SUCCESS, result));
 
   }catch(error){
     next(error)
   }
+
+}
+
+const serviceLogout = async (req: Request, res: Response, next: NextFunction) => {
+  try{
+    const { accessToken } = req.body
+
+
+    // await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);
+
+  }catch(error){
+    next(error)
+  }
+
+
 
 }
 
@@ -227,7 +243,7 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
       if (refresh_decoded === tokenType.REFRESH_TOKEN_EXPIRED)
         return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_ALL_TOKEN));
 
-      const new_access_token = await userService.refreshToken(refreshToken);
+      const new_access_token = await tokenService.refreshToken(refreshToken);
       return res.status(sc.OK).send(success(statusCode.OK, rm.REFRESH_TOKEN_SUCCESS, new_access_token));
 
     }
@@ -247,9 +263,11 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
 
 export default{
     getUserById,
-    // kakaoLogin_getAuthorizedCode,
-    // kakaoLogin_getToken,
+    kakaoLogin_getAuthorizedCode,
+    kakaoLogin_getToken,
     kakaoLogin,
+    kakaoLogout,
     serviceLogin,
+    serviceLogout,
     refreshToken
 }

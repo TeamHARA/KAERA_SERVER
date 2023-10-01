@@ -35,6 +35,14 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
     })
 }
 
+const deleteUser = async(userId: number) => {
+    return await prisma.user.delete({
+        where: {
+            id: userId
+        }
+    })
+}
+
 // ? class로 사용하는 경우는 언제 ?
 // export class userRepository{
 //     findUserById = async (userId: number) => {
@@ -57,5 +65,6 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
 export default { 
     findUserById,
     createUser,
-    findUserByKakaoId
+    findUserByKakaoId,
+    deleteUser
  };
