@@ -16,7 +16,7 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
       if ((access_decoded === tokenType.ACCESS_TOKEN_INVALID) || (refresh_decoded === tokenType.REFRESH_TOKEN_INVALID))
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_TOKEN));
   
-      // 기간이 만료된 경우 -> refreshToken을 이용하여 재발급
+      // 기간이 만료된 경우 -> refreshToken을 이용하여 accessToken 재발급
       if (access_decoded === tokenType.ACCESS_TOKEN_EXPIRED){
         // refresh token도 만료된 경우 (access,refresh 모두 만료)
         if (refresh_decoded === tokenType.REFRESH_TOKEN_EXPIRED)
@@ -27,6 +27,7 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
   
       }
       
+      // 기간이 만료되지 않은 경우 -> 기존 accessToken 다시 반환
       const data = {
         "accessToken": accessToken
       }
