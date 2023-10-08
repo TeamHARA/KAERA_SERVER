@@ -2,7 +2,7 @@ import { ClientException } from "../common/error/exceptions/customExceptions";
 import jwtHandler from "../modules/jwtHandler";
 import tokenRepository from "../repository/tokenRepository";
 
-const refreshToken =async (refreshToken:string) => {
+const refreshAccessToken =async (refreshToken:string) => {
    
     const user = await tokenRepository.findIdByRefreshToken(refreshToken)
     if(!user){
@@ -17,6 +17,8 @@ const refreshToken =async (refreshToken:string) => {
     return data;
 }
 
+
+
 export default{
-    refreshToken,
+    refreshAccessToken,
 }

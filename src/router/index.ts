@@ -3,6 +3,7 @@ import userRouter from './userRouter';
 import templateRouter from "./templateRouter";
 import worryRouter from "./worryRouter";
 import reviewRouter from "./reviewRouter";
+import authRouter from "./authRouter";
 
 const router: Router = Router();
 
@@ -10,6 +11,8 @@ router.use("/user", userRouter);
 router.use("/template",templateRouter);
 router.use("/worry",worryRouter);
 router.use("/review",reviewRouter);
+router.use("/auth",authRouter);
+
 
 
 export default router;

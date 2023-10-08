@@ -1,0 +1,45 @@
+import { NextFunction, Request, Response } from "express";
+import { rm, sc, tokenType } from "../constants";
+import { fail, success } from "../constants/response";
+import statusCode from "../constants/statusCode";
+import jwtHandler from "../modules/jwtHandler";
+import tokenService from "../service/tokenService";
+
+
+const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+      const { accessToken, refreshToken} = req.body;
+      const access_decoded = jwtHandler.accessVerify(accessToken);
+      const refresh_decoded = jwtHandler.refreshVerify(refreshToken);
+  
+      // 잘못된 accessToken or refreshToken 일 경우
+      if ((access_decoded === tokenType.ACCESS_TOKEN_INVALID) || (refresh_decoded === tokenType.REFRESH_TOKEN_INVALID))
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_TOKEN));
+  
+      // 기간이 만료된 경우 -> refreshToken을 이용하여 재발급
+      if (access_decoded === tokenType.ACCESS_TOKEN_EXPIRED){
+        // refresh token도 만료된 경우 (access,refresh 모두 만료)
+        if (refresh_decoded === tokenType.REFRESH_TOKEN_EXPIRED)
+          return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_ALL_TOKEN));
+  
+        const new_access_token = await tokenService.refreshAccessToken(refreshToken);
+        return res.status(sc.OK).send(success(statusCode.OK, rm.REFRESH_TOKEN_SUCCESS, new_access_token));
+  
+      }
+      
+      const data = {
+        "accessToken": accessToken
+      }
+  
+      return res.status(sc.OK).send(success(statusCode.OK, "유효한 토큰입니다. 재발급이 불필요합니다.",data));
+  
+    }catch(error){
+      next(error)
+    }
+  
+  }
+
+  export default{
+    refreshToken
+}
+
