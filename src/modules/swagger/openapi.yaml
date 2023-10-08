@@ -14,11 +14,11 @@ security:
 
 #Paths api 경로 지정
 paths: 
-  #user  
-  /user/kakao/login:
-    $ref: './user.yaml#/~1user~1kakao~1login'
-  /user/refresh/token:
-    $ref: './user.yaml#/~1user~1token~1refresh'
+  #auth  
+  /auth/kakao/login:
+    $ref: './auth.yaml#/~1auth~1kakao~1login'
+  /auth/refresh/token:
+    $ref: './auth.yaml#/~1auth~1token~1refresh'
 
   #template
   /template:
