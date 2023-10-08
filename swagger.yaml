@@ -11,10 +11,10 @@ servers:
 security:
   - bearerAuth: []
 paths:
-  /user/kakao/login:
+  /auth/kakao/login:
     post:
       tags:
-        - User
+        - Auth
       summary: 유저 카카오 회원가입/로그인하기
       consumes:
         - application/json
@@ -59,10 +59,10 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /user/refresh/token:
+  /auth/refresh/token:
     post:
       tags:
-        - User
+        - Auth
       summary: 유저 토큰 재발급하기
       consumes:
         - application/json

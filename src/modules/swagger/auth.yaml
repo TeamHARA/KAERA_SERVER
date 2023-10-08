@@ -1,7 +1,7 @@
-/user/kakao/login:
+/auth/kakao/login:
   post:
     tags:
-      - User
+      - Auth
     summary: 유저 카카오 회원가입/로그인하기
     consumes:
       - application/json
@@ -52,10 +52,10 @@
       '500':
         $ref: './openapi.yaml#/components/responses/InternalServerError'
 
-/user/token/refresh:
+/auth/token/refresh:
   post:
     tags:
-      - User
+      - Auth
     summary: 유저 토큰 재발급하기
     consumes:
       - application/json
