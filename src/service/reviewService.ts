@@ -5,10 +5,17 @@ import { reviewDTO } from "../interfaces/DTO/reviewDTO"
 import worryRepository from "../repository/worryRepository";
 
 const putReview = async (reviewDTO: reviewDTO) => {
+
     const worry = await worryRepository.findWorryById(reviewDTO.worryId);
     if(!worry){
         throw new ClientException("해당 worryId의 고민글이 존재하지 않습니다.");
     }
+
+    if(worry.user_id != reviewDTO.userId){
+        throw new ClientException("고민글 작성자만 리뷰를 등록/수정할 수 있습니다.");
+    }
+
+
     const exists = await reviewRepository.findreviewById(reviewDTO.worryId);
     let review;
     if (!exists) {
