@@ -79,5 +79,6 @@ export default {
   KAKAO_LOGOUT_SUCCESS: "카카오 로그아웃 성공",
   KAKAO_LOGOUT_FAIL: "카카오 로그아웃 실패",
   READ_KAKAO_TOKEN_SUCCESS: "카카오 토큰 조회 성공",
- 
+  READ_KAKAO_TOKEN_FAIL: "카카오 토큰 조회 실패",
+
 };
