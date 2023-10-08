@@ -1,10 +1,10 @@
 interface userCreateDTO {
-    kakaoId: number;
-    appleId: number;
+    kakaoId: number | null;
+    appleId: number | null;
     name: string;
-    ageRange: string;
-    gender: string;
-    email: string;
+    ageRange: string | null;
+    gender: string | null;
+    email: string | null;
 }
 
 

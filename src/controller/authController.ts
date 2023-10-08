@@ -3,7 +3,6 @@ import { rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import axios from 'axios';
-import tokenRepository from "../repository/tokenRepository";
 import qs from "qs";
 import authService from "../service/authService";
 
@@ -85,8 +84,16 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
         },
       })
   
-      // console.log(response.data)
-      return await authService.serviceLogin(req,res,next,response.data);
+      const data = await authService.serviceLogin(response.data);
+
+      // 경우에 따라 다른 response message 출력
+      // - 회원가입한 경우
+      if(data.isNew){
+        return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, data.result));
+      }
+  
+      // - 기존회원이 로그인한 경우
+      return res.status(sc.OK).send(success(sc.OK, rm.LOGIN_SUCCESS, data.result));
   
     }catch(error:any){
   
@@ -130,23 +137,11 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
   }
   
   
-  const serviceLogout = async (req: Request, res: Response, next: NextFunction) => {
-    try{
-      const { accessToken } = req.body
-  
-  
-      // await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);
-  
-    }catch(error){
-      next(error)
-    }
-}
 
 export default{
     kakaoLogin_getAuthorizedCode,
     kakaoLogin_getToken,
     kakaoLogin,
     kakaoLogout,
-    serviceLogout,
 
 }

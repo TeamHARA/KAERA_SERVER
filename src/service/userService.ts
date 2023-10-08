@@ -20,8 +20,11 @@ const getUserByKakaoId =async (KakaoId: number) => {
 }
 
 const createUser =async (userCreateDTO:userCreateDTO) => {
+    const createdUser = await userRepository.createUser(userCreateDTO);
+    if(!createUser)
+        throw new ClientException("create user fail");
    
-    return await userRepository.createUser(userCreateDTO);
+    return createdUser;
     
 }
 
