@@ -8,6 +8,7 @@ import validate from "../middlewares/validate";
 const router = Router();
 
 
+
 router.get("/:userId",
     auth,
     userController.getUserById

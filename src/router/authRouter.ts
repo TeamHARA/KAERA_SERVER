@@ -28,6 +28,16 @@ router.post("/kakao/logout",
     authController.kakaoLogout
 )
 
+router.post("/apple/login",
+    [
+        body('identityToken').notEmpty().withMessage("body 에 'identityToken' 값이 존재하지 않습니다"),
+        body('user').notEmpty().withMessage("body 에 'user' 값이 존재하지 않습니다"),
+
+    ],
+    validate,
+    authController.appleLogin
+)
+
 router.post("/token/refresh",
     [
         body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),

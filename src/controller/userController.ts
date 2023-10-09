@@ -243,7 +243,7 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
       if (refresh_decoded === tokenType.REFRESH_TOKEN_EXPIRED)
         return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_ALL_TOKEN));
 
-      const new_access_token = await tokenService.refreshToken(refreshToken);
+      const new_access_token = await tokenService.refreshAccessToken(refreshToken);
       return res.status(sc.OK).send(success(statusCode.OK, rm.REFRESH_TOKEN_SUCCESS, new_access_token));
 
     }
@@ -263,11 +263,5 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
 
 export default{
     getUserById,
-    kakaoLogin_getAuthorizedCode,
-    kakaoLogin_getToken,
-    kakaoLogin,
-    kakaoLogout,
-    serviceLogin,
-    serviceLogout,
-    refreshToken
+
 }

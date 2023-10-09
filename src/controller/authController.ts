@@ -84,7 +84,7 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
         },
       })
   
-      const data = await authService.serviceLogin(response.data);
+      const data = await authService.serviceLogin("kakao", response.data);
 
       // 경우에 따라 다른 response message 출력
       // - 회원가입한 경우
@@ -135,6 +135,27 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
     }
   
   }
+
+  const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
+    try {
+      const { identityToken, user } = req.body
+      const DTO = {
+        identityToken: identityToken,
+        id: user
+      }
+      const data = await authService.serviceLogin("apple", DTO);
+
+    
+     // Respond with the user
+    //  return res.status(sc.OK).send(success(statusCode.OK, rm.LOGIN_SUCCESS ,data))
+  
+  
+  
+  } catch (err) {
+     console.log("Err", err)
+  }
+  
+  }
   
   
 
@@ -143,5 +164,7 @@ export default{
     kakaoLogin_getToken,
     kakaoLogin,
     kakaoLogout,
+    appleLogin,
+
 
 }
