@@ -2,9 +2,10 @@
 .DS_Store
 .vscode
 node_modules
-.env
 dist
+.env
 .env.development
+.env.production
 .env.test
-firebase-admin.json
 config
+firebase-admin.json
