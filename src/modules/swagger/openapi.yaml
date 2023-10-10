@@ -17,7 +17,7 @@ paths:
   #auth  
   /auth/kakao/login:
     $ref: './auth.yaml#/~1auth~1kakao~1login'
-  /auth/refresh/token:
+  /auth/token/refresh:
     $ref: './auth.yaml#/~1auth~1token~1refresh'
 
   #template
