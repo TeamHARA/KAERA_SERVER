@@ -84,7 +84,9 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
         },
       })
   
+
       const data = await authService.serviceLogin("kakao", response.data);
+
 
       // 경우에 따라 다른 response message 출력
       // - 회원가입한 경우
@@ -136,6 +138,7 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
   
   }
 
+
   const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
     try {
       const { identityToken, user } = req.body
@@ -157,14 +160,13 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
   
   }
   
-  
 
+  
 export default{
     kakaoLogin_getAuthorizedCode,
     kakaoLogin_getToken,
     kakaoLogin,
     kakaoLogout,
     appleLogin,
-
 
 }
