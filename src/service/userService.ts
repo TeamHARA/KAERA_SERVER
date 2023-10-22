@@ -19,6 +19,11 @@ const getUserByKakaoId =async (KakaoId: number) => {
 
 }
 
+const getUserByAppleId =async (AppleId: number) => {
+    return await userRepository.findUserByAppleId(AppleId);
+
+}
+
 const createUser =async (userCreateDTO:userCreateDTO) => {
     const createdUser = await userRepository.createUser(userCreateDTO);
     if(!createUser)
@@ -41,6 +46,7 @@ const deleteUser = async (userId: number) => {
 export default{
     getUserById,
     getUserByKakaoId,
+    getUserByAppleId,
     createUser,
     deleteUser
 }

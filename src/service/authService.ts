@@ -14,6 +14,7 @@ const serviceLogin = async (provider:string, user:any) => {
     // kakao login으로 유저 정보 갖고온 경우
     if(provider == "kakao"){
       const { id, kakao_account } = user;
+      console.log(user)
   
       foundUser = await userService.getUserByKakaoId(id);
 
@@ -34,8 +35,14 @@ const serviceLogin = async (provider:string, user:any) => {
         if(kakao_account.gender)
             userCreateDTO.gender = kakao_account.gender
 
+
+        //회원가입
+        const createdUser = await userService.createUser(userCreateDTO);
+        foundUser = createdUser
+        isNew = true
       }
     }
+
 
     // apple login
     if(provider == "apple"){
@@ -68,15 +75,27 @@ const serviceLogin = async (provider:string, user:any) => {
       if(payload.sub === id && payload.aud === process.env.APPLE_CLIENT_ID){
         
       }
-      
+      foundUser = await userService.getUserByAppleId(id);
+      if(!foundUser){
+        
+        //필수 동의만 했을 경우
+        userCreateDTO.AppleId = id;
+        // userCreateDTO.name = 
 
 
+
+         //회원가입
+         const createdUser = await userService.createUser(userCreateDTO);
+         foundUser = createdUser
+         isNew = true
+      }
 
     }
+    
+    if(!foundUser){
+      throw new ClientException("로그인 및 회원가입 실패");
+    }
 
-    const createdUser = await userService.createUser(userCreateDTO);
-    foundUser = createdUser
-    isNew = true
       
      
   
