@@ -59,7 +59,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /auth/refresh/token:
+  /auth/token/refresh:
     post:
       tags:
         - Auth

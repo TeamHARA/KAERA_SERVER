@@ -33,9 +33,18 @@ const findreviewById = async (worryId: number) => {
     });
 };
 
+const deleteReviewById = async (worryId: number) => {
+    return await prisma.review.delete({
+        where:{
+            worry_id: worryId
+        }
+    });
+};
+
 
 export default{
     createReview,
     updateReview,
-    findreviewById
+    findreviewById,
+    deleteReviewById
 }
