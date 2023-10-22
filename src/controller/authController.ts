@@ -98,12 +98,12 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
       return res.status(sc.OK).send(success(sc.OK, rm.LOGIN_SUCCESS, data.result));
   
     }catch(error:any){
-  
+      console.log(error)
+
       //토큰이 유효하지 않은 경우
       if(error.response.data.msg == "this access token does not exist"){
         return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
       }
-      console.log(error)
       return res.status(error.response.status).send(fail(error.response.status, error.response.data.msg));
   
     }
