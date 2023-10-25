@@ -54,7 +54,7 @@ const serviceLogin = async (provider:string, user:any) => {
       });
 
       // 전달받은 identityToken이 변조되지 않은 올바른 토큰인지 확인하는 과정
-      const {identityToken, id} = user;
+      const {identityToken, id, fullName} = user;
       const decoded = jwt.decode(identityToken, { complete: true})
       const kid = decoded.header.kid
       
@@ -72,17 +72,17 @@ const serviceLogin = async (provider:string, user:any) => {
 
       // 발급한 주체가(aud)가 우리의 서비스 id 와 일치하는지
       // 사용자 식별 id 가 일치하는지
-      if(payload.sub === id && payload.aud === process.env.APPLE_CLIENT_ID){
-        
+      if(payload.sub !== id || payload.aud !== process.env.APPLE_CLIENT_ID){
+        throw new ClientException("invliad signIn reqeust");
       }
+
       foundUser = await userService.getUserByAppleId(id);
       if(!foundUser){
         
-        //필수 동의만 했을 경우
+
         userCreateDTO.AppleId = id;
-        // userCreateDTO.name = 
-
-
+        userCreateDTO.name = fullName;
+        userCreateDTO.email = payload.email;
 
          //회원가입
          const createdUser = await userService.createUser(userCreateDTO);
