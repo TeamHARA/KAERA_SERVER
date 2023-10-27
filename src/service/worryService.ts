@@ -47,8 +47,17 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
 }
 
 const patchWorry =async (worryUpdateDTO: worryUpdateDTO) => {
-    const worry = await worryRepository.updateWorry(worryUpdateDTO);
+    const worry = await worryRepository.findWorryById(worryUpdateDTO.worryId);
+
     if (!worry) {
+      throw new ClientException("수정할 고민글이 존재하지 않습니다.");
+    }
+    if (worry.user_id != worryUpdateDTO.userId) {
+      throw new ClientException("고민글 작성자만 수정할 수 있습니다.");
+    }
+   
+    const updatedWorry = await worryRepository.updateWorry(worryUpdateDTO);
+    if (!updatedWorry) {
         throw new ClientException(rm.UPDATE_WORRY_FAIL);
     }
 

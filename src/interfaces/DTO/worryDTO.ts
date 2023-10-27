@@ -1,4 +1,4 @@
-import { IsString, IsDefined, IsNumber, IsArray, IsNotEmpty} from 'class-validator';
+import { IsString, IsDefined, IsNumber, IsArray, IsNotEmpty, isNumber} from 'class-validator';
 
 class worryCreateDTO {
 
@@ -27,6 +27,10 @@ class worryUpdateDTO{
   @IsDefined()
   @IsNumber()
   worryId!: number;
+
+  @IsDefined()
+  @IsNumber()
+  templateId!: number;
 
   @IsDefined()
   @IsNumber()
