@@ -284,6 +284,7 @@ paths:
                   description: 데드라인
             example:
               worryId: 2
+              templateId: 1
               title: 졸업후의 나
               answers:
                 - 11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.
