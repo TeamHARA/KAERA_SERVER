@@ -26,6 +26,7 @@ const updateWorry = async(worryUpdateDTO: worryUpdateDTO) => {
             id: worryUpdateDTO.worryId
         },
         data: {
+            template_id: worryUpdateDTO.templateId,
             title: worryUpdateDTO.title,
             answers: worryUpdateDTO.answers,
             updated_at: new Date(),
