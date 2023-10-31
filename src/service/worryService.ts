@@ -145,18 +145,23 @@ const getWorryDetail =async (worryId: number,userId: number) => {
 }
 
 const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
-    const worry = await worryRepository.createFinalAnswer(finalAnswerCreateDTO);
-    
-    if (!worry) {
-        throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
-    }
+    const worry = await worryRepository.findWorryById(finalAnswerCreateDTO.worryId);
 
+    if (!worry) {
+        throw new ClientException("해당 id의 고민글이 존재하지 않습니다.");
+    }
+    
     if (worry.user_id != finalAnswerCreateDTO.userId) {
         throw new ClientException("고민글 작성자만 최종결정할 수 있습니다.");
     }
 
     if (worry.final_answer){
         throw new ClientException("한 번 내린 최종결정은 수정 불가합니다.");
+    }
+
+    const updatedWorry = await worryRepository.createFinalAnswer(finalAnswerCreateDTO);
+    if (!updatedWorry) {
+        throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
     }
 
     const quotes = await quoteRepository.findAllQuote();
