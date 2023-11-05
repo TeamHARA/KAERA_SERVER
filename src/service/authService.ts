@@ -123,11 +123,12 @@ const serviceLogin = async (provider:string, user:any) => {
   
  }
 
-  const serviceLogout = async (userId:number) => {
+const serviceLogout = async (userId:number) => {
   
-
-   // await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);
-  
+  const deleted = await tokenRepository.deleteRefreshTokenById(userId);
+  if(!deleted){
+    throw new ClientException("refresh token delete fail");
+  }
 
 }
 

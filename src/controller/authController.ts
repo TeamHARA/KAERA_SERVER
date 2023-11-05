@@ -7,6 +7,7 @@ import qs from "qs";
 import authService from "../service/authService";
 
 
+
 // 서버에서 테스트용 카카오 토큰을 받기 위해 쓰일, 인가코드를 받기 위한 함수
 const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: NextFunction) => {
     try{
@@ -109,35 +110,6 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
     }
   
   }
-  
-  const kakaoLogout =async (req: Request, res:Response, next:NextFunction) => {
-    try{
-      const { accessToken } = req.body;
-  
-      const response = await axios({
-        method: 'POST',
-        url: 'https://kapi.kakao.com/v1/user/logout',
-        headers:{
-          'Authorization': `Bearer ${accessToken}`,
-        }
-      })
-  
-      return res.status(sc.OK).send(success(statusCode.OK, rm.KAKAO_LOGOUT_SUCCESS, response.data.msg));
-  
-    }catch(error:any){
-  
-      //토큰이 유효하지 않은 경우
-      if(error.response.data.msg == "this access token does not exist"){
-        return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
-      }
-      console.log(error)
-  
-      return res.status(error.response.status).send(fail(error.response.status, error.response.data.msg));
-  
-    }
-  
-  }
-
 
   const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
     try {
@@ -158,20 +130,58 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
       // - 기존회원이 로그인한 경우
       return res.status(sc.OK).send(success(sc.OK, rm.LOGIN_SUCCESS, data.result));  
     
-  
-  } catch (err) {
-     console.log("Err", err)
+    } catch (err) {
+      console.log("Err", err)
+    }
   }
-  
-  }
-  
 
+  const serviceLogout =async (req: Request, res:Response, next:NextFunction) => {
+    try{
+      const { userId } = req.body;
+      await authService.serviceLogout(userId);
+ 
+
+      return res.status(sc.OK).send(success(sc.OK, rm.LOGOUT_SUCCESS));  
+
+    }catch(error){
+      next(error);
+    }
+  }
+
+
+  // const kakaoLogout =async (req: Request, res:Response, next:NextFunction) => {
+  //   try{
+  //     const { accessToken } = req.body;
+  
+  //     const response = await axios({
+  //       method: 'POST',
+  //       url: 'https://kapi.kakao.com/v1/user/logout',
+  //       headers:{
+  //         'Authorization': `Bearer ${accessToken}`,
+  //       }
+  //     })
+  
+  //     return res.status(sc.OK).send(success(statusCode.OK, rm.KAKAO_LOGOUT_SUCCESS, response.data.msg));
+  
+  //   }catch(error:any){
+  
+  //     //토큰이 유효하지 않은 경우
+  //     if(error.response.data.msg == "this access token does not exist"){
+  //       return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+  //     }
+  //     console.log(error)
+  
+  //     return res.status(error.response.status).send(fail(error.response.status, error.response.data.msg));
+  
+  //   }
+  
+  // }
   
 export default{
     kakaoLogin_getAuthorizedCode,
     kakaoLogin_getToken,
     kakaoLogin,
-    kakaoLogout,
     appleLogin,
+    serviceLogout,
 
 }
