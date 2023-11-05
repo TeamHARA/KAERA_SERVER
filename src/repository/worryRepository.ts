@@ -61,6 +61,7 @@ const createFinalAnswer = async(finalAnswerCreateDTO: finalAnswerCreateDTO) => {
             id: finalAnswerCreateDTO.worryId
         },
         data: {
+            updated_at: new Date(),
             final_answer: finalAnswerCreateDTO.finalAnswer
         }
     })
@@ -73,6 +74,7 @@ const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
             id: deadlineUpdateDAO.worryId
         },
         data: {
+            updated_at: new Date(),
             deadline: deadlineUpdateDAO.deadline
         }
     })
