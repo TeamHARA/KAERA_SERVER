@@ -11,10 +11,9 @@ const serviceLogin = async (provider:string, user:any) => {
     let isNew = false;
     let foundUser;
 
-    // kakao login으로 유저 정보 갖고온 경우
+    // kakao login
     if(provider == "kakao"){
       const { id, kakao_account } = user;
-      console.log(user)
   
       foundUser = await userService.getUserByKakaoId(id);
 
@@ -41,7 +40,7 @@ const serviceLogin = async (provider:string, user:any) => {
         foundUser = createdUser
         isNew = true
       }
-    }
+    }//kakao
 
 
     // apple login
@@ -65,7 +64,6 @@ const serviceLogin = async (provider:string, user:any) => {
       }
 
       const payload = jwt.verify(identityToken, signingKey);
-      console.log(payload)
       if(!payload){
         throw new ClientException("jwt verification fail");
       }
@@ -73,16 +71,17 @@ const serviceLogin = async (provider:string, user:any) => {
       // 발급한 주체가(aud)가 우리의 서비스 id 와 일치하는지
       // 사용자 식별 id 가 일치하는지
       if(payload.sub !== id || payload.aud !== process.env.APPLE_CLIENT_ID){
-        throw new ClientException("invliad signIn reqeust");
+        throw new ClientException("invliad signIn request");
       }
 
       foundUser = await userService.getUserByAppleId(id);
-      if(!foundUser){
-        
+      console.log(foundUser)
 
-        userCreateDTO.AppleId = id;
+      if(!foundUser){
+      
+        userCreateDTO.appleId = id;
         userCreateDTO.name = fullName;
-        userCreateDTO.email = payload.email;
+        // userCreateDTO.email = payload.email;
 
          //회원가입
          const createdUser = await userService.createUser(userCreateDTO);
@@ -90,15 +89,14 @@ const serviceLogin = async (provider:string, user:any) => {
          isNew = true
       }
 
-    }
+    }// apple
     
+
+    // our service(kaera) login logic
     if(!foundUser){
       throw new ClientException("로그인 및 회원가입 실패");
     }
 
-      
-     
-  
     //local accessToken, refreshToken 발급
     const accessToken = jwtHandler.access(foundUser.id);
     const refreshToken = jwtHandler.refresh();
@@ -113,7 +111,7 @@ const serviceLogin = async (provider:string, user:any) => {
     // 발급받은 refresh token 은 DB에 저장
     const token = await tokenRepository.findRefreshTokenById(foundUser.id);
     if(!token){
-      await tokenRepository.createRefreshToken(foundUser.id, refreshToken);
+    await tokenRepository.createRefreshToken(foundUser.id, refreshToken);
     }
     await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
 
@@ -125,7 +123,7 @@ const serviceLogin = async (provider:string, user:any) => {
   
  }
 
-  const serviceLogout = async () => {
+  const serviceLogout = async (userId:number) => {
   
 
    // await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);

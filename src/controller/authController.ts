@@ -150,10 +150,14 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
       const data = await authService.serviceLogin("apple", DTO);
 
     
-     // Respond with the user
-    //  return res.status(sc.OK).send(success(statusCode.OK, rm.LOGIN_SUCCESS ,data))
-  
-  
+      // - 회원가입한 경우
+      if(data.isNew){
+        return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, data.result));
+      }
+
+      // - 기존회원이 로그인한 경우
+      return res.status(sc.OK).send(success(sc.OK, rm.LOGIN_SUCCESS, data.result));  
+    
   
   } catch (err) {
      console.log("Err", err)
