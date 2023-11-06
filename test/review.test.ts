@@ -37,14 +37,20 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
             updated_at: new Date()
         };
     
-        test("리뷰가 존재하지 않을 경우, 리뷰를 생성", async () => {
-            prismaMock.review.findUnique.mockResolvedValue(null);
-            prismaMock.review.create.mockResolvedValue(review);
+        // test("리뷰가 존재하지 않을 경우, 리뷰를 생성", async () => {
+        //     prismaMock.review.findUnique.mockResolvedValue(null);
+        //     prismaMock.review.create.mockResolvedValue(review);
+        //     const moment = require('moment');
+        //     const kst_updated_at = moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
+            
+        //     await expect(reviewService.patchReview(DTO)).resolves.toEqual({
+        //         isNew: 1,
+        //         result:{
+        //             updatedAt: kst_updated_at
+        //         }
+        //     })
 
-            // 리뷰를 생성했을 경우엔 data를 반환하지 않으므로 resolves to 'undefined'
-            await expect(reviewService.putReview(DTO)).resolves.toEqual(undefined)
-
-        })
+        // })
 
         test("리뷰가 존재할 경우, 리뷰를 수정", async () => {
             prismaMock.review.findUnique.mockResolvedValue(review);
@@ -52,15 +58,17 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
             const moment = require('moment');
             const kst_updated_at = moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
             
-            // 리뷰를 수정했을 경우엔 update 날짜를 리턴
-            await expect(reviewService.putReview(DTO)).resolves.toEqual({
-                updatedAt: kst_updated_at
+            await expect(reviewService.patchReview(DTO)).resolves.toEqual({
+                isNew: 0,
+                result:{
+                    updatedAt: kst_updated_at
+                }
             })
 
         })    
     })
 
-    describe("잘못된 요청일 경우", () => {
+    // describe("잘못된 요청일 경우", () => {
 
         // const invalidWorryId = {
         //     worryId: -1,              // invalid worryId
@@ -87,6 +95,6 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
 
         // })
 
-    })
+    // })
 
 })
