@@ -7,6 +7,8 @@ export default {
   // 회원가입 및 로그인
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_FAIL: "회원 가입 실패",
+  UNREGISTER_SUCCESS: "회원 탈퇴 성공",
+  UNREGISTER_FAIL: "회원 탈퇴 실패",
   LOGIN_SUCCESS: "로그인 성공",
   LOGIN_FAIL: "로그인 실패",
   LOGOUT_SUCCESS: "로그아웃 성공",
