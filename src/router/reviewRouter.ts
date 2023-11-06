@@ -12,10 +12,10 @@ import { reviewDTO } from '../interfaces/DTO/reviewDTO';
 
 const router = Router();
 
-router.put("/",
+router.patch("/",
     auth,
     validateBody(reviewDTO),
-    reviewController.putReview
+    reviewController.patchReview
 );
 
 
