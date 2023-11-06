@@ -132,8 +132,18 @@ const serviceLogout = async (userId:number) => {
 
 }
 
+const serviceUnregister = async (userId:number) => {
+  
+  const deleted = await tokenRepository.deleteRefreshTokenById(userId);
+  if(!deleted){
+    throw new ClientException("refresh token delete fail");
+  }
+
+}
+
 
   export default{
     serviceLogin,
-    serviceLogout
+    serviceLogout,
+    serviceUnregister
 }

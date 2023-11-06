@@ -148,6 +148,19 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
     }
   }
 
+  const serviceUnregister =async (req: Request, res:Response, next:NextFunction) => {
+    try{
+      const { userId } = req.body;
+      await authService.serviceUnregister(userId);
+ 
+
+      return res.status(sc.OK).send(success(sc.OK, rm.UNREGISTER_SUCCESS));  
+
+    }catch(error){
+      next(error);
+    }
+  }
+
 
   // const kakaoLogout =async (req: Request, res:Response, next:NextFunction) => {
   //   try{
@@ -183,5 +196,6 @@ export default{
     kakaoLogin,
     appleLogin,
     serviceLogout,
+    serviceUnregister
 
 }
