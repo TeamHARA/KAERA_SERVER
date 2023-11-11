@@ -44,6 +44,16 @@ const deleteWorry = async(worryId:number) => {
 
 }
 
+// const deleteWorryByUserId = async(userId:number) => {
+
+//     return await prisma.worry.deleteMany({
+//         where: {
+//             user_id: userId
+//         }
+//     })
+
+// }
+
 const findWorryById = async(worryId:number) => {
 
     return await prisma.worry.findUnique({
@@ -149,6 +159,7 @@ export default {
     createWorry,
     updateWorry,
     deleteWorry,
+    // deleteWorryByUserId,
     findWorryById,
     createFinalAnswer,
     updateDeadline,

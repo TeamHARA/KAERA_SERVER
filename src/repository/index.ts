@@ -3,8 +3,8 @@
 // import templateRepository from './templateRepository';
 import userRepository from './userRepository';
 // import worryRepository from './worryRepository';
+import tokenRepository from './tokenRepository';
 
-// import {userRepository} from './userRepository';
 
 
 export {
@@ -12,5 +12,6 @@ export {
     // reviewRepository,
     // templateRepository,
     userRepository,
+    tokenRepository
     // worryRepository,
 }
