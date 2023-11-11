@@ -36,7 +36,7 @@ router.post("/logout",
 )
 
 router.post("/unregister",
-    auth,
+ 
     authController.serviceUnregister
 )
 

@@ -1,8 +1,8 @@
 import userService from "./userService";
 import jwtHandler from "../modules/jwtHandler";
-import tokenRepository from "../repository/tokenRepository";
 import { ClientException } from "../common/error/exceptions/customExceptions";
-
+import { tokenRepository,userRepository } from "../repository";
+import worryRepository from "../repository/worryRepository";
 
 
 // 캐라 서비스의 로그인 함수
@@ -134,9 +134,9 @@ const serviceLogout = async (userId:number) => {
 
 const serviceUnregister = async (userId:number) => {
   
-  const deleted = await tokenRepository.deleteRefreshTokenById(userId);
-  if(!deleted){
-    throw new ClientException("refresh token delete fail");
+  const user = await userRepository.deleteUser(userId);
+  if(!user){
+    throw new ClientException("user delete fail");
   }
 
 }
