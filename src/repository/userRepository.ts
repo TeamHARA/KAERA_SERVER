@@ -38,6 +38,11 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
             created_at: new Date(),
             updated_at: new Date(),
 
+            token:{
+                create:{
+                    refresh_token: userCreateDTO.refreshToken
+                }
+            }
         }
     })
 }
