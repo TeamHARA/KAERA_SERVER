@@ -1,6 +1,7 @@
 import prisma from "./prismaClient"
 import { worryCreateDAO,deadlineUpdateDAO } from "../interfaces/DAO/worryDAO";
 import { finalAnswerCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
+import { wrap } from "module";
 // created_at, updated_at 은 디비에 저장시 utc 값으로 저장
 // deadline은 kst 값으로 저장
 
@@ -67,11 +68,19 @@ const updateWorry = async(worryUpdateDTO: worryUpdateDTO) => {
 
 const deleteWorry = async(worryId:number) => {
 
-    return await prisma.worry.delete({
+    const deleteReview = prisma.review.delete({
+        where:{
+            worry_id: worryId
+        }
+    })
+
+    const deleteWorry = prisma.worry.delete({
         where: {
             id: worryId
         }
     })
+
+    return await prisma.$transaction([deleteReview,deleteWorry])
 
 }
 
