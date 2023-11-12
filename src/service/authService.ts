@@ -34,10 +34,6 @@ const serviceLogin = async (provider:string, user:any) => {
         if(kakao_account.gender)
             userCreateDTO.gender = kakao_account.gender
 
-
-        //회원가입
-        const createdUser = await userService.createUser(userCreateDTO);
-        foundUser = createdUser
         isNew = true
       }
     }//kakao
@@ -75,31 +71,40 @@ const serviceLogin = async (provider:string, user:any) => {
       }
 
       foundUser = await userService.getUserByAppleId(id);
-      console.log(foundUser)
 
       if(!foundUser){
       
         userCreateDTO.appleId = id;
         userCreateDTO.name = fullName;
-        // userCreateDTO.email = payload.email;
-
-         //회원가입
-         const createdUser = await userService.createUser(userCreateDTO);
-         foundUser = createdUser
-         isNew = true
+        isNew = true
       }
 
     }// apple
-    
 
-    // our service(kaera) login logic
+
+    // local refreshToken 먼저 발급후, 회원가입시 같이 DB에 저장
+    const refreshToken = jwtHandler.refresh();
+    // 새로운 회원일 경우 회원가입 진행
+    if(isNew){
+      userCreateDTO.refreshToken = refreshToken;
+      const createdUser = await userService.createUser(userCreateDTO);
+      foundUser = createdUser
+    }
+
+    // 기존 유저, 새로운 유저 둘 다 존재하지 않을 시
     if(!foundUser){
       throw new ClientException("로그인 및 회원가입 실패");
     }
 
-    //local accessToken, refreshToken 발급
+
+    // 기존 유저의 경우 이전 refresh token을 갱신하여 DB에 저장
+    if(!isNew){
+      await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+    }
+
+    
+    //local accessToken 발급
     const accessToken = jwtHandler.access(foundUser.id);
-    const refreshToken = jwtHandler.refresh();
 
     const result = {
       id: foundUser.id,
@@ -108,12 +113,6 @@ const serviceLogin = async (provider:string, user:any) => {
       refreshToken
     };
 
-    // 발급받은 refresh token 은 DB에 저장
-    const token = await tokenRepository.findRefreshTokenById(foundUser.id);
-    if(!token){
-    await tokenRepository.createRefreshToken(foundUser.id, refreshToken);
-    }
-    await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
 
     const data = {
       isNew,result
@@ -125,8 +124,8 @@ const serviceLogin = async (provider:string, user:any) => {
 
 const serviceLogout = async (userId:number) => {
   
-  const deleted = await tokenRepository.deleteRefreshTokenById(userId);
-  if(!deleted){
+  const token = await tokenRepository.disableRefreshTokenById(userId);
+  if(!token){
     throw new ClientException("refresh token delete fail");
   }
 
