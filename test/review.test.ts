@@ -32,6 +32,7 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
         };
         const review = {
             worry_id: 1,
+            user_id:3,
             content: "후기이이ㅣㅣㅣㅣㅣ~!",
             created_at: new Date(),
             updated_at: new Date()
