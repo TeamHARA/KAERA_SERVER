@@ -35,6 +35,11 @@ router.post("/logout",
     authController.serviceLogout
 )
 
+router.post("/unregister",
+ 
+    authController.serviceUnregister
+)
+
 router.post("/token/refresh",
     [
         body('accessToken').notEmpty().withMessage("body 에 'accessToken' 값이 존재하지 않습니다"),

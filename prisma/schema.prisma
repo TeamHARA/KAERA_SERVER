@@ -17,6 +17,8 @@ model review {
   content    String
   created_at DateTime @db.Timestamptz(6)
   updated_at DateTime @db.Timestamptz(6)
+  user_id    Int?
+  user       user?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_user_id_fk")
   worry      worry    @relation(fields: [worry_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_worry_id_fk")
 }
 
@@ -43,6 +45,7 @@ model user {
   apple_id      String?  @unique
   age_range     String?  @db.VarChar(5)
   gender        String?  @db.VarChar(6)
+  review        review[]
   token         token?
   worry         worry[]
 }

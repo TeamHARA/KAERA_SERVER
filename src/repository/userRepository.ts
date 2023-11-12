@@ -42,12 +42,35 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
     })
 }
 
+
 const deleteUser = async(userId: number) => {
-    return await prisma.user.delete({
+      
+    const deletedReview = prisma.review.deleteMany({
         where: {
+            user_id: userId
+        }
+    })
+
+    const deletedWorry = prisma.worry.deleteMany({
+        where: {
+            user_id: userId
+        }
+    })
+
+    const deletedToken = prisma.token.delete({
+        where: {
+           user_id: userId
+        }
+    })
+
+    const deletedUser = prisma.user.delete({
+        where:{
             id: userId
         }
     })
+
+    return await prisma.$transaction([deletedReview,deletedWorry,deletedToken,deletedUser])
+
 }
 
 // ? class로 사용하는 경우는 언제 ?
