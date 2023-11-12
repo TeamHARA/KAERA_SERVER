@@ -30,11 +30,13 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     }
     // console.log(worryCreateDAO)
 
-    const worry = await worryRepository.createWorry(worryCreateDAO);
-    if (!worry) {
+    const result = await worryRepository.createWorry(worryCreateDAO);
+    if (!result) {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
 
+    // result[0]: createdWorry | result[1]: updatedUsedTemplate 
+    const worry = result[0]
     const data = {
         createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
         deadline: "데드라인이 없습니다."
