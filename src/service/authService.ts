@@ -18,7 +18,7 @@ const serviceLogin = async (provider:string, user:any) => {
       foundUser = await userService.getUserByKakaoId(id);
 
   
-      //가입하지 않은 회원일 경우, 회원가입 진행
+      //신규 회원일 경우, 회원가입 진행
       if(!foundUser){
         
         //필수 동의만 했을 경우
@@ -33,7 +33,8 @@ const serviceLogin = async (provider:string, user:any) => {
             userCreateDTO.ageRange = kakao_account.age_range
         if(kakao_account.gender)
             userCreateDTO.gender = kakao_account.gender
-
+        
+        //신규회원일 경우
         isNew = true
       }
     }//kakao
@@ -84,20 +85,20 @@ const serviceLogin = async (provider:string, user:any) => {
 
     // local refreshToken 먼저 발급후, 회원가입시 같이 DB에 저장
     const refreshToken = jwtHandler.refresh();
-    // 새로운 회원일 경우 회원가입 진행
+    // 신규회원일 경우 회원가입 진행
     if(isNew){
       userCreateDTO.refreshToken = refreshToken;
       const createdUser = await userService.createUser(userCreateDTO);
       foundUser = createdUser
     }
 
-    // 기존 유저, 새로운 유저 둘 다 존재하지 않을 시
+    // 신규회원,기존회원 둘 다 존재하지 않을 시
     if(!foundUser){
       throw new ClientException("로그인 및 회원가입 실패");
     }
 
 
-    // 기존 유저의 경우 이전 refresh token을 갱신하여 DB에 저장
+    // 기존회원의 경우 이전 refresh token을 갱신하여 DB에 저장
     if(!isNew){
       const updatedToken = await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
       if(!updatedToken){
