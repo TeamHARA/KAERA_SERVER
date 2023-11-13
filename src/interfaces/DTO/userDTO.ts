@@ -5,6 +5,7 @@ interface userCreateDTO {
     ageRange: string | null;
     gender: string | null;
     email: string | null;
+    refreshToken: string;
 }
 
 

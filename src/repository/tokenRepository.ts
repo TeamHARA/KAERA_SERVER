@@ -44,10 +44,13 @@ const updateRefreshTokenById = async (userId: number, token:string) => {
     });
 };
 
-const deleteRefreshTokenById = async (userId: number) => {
-    return await prisma.token.delete({
+const disableRefreshTokenById = async (userId: number) => {
+    return await prisma.token.update({
         where: {
             user_id: userId
+        },
+        data:{
+            refresh_token: ""
         }
     });
 };
@@ -58,6 +61,6 @@ export default {
     findRefreshTokenById,
     findIdByRefreshToken,
     updateRefreshTokenById,
-    deleteRefreshTokenById
+    disableRefreshTokenById
 
 }
