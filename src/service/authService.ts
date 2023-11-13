@@ -99,7 +99,10 @@ const serviceLogin = async (provider:string, user:any) => {
 
     // 기존 유저의 경우 이전 refresh token을 갱신하여 DB에 저장
     if(!isNew){
-      await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+      const updatedToken = await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+      if(!updatedToken){
+        throw new ClientException("refresh token 갱신 실패");
+      }
     }
 
     
