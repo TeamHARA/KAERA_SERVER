@@ -5,6 +5,7 @@ const createReview = async (reviewDTO: reviewDTO) => {
     return await prisma.review.create({
         data: {
             worry_id: reviewDTO.worryId,
+            user_id: reviewDTO.userId,
             content: reviewDTO.review,
             created_at: new Date(),
             updated_at: new Date(),

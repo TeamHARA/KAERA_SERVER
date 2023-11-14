@@ -19,7 +19,7 @@ const getUserByKakaoId =async (KakaoId: number) => {
 
 }
 
-const getUserByAppleId =async (AppleId: number) => {
+const getUserByAppleId =async (AppleId: string) => {
     return await userRepository.findUserByAppleId(AppleId);
 
 }

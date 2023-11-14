@@ -7,6 +7,8 @@ export default {
   // 회원가입 및 로그인
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_FAIL: "회원 가입 실패",
+  UNREGISTER_SUCCESS: "회원 탈퇴 성공",
+  UNREGISTER_FAIL: "회원 탈퇴 실패",
   LOGIN_SUCCESS: "로그인 성공",
   LOGIN_FAIL: "로그인 실패",
   LOGOUT_SUCCESS: "로그아웃 성공",
@@ -67,11 +69,13 @@ export default {
   GET_WORRY_LIST_BY_TEMPLATE_SUCCESS: "템플릿별 고민목록 조회 성공",
   GET_WORRY_LIST_BY_TEMPLATE_FAIL: "템플릿별 고민목록 조회 실패",
 
-  //리뷰
-  CREATE_REVIEW_SUCCESS: "리뷰 생성 성공",
-  CREATE_REVIEW_FAIL: "리뷰 생성 실패",
-  UPDATE_REVIEW_SUCCESS: "리뷰 수정 성공",
-  UPDATE_REVIEW_FAIL: "리뷰 수정 실패",
+  //나의기록
+  CREATE_REVIEW_SUCCESS: "나의기록 등록 성공",
+  CREATE_REVIEW_FAIL: "나의기록 등록 실패",
+  UPDATE_REVIEW_SUCCESS: "나의기록 수정 성공",
+  UPDATE_REVIEW_FAIL: "나의기록 수정 실패",
+  CREATE_UPDATE_REVIEW_SUCCESS: "나의기록 등록/수정 성공",
+  CREATE_UPDATE_REVIEW_FAIL: "나의기록 등록/수정 실패",
 
   //카카오로그인
   KAKAO_LOGIN_SUCCESS: "카카오 로그인 성공",

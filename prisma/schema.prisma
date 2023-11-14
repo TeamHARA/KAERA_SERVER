@@ -14,9 +14,11 @@ model quote {
 
 model review {
   worry_id   Int      @id
-  content    String   @db.VarChar(50)
+  content    String
   created_at DateTime @db.Timestamptz(6)
   updated_at DateTime @db.Timestamptz(6)
+  user_id    Int?
+  user       user?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_user_id_fk")
   worry      worry    @relation(fields: [worry_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_worry_id_fk")
 }
 
@@ -40,9 +42,10 @@ model user {
   created_at    DateTime @db.Timestamptz(6)
   updated_at    DateTime @db.Timestamptz(6)
   kakao_id      BigInt?  @unique
-  apple_id      Int?     @unique
+  apple_id      String?  @unique
   age_range     String?  @db.VarChar(5)
   gender        String?  @db.VarChar(6)
+  review        review[]
   token         token?
   worry         worry[]
 }
@@ -56,7 +59,7 @@ model worry {
   created_at   DateTime  @db.Timestamptz(6)
   updated_at   DateTime  @db.Timestamptz(6)
   deadline     DateTime? @db.Date
-  final_answer String?   @db.VarChar(50)
+  final_answer String?   @db.VarChar(100)
   review       review?
   template     template  @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_template_id_fk")
   user         user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "worry_user_id_fk")

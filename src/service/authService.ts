@@ -1,8 +1,8 @@
 import userService from "./userService";
 import jwtHandler from "../modules/jwtHandler";
-import tokenRepository from "../repository/tokenRepository";
 import { ClientException } from "../common/error/exceptions/customExceptions";
-
+import { tokenRepository,userRepository } from "../repository";
+import worryRepository from "../repository/worryRepository";
 
 
 // 캐라 서비스의 로그인 함수
@@ -11,15 +11,14 @@ const serviceLogin = async (provider:string, user:any) => {
     let isNew = false;
     let foundUser;
 
-    // kakao login으로 유저 정보 갖고온 경우
+    // kakao login
     if(provider == "kakao"){
       const { id, kakao_account } = user;
-      console.log(user)
   
       foundUser = await userService.getUserByKakaoId(id);
 
   
-      //가입하지 않은 회원일 경우, 회원가입 진행
+      //신규 회원일 경우, 회원가입 진행
       if(!foundUser){
         
         //필수 동의만 했을 경우
@@ -34,14 +33,11 @@ const serviceLogin = async (provider:string, user:any) => {
             userCreateDTO.ageRange = kakao_account.age_range
         if(kakao_account.gender)
             userCreateDTO.gender = kakao_account.gender
-
-
-        //회원가입
-        const createdUser = await userService.createUser(userCreateDTO);
-        foundUser = createdUser
+        
+        //신규회원일 경우
         isNew = true
       }
-    }
+    }//kakao
 
 
     // apple login
@@ -65,7 +61,6 @@ const serviceLogin = async (provider:string, user:any) => {
       }
 
       const payload = jwt.verify(identityToken, signingKey);
-      console.log(payload)
       if(!payload){
         throw new ClientException("jwt verification fail");
       }
@@ -73,35 +68,47 @@ const serviceLogin = async (provider:string, user:any) => {
       // 발급한 주체가(aud)가 우리의 서비스 id 와 일치하는지
       // 사용자 식별 id 가 일치하는지
       if(payload.sub !== id || payload.aud !== process.env.APPLE_CLIENT_ID){
-        throw new ClientException("invliad signIn reqeust");
+        throw new ClientException("invliad signIn request");
       }
 
       foundUser = await userService.getUserByAppleId(id);
+
       if(!foundUser){
-        
-
-        userCreateDTO.AppleId = id;
+      
+        userCreateDTO.appleId = id;
         userCreateDTO.name = fullName;
-        userCreateDTO.email = payload.email;
-
-         //회원가입
-         const createdUser = await userService.createUser(userCreateDTO);
-         foundUser = createdUser
-         isNew = true
+        isNew = true
       }
 
+    }// apple
+
+
+    // local refreshToken 먼저 발급후, 회원가입시 같이 DB에 저장
+    const refreshToken = jwtHandler.refresh();
+    // 신규회원일 경우 회원가입 진행
+    if(isNew){
+      userCreateDTO.refreshToken = refreshToken;
+      const createdUser = await userService.createUser(userCreateDTO);
+      foundUser = createdUser
     }
-    
+
+    // 신규회원,기존회원 둘 다 존재하지 않을 시
     if(!foundUser){
       throw new ClientException("로그인 및 회원가입 실패");
     }
 
-      
-     
-  
-    //local accessToken, refreshToken 발급
+
+    // 기존회원의 경우 이전 refresh token을 갱신하여 DB에 저장
+    if(!isNew){
+      const updatedToken = await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+      if(!updatedToken){
+        throw new ClientException("refresh token 갱신 실패");
+      }
+    }
+
+    
+    //local accessToken 발급
     const accessToken = jwtHandler.access(foundUser.id);
-    const refreshToken = jwtHandler.refresh();
 
     const result = {
       id: foundUser.id,
@@ -110,12 +117,6 @@ const serviceLogin = async (provider:string, user:any) => {
       refreshToken
     };
 
-    // 발급받은 refresh token 은 DB에 저장
-    const token = await tokenRepository.findRefreshTokenById(foundUser.id);
-    if(!token){
-      await tokenRepository.createRefreshToken(foundUser.id, refreshToken);
-    }
-    await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
 
     const data = {
       isNew,result
@@ -125,16 +126,27 @@ const serviceLogin = async (provider:string, user:any) => {
   
  }
 
-  const serviceLogout = async () => {
+const serviceLogout = async (userId:number) => {
   
+  const token = await tokenRepository.disableRefreshTokenById(userId);
+  if(!token){
+    throw new ClientException("refresh token delete fail");
+  }
 
-   // await tokenRepository.updateRefreshTokenById(accessToken, refreshToken);
+}
+
+const serviceUnregister = async (userId:number) => {
   
+  const user = await userRepository.deleteUser(userId);
+  if(!user){
+    throw new ClientException("user delete fail");
+  }
 
 }
 
 
   export default{
     serviceLogin,
-    serviceLogout
+    serviceLogout,
+    serviceUnregister
 }

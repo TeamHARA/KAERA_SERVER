@@ -44,12 +44,23 @@ const updateRefreshTokenById = async (userId: number, token:string) => {
     });
 };
 
+const disableRefreshTokenById = async (userId: number) => {
+    return await prisma.token.update({
+        where: {
+            user_id: userId
+        },
+        data:{
+            refresh_token: ""
+        }
+    });
+};
+
 
 export default { 
     createRefreshToken,
     findRefreshTokenById,
     findIdByRefreshToken,
     updateRefreshTokenById,
-    
+    disableRefreshTokenById
 
 }

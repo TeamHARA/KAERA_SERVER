@@ -30,11 +30,13 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     }
     // console.log(worryCreateDAO)
 
-    const worry = await worryRepository.createWorry(worryCreateDAO);
-    if (!worry) {
+    const result = await worryRepository.createWorry(worryCreateDAO);
+    if (!result) {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
 
+    // result[0]: createdWorry | result[1]: updatedUsedTemplate 
+    const worry = result[0]
     const data = {
         createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
         deadline: "데드라인이 없습니다."
@@ -78,10 +80,10 @@ const deleteWorry =async (worryId: number,userId: number) => {
     if (worry.user_id != userId) {
       throw new ClientException("고민글 작성자만 삭제할 수 있습니다.");
     }
-    const review = await reviewRepository.findreviewById(worryId);
-    if(review){
-        await reviewRepository.deleteReviewById(worryId);
-    }
+    // const review = await reviewRepository.findreviewById(worryId);
+    // if(review){
+    //     await reviewRepository.deleteReviewById(worryId);
+    // }
 
     await worryRepository.deleteWorry(worryId);
 }
@@ -145,18 +147,23 @@ const getWorryDetail =async (worryId: number,userId: number) => {
 }
 
 const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
-    const worry = await worryRepository.createFinalAnswer(finalAnswerCreateDTO);
-    
-    if (!worry) {
-        throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
-    }
+    const worry = await worryRepository.findWorryById(finalAnswerCreateDTO.worryId);
 
+    if (!worry) {
+        throw new ClientException("해당 id의 고민글이 존재하지 않습니다.");
+    }
+    
     if (worry.user_id != finalAnswerCreateDTO.userId) {
         throw new ClientException("고민글 작성자만 최종결정할 수 있습니다.");
     }
 
     if (worry.final_answer){
         throw new ClientException("한 번 내린 최종결정은 수정 불가합니다.");
+    }
+
+    const updatedWorry = await worryRepository.createFinalAnswer(finalAnswerCreateDTO);
+    if (!updatedWorry) {
+        throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
     }
 
     const quotes = await quoteRepository.findAllQuote();
