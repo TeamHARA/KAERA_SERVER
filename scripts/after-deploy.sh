@@ -3,9 +3,9 @@ REPOSITORY=/home/ubuntu/build
 
 cd $REPOSITORY
 
-yarn
+sudo yarn
 
-npx prisma db pull
-npx prisma generate
+sudo npx prisma db pull
+sudo npx prisma generate
 
-pm2 start dist
+sudo pm2 start dist
