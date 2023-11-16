@@ -3,6 +3,7 @@ import { auth, validation } from "../middlewares";
 import { param,body } from "express-validator";
 import validate from "../middlewares/validate";
 import { authController,tokenController } from "../controller";
+import alarmController from "../controller/alarmController";
 
 
 const router = Router();
@@ -48,5 +49,7 @@ router.post("/token/refresh",
     validate,
     tokenController.refreshToken
 )
+
+router.post("/pushAlarm",alarmController.pushAlarm)
 
 export default router;
