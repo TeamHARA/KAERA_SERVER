@@ -77,12 +77,21 @@ router.patch("/deadline",
 
 
 
-router.get("/list/:isSolved",
-    auth,
-    validate,
-    worryController.getWorryList,
-);
+// router.get("/list/:isSolved",
+//     auth,
+//     validate,
+//     worryController.getWorryList,
+// );
 
+router.get("/:isSolved/list",
+auth,
+[
+    query('page').notEmpty().withMessage("query string 에 'page' 값이 존재하지 않습니다"),
+    query('limit').notEmpty().withMessage("query string 에 'limit' 값이 존재하지 않습니다")
+],
+validate,
+worryController.getWorryList,
+);
 
 
 

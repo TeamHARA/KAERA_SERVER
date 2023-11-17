@@ -219,12 +219,12 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
 
 }
 
-const getWorryList =async (isSolved: number, userId: number) => {
+const getWorryList =async (isSolved: number, page: number, limit: number, userId: number) => {
     let worry = null;
     if(isSolved)
-        worry = await worryRepository.findWorryListSolved(userId);
+        worry = await worryRepository.findWorryListSolved(userId,page,limit);
     else
-        worry = await worryRepository.findWorryListUnsolved(userId);
+        worry = await worryRepository.findWorryListUnsolved(userId,page,limit);
 
     if (!worry) {
         throw new ClientException(rm.GET_WORRY_LIST_FAIL);
@@ -247,7 +247,7 @@ const getWorryList =async (isSolved: number, userId: number) => {
 const getWorryListByTemplate =async (templateId: number, userId: number) => {
     let worry;
     if(templateId == 0)
-        worry = await worryRepository.findWorryListSolved(userId);
+        worry = await worryRepository.findAllWorryListSolved(userId);
     else
         worry = await worryRepository.findWorryListByTemplate(templateId,userId);
     
