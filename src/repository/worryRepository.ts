@@ -130,7 +130,7 @@ const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
     })
 }
 
-const findWorryListSolved = async(userId: number) => {
+const findAllWorryListSolved = async(userId: number) => {
 
     return await prisma.worry.findMany({
         select:{
@@ -148,12 +148,37 @@ const findWorryListSolved = async(userId: number) => {
             }
         },
         orderBy:{
-            created_at: 'asc'
+            updated_at: 'desc'
         } 
     })
 }
 
-const findWorryListUnsolved = async(userId: number) => {
+const findWorryListSolved = async(userId: number, page: number, limit: number) => {
+
+    return await prisma.worry.findMany({
+        select:{
+            id:true,
+            user_id:true,
+            template_id:true,
+            title:true,
+            created_at:true,
+            updated_at:true
+        },    
+        where: {
+            user_id: userId,
+            final_answer:{
+                not: null
+            }
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy:{
+            updated_at: 'desc'
+        } 
+    })
+}
+
+const findWorryListUnsolved = async(userId: number, page: number, limit: number) => {
 
     return await prisma.worry.findMany({
         select:{
@@ -165,9 +190,11 @@ const findWorryListUnsolved = async(userId: number) => {
         where: {
             user_id: userId,
             final_answer: null
-        }, 
+        },
+        skip: (page - 1) * limit,
+        take: limit, 
         orderBy:{
-            created_at: 'asc'
+            created_at: 'desc'
         }
     })
 }
@@ -190,7 +217,7 @@ const findWorryListByTemplate = async(templateId: number,userId: number) => {
             }
         }, 
         orderBy:{
-            created_at: 'asc'
+            created_at: 'desc'
         }
     })
 }
@@ -199,11 +226,11 @@ export default {
     createWorry,
     updateWorry,
     deleteWorry,
-    // deleteWorryByUserId,
     findWorryById,
     createFinalAnswer,
     updateDeadline,
     findWorryListSolved,
+    findAllWorryListSolved,
     findWorryListUnsolved,
     findWorryListByTemplate
 
