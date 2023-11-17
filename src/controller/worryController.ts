@@ -94,9 +94,10 @@ const patchDeadline = async (req: Request, res: Response, next: NextFunction) =>
 const getWorryList = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { isSolved } = req.params;
+        const { page, limit } = req.query;
         const { userId }= req.body;
 
-        const data = await worryService.getWorryList(+isSolved,userId);
+        const data = await worryService.getWorryList(+isSolved, +page!, +limit!, userId);
 
         return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_SUCCESS,data));
 
