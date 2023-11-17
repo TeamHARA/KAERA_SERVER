@@ -217,7 +217,7 @@ const findWorryListByTemplate = async(templateId: number,userId: number) => {
             }
         }, 
         orderBy:{
-            created_at: 'desc'
+            updated_at: 'desc'
         }
     })
 }
