@@ -130,29 +130,6 @@ const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
     })
 }
 
-const findAllWorryListSolved = async(userId: number) => {
-
-    return await prisma.worry.findMany({
-        select:{
-            id:true,
-            user_id:true,
-            template_id:true,
-            title:true,
-            created_at:true,
-            updated_at:true
-        },    
-        where: {
-            user_id: userId,
-            final_answer:{
-                not: null
-            }
-        },
-        orderBy:{
-            updated_at: 'desc'
-        } 
-    })
-}
-
 const findWorryListSolved = async(userId: number, page: number, limit: number) => {
 
     return await prisma.worry.findMany({
@@ -199,7 +176,7 @@ const findWorryListUnsolved = async(userId: number, page: number, limit: number)
     })
 }
 
-const findWorryListByTemplate = async(templateId: number,userId: number) => {
+const findWorryListByTemplate = async(templateId: number,userId: number, page: number, limit: number) => {
 
     return await prisma.worry.findMany({
         select:{
@@ -216,6 +193,8 @@ const findWorryListByTemplate = async(templateId: number,userId: number) => {
                 not: null
             }
         }, 
+        skip: (page - 1) * limit,
+        take: limit, 
         orderBy:{
             updated_at: 'desc'
         }
@@ -230,7 +209,6 @@ export default {
     createFinalAnswer,
     updateDeadline,
     findWorryListSolved,
-    findAllWorryListSolved,
     findWorryListUnsolved,
     findWorryListByTemplate
 
