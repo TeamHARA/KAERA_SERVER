@@ -244,12 +244,12 @@ const getWorryList =async (isSolved: number, page: number, limit: number, userId
   
 }
 
-const getWorryListByTemplate =async (templateId: number, userId: number, page: number, limit: number) => {
+const getWorryListByTemplate =async (templateId: number, userId: number) => {
     let worry;
     if(templateId == 0)
-        worry = await worryRepository.findWorryListSolved(userId,page,limit);
+        worry = await worryRepository.findAllWorryListSolved(userId);
     else
-        worry = await worryRepository.findWorryListByTemplate(templateId,userId,page,limit);
+        worry = await worryRepository.findWorryListByTemplate(templateId,userId);
     
     if (!worry) {
         throw new ClientException(rm.GET_WORRY_LIST_BY_TEMPLATE_FAIL);
