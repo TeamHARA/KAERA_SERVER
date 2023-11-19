@@ -37,9 +37,7 @@ router.patch("/",
 router.get("/",
     auth,
     [
-        query('templateId').notEmpty().withMessage("query string 에 'templateId' 값이 존재하지 않습니다"),
-        query('page').notEmpty().withMessage("query string 에 'page' 값이 존재하지 않습니다"),
-        query('limit').notEmpty().withMessage("query string 에 'limit' 값이 존재하지 않습니다")
+        query('templateId').notEmpty().withMessage("query string 에 'templateId' 값이 존재하지 않습니다")
     ],
     validate,
     worryController.getWorryListByTemplate,

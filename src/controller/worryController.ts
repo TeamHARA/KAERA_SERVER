@@ -108,11 +108,11 @@ const getWorryList = async (req: Request, res: Response, next: NextFunction) => 
 
 const getWorryListByTemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { templateId,page,limit } = req.query;
-        if(!templateId || !page || !limit)
-            throw new ClientException("필요한 query 값이 존재하지 않습니다.");
+        const { templateId } = req.query;
+        if(!templateId)
+            throw new ClientException("templateId 값이 존재하지 않습니다.");
         const { userId }= req.body;
-        const data = await worryService.getWorryListByTemplate(+templateId,userId,+page,+limit);
+        const data = await worryService.getWorryListByTemplate(+templateId,userId);
 
         return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_BY_TEMPLATE_SUCCESS,data));
 
