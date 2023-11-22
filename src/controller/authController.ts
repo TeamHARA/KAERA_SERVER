@@ -151,6 +151,9 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
   const serviceUnregister =async (req: Request, res:Response, next:NextFunction) => {
     try{
       const { userId } = req.body;
+      if(userId == 11){
+        return res.status(sc.BAD_REQUEST).send(success(sc.BAD_REQUEST, rm.DEV_USER_UNREGISTER_IMPOSSIBLE));  
+      }
       await authService.serviceUnregister(userId);
  
 

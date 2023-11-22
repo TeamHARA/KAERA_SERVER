@@ -35,8 +35,8 @@ router.post("/logout",
     authController.serviceLogout
 )
 
-router.post("/unregister",
- 
+router.delete("/unregister",
+    auth,
     authController.serviceUnregister
 )
 
