@@ -66,7 +66,7 @@ const updateWorry = async(worryUpdateDTO: worryUpdateDTO) => {
     })
 }
 
-const deleteWorry = async(worryId:number) => {
+const deleteWorryWithReview = async(worryId:number) => {
 
     const deleteReview = prisma.review.delete({
         where:{
@@ -84,15 +84,16 @@ const deleteWorry = async(worryId:number) => {
 
 }
 
-// const deleteWorryByUserId = async(userId:number) => {
+const deleteWorryWithoutReview = async(worryId:number) => {
 
-//     return await prisma.worry.deleteMany({
-//         where: {
-//             user_id: userId
-//         }
-//     })
+    return await prisma.worry.delete({
+        where: {
+            id: worryId
+        }
+    })
 
-// }
+}
+
 
 const findWorryById = async(worryId:number) => {
 
@@ -225,7 +226,8 @@ const findWorryListByTemplate = async(templateId: number,userId: number) => {
 export default {
     createWorry,
     updateWorry,
-    deleteWorry,
+    deleteWorryWithReview,
+    deleteWorryWithoutReview,
     findWorryById,
     createFinalAnswer,
     updateDeadline,
