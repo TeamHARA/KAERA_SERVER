@@ -80,12 +80,13 @@ const deleteWorry =async (worryId: number,userId: number) => {
     if (worry.user_id != userId) {
       throw new ClientException("고민글 작성자만 삭제할 수 있습니다.");
     }
-    // const review = await reviewRepository.findreviewById(worryId);
-    // if(review){
-    //     await reviewRepository.deleteReviewById(worryId);
-    // }
 
-    await worryRepository.deleteWorry(worryId);
+    const review = await reviewRepository.findreviewById(worryId);
+    if(!review){
+        return await worryRepository.deleteWorryWithoutReview(worryId);
+    }
+
+    return await worryRepository.deleteWorryWithReview(worryId);
 }
 
 const getWorryDetail =async (worryId: number,userId: number) => {
