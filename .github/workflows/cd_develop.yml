@@ -35,6 +35,7 @@ jobs:
           echo KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} >> .env
           echo KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }} >> .env
           echo KAKAO_SECRET_KEY=${{ secrets.KAKAO_SECRET_KEY }} >> .env
+          echo APPLE_CLIENT_ID=${{ secrets.APPLE_CLIENT_ID }} >> .env
           cat .env
 
       - name: Install dependencies
