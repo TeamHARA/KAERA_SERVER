@@ -3,6 +3,7 @@ import jwtHandler from "../modules/jwtHandler";
 import { ClientException } from "../common/error/exceptions/customExceptions";
 import { tokenRepository,userRepository } from "../repository";
 import worryRepository from "../repository/worryRepository";
+import tokenType from "../constants/tokenType";
 
 
 // 캐라 서비스의 로그인 함수
@@ -51,25 +52,30 @@ const serviceLogin = async (provider:string, user:any) => {
 
       // 전달받은 identityToken이 변조되지 않은 올바른 토큰인지 확인하는 과정
       const {identityToken, id, fullName} = user;
+      // console.log(identityToken,id,fullName)
       const decoded = jwt.decode(identityToken, { complete: true})
       const kid = decoded.header.kid
       
       const key = await client.getSigningKey(kid);
+
       const signingKey = key.getPublicKey();
+
+
       if(!signingKey){
         throw new ClientException("signinKey missing");
       }
 
-      const payload = jwt.verify(identityToken, signingKey);
-      if(!payload){
-        throw new ClientException("jwt verification fail");
+      try{
+        const payload = jwt.verify(identityToken, signingKey);
+        // 발급한 주체가(aud)가 우리의 서비스 id 와 일치하는지
+        // 사용자 식별 id 가 일치하는지
+        if(payload.sub !== id || payload.aud !== process.env.APPLE_CLIENT_ID){
+          throw new ClientException("invliad signIn request");
+        }
+      }catch (error: any) {
+        throw new ClientException(error.message);
       }
 
-      // 발급한 주체가(aud)가 우리의 서비스 id 와 일치하는지
-      // 사용자 식별 id 가 일치하는지
-      if(payload.sub !== id || payload.aud !== process.env.APPLE_CLIENT_ID){
-        throw new ClientException("invliad signIn request");
-      }
 
       foundUser = await userService.getUserByAppleId(id);
 
