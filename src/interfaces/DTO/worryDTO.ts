@@ -1,4 +1,4 @@
-import { IsString, IsDefined, IsNumber, IsArray, IsNotEmpty, isNumber} from 'class-validator';
+import { IsString, IsDefined, IsNumber, IsArray, IsNotEmpty, isNumber, ArrayNotEmpty} from 'class-validator';
 
 class worryCreateDTO {
 
@@ -15,6 +15,7 @@ class worryCreateDTO {
   title!: string;
 
   @IsDefined()
+  @ArrayNotEmpty()
   @IsArray()
   answers!: Array<string>;
 
