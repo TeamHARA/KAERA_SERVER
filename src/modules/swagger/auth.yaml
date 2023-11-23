@@ -2,7 +2,7 @@
   post:
     tags:
       - Auth
-    summary: 유저 카카오 회원가입/로그인하기
+    summary: 카카오 회원가입/로그인하기
     consumes:
       - application/json
     requestBody:
@@ -52,11 +52,68 @@
       '500':
         $ref: './openapi.yaml#/components/responses/InternalServerError'
 
+/auth/apple/login:
+  post:
+    tags:
+      - Auth
+    summary: 애플 회원가입/로그인하기
+    consumes:
+      - application/json
+    requestBody:
+      x-name: body
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object     
+            example: {
+              "identityToken" :"apple identity토큰",
+              "user": "apple의 유저 식별 스트링",
+              "fullName": "사용자 이름",
+              "deviceToken" :"fcm 디바이스토큰"
+            }  
+    responses:
+      '200':
+        description: 회원가입/로그인 성공
+        content:
+          application/json:
+            schema:
+              type: object
+            examples: 
+              login_example: 
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "로그인 성공",
+                  "data": {
+                    "id": 2,
+                    "name": "김캐라",
+                    "accessToken": "캐라의 jwt 액세스토큰",
+                    "refreshToken": "캐라의 jwt 리프레쉬토큰"
+                  }
+                }
+              signIn_example:
+                value:  {
+                  "status": 200,
+                  "success": true,
+                  "message": "회원가입 성공",
+                  "data": {
+                    "id": 2,
+                    "name": "김캐라",
+                    "accessToken": "캐라의 jwt 액세스토큰",
+                    "refreshToken": "캐라의 jwt 리프레쉬토큰"
+                  }
+                }              
+      '400':
+        $ref: './openapi.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: './openapi.yaml#/components/responses/InternalServerError'
+
 /auth/token/refresh:
   post:
     tags:
       - Auth
-    summary: 유저 토큰 재발급하기
+    summary: 토큰 재발급하기
     consumes:
       - application/json
     requestBody:
@@ -98,5 +155,29 @@
                 "success": false,
                 "message": "모든 토큰이 만료되었습니다."
               }      
+      '500':
+        $ref: './openapi.yaml#/components/responses/InternalServerError'
+
+/auth/logout:
+  post:
+    tags:
+      - Auth
+    summary: 로그아웃하기
+    consumes:
+      - application/json
+    responses:
+      '200':
+        description: 로그아웃 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": 200,
+                "success": true,
+                "message": "로그아웃 성공",          
+              }
+      '400':
+        $ref: './openapi.yaml#/components/responses/BadRequest'
       '500':
         $ref: './openapi.yaml#/components/responses/InternalServerError'
