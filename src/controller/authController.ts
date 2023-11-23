@@ -130,8 +130,8 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
       // - 기존회원이 로그인한 경우
       return res.status(sc.OK).send(success(sc.OK, rm.LOGIN_SUCCESS, data.result));  
     
-    } catch (err) {
-      console.log("Err", err)
+    } catch (error) {
+      next(error)
     }
   }
 
