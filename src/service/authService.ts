@@ -70,7 +70,7 @@ const serviceLogin = async (provider:string, user:any) => {
         // 발급한 주체가(aud)가 우리의 서비스 id 와 일치하는지
         // 사용자 식별 id 가 일치하는지
         if(payload.sub !== id || payload.aud !== process.env.APPLE_CLIENT_ID){
-          throw new ClientException("invliad signIn request");
+          throw new ClientException("invalid signIn request");
         }
       }catch (error: any) {
         throw new ClientException(error.message);
