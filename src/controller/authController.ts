@@ -113,11 +113,12 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
 
   const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
     try {
-      const { identityToken, user, fullName } = req.body
+      const { identityToken, user, fullName, email } = req.body
       const DTO = {
         identityToken: identityToken,
         id: user,
-        fullName: fullName
+        fullName: fullName,
+        email: email,
       }
       const data = await authService.serviceLogin("apple", DTO);
 

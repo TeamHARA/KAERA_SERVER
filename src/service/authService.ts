@@ -51,7 +51,7 @@ const serviceLogin = async (provider:string, user:any) => {
       });
 
       // 전달받은 identityToken이 변조되지 않은 올바른 토큰인지 확인하는 과정
-      const {identityToken, id, fullName} = user;
+      const {identityToken, id, fullName, email} = user;
       // console.log(identityToken,id,fullName)
       const decoded = jwt.decode(identityToken, { complete: true})
       const kid = decoded.header.kid
@@ -83,6 +83,7 @@ const serviceLogin = async (provider:string, user:any) => {
       
         userCreateDTO.appleId = id;
         userCreateDTO.name = fullName;
+        userCreateDTO.email = email;
         isNew = true
       }
 
