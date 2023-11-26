@@ -12,7 +12,6 @@ const getTemplateById =async (templateId: number) => {
 
     const data = {
         title: template.title,
-        info: template.info,
         guideline: template.guideline,
         questions: template.questions,
         hints: template.hints
