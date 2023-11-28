@@ -38,6 +38,16 @@ jobs:
           echo APPLE_CLIENT_ID=${{ secrets.APPLE_CLIENT_ID }} >> .env
           cat .env
 
+      - name: Create firebase-amin json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "credentials.json"
+          json: ${{ secrets.FIREBASE_JSON }}
+        - name: Install dependencies
+          working-directory: ./
+          run: yarn
+          
       - name: Install dependencies
         working-directory: ./
         run: yarn
