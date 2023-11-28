@@ -47,10 +47,7 @@ jobs:
         with:
           name: "credentials.json"
           json: ${{ secrets.FIREBASE_JSON }}
-        - name: Install dependencies
-          working-directory: ./
-          run: yarn
-          
+
       - name: Install dependencies
         working-directory: ./
         run: yarn
