@@ -7,13 +7,15 @@ import tokenType from "../constants/tokenType";
 
 
 // 캐라 서비스의 로그인 함수
-const serviceLogin = async (provider:string, user:any) => {
+const serviceLogin = async (provider:string, DTO:any) => {
     const userCreateDTO: any = {};
     let isNew = false;
     let foundUser;
+    const { deviceToken } = DTO;
 
     // kakao login
     if(provider == "kakao"){
+      const { user } = DTO;
       const { id, kakao_account } = user;
   
       foundUser = await userService.getUserByKakaoId(id);
@@ -51,8 +53,8 @@ const serviceLogin = async (provider:string, user:any) => {
       });
 
       // 전달받은 identityToken이 변조되지 않은 올바른 토큰인지 확인하는 과정
-      const {identityToken, id, fullName, email} = user;
-      // console.log(identityToken,id,fullName)
+      const {identityToken, id, fullName, email} = DTO;
+
       const decoded = jwt.decode(identityToken, { complete: true})
       const kid = decoded.header.kid
       
@@ -95,6 +97,7 @@ const serviceLogin = async (provider:string, user:any) => {
     // 신규회원일 경우 회원가입 진행
     if(isNew){
       userCreateDTO.refreshToken = refreshToken;
+      userCreateDTO.deviceToken = deviceToken;
       const createdUser = await userService.createUser(userCreateDTO);
       foundUser = createdUser
     }
@@ -105,11 +108,11 @@ const serviceLogin = async (provider:string, user:any) => {
     }
 
 
-    // 기존회원의 경우 이전 refresh token을 갱신하여 DB에 저장
+    // 기존회원의 경우 이전 refresh token, device token을 갱신하여 DB에 저장
     if(!isNew){
-      const updatedToken = await tokenRepository.updateRefreshTokenById(foundUser.id,refreshToken);
+      const updatedToken = await tokenRepository.updateTokenById(foundUser.id,refreshToken,deviceToken);
       if(!updatedToken){
-        throw new ClientException("refresh token 갱신 실패");
+        throw new ClientException("token 갱신 실패");
       }
     }
 
