@@ -40,7 +40,8 @@ const createUser = async(userCreateDTO:userCreateDTO) => {
 
             token:{
                 create:{
-                    refresh_token: userCreateDTO.refreshToken
+                    refresh_token: userCreateDTO.refreshToken,
+                    device_token: userCreateDTO.deviceToken
                 }
             }
         }
