@@ -73,7 +73,7 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
   
   const kakaoLogin =async (req: Request, res:Response, next:NextFunction) => {
     try{
-      const { accessToken } = req.body;
+      const { accessToken, deviceToken } = req.body;
   
       // get user kakao info
       const response = await axios({
@@ -84,9 +84,14 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
           'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         },
       })
+
+      const DTO = {
+        user: response.data,
+        deviceToken: deviceToken
+      }
   
 
-      const data = await authService.serviceLogin("kakao", response.data);
+      const data = await authService.serviceLogin("kakao", DTO);
 
 
       // 경우에 따라 다른 response message 출력
@@ -113,12 +118,13 @@ const kakaoLogin_getAuthorizedCode = async (req: Request, res: Response, next: N
 
   const appleLogin =async (req: Request, res:Response, next:NextFunction) => {
     try {
-      const { identityToken, user, fullName, email } = req.body
+      const { identityToken, user, fullName, email, deviceToken } = req.body
       const DTO = {
         identityToken: identityToken,
         id: user,
         fullName: fullName,
         email: email,
+        deviceToken: deviceToken
       }
       const data = await authService.serviceLogin("apple", DTO);
 
