@@ -70,10 +70,7 @@ const patchFinalAnswer = async (req: Request, res: Response, next: NextFunction)
 
         const data = await worryService.patchFinalAnswer(finalAnswerCreateDTO);
 
-        req.body.templateId = data.alarm_data.templateId;
-        next();
-        
-        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS,data.quote_data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS,data));
 
     } catch (error) {
         next(error);
