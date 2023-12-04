@@ -39,6 +39,7 @@ jobs:
           cat .env
 
       - name: Create firebase-amin json
+        working-directory: ./
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
@@ -55,7 +56,7 @@ jobs:
         run: yarn run build  
 
       - name: Zip file
-        run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./swagger.yaml ./.firebase-admin.json
+        run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./swagger.yaml ./firebase-admin.json
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
