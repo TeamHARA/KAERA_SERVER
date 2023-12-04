@@ -42,8 +42,9 @@ jobs:
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
-          name: "credentials.json"
+          name: "firebase-admin.json"
           json: ${{ secrets.FIREBASE_JSON }}
+          dir: './'
 
       - name: Install dependencies
         working-directory: ./
