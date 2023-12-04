@@ -17,19 +17,8 @@ const refreshAccessToken =async (refreshToken:string) => {
     return data;
 }
 
-const getDeviceToken =async (userId: number) => {
-   
-    const data = await tokenRepository.findDeviceTokenById(userId);
-    if(!data){
-        throw new ClientException("device token not found in database");
-    }
-
-    return data.device_token;
-}
-
 
 
 export default{
     refreshAccessToken,
-    getDeviceToken
 }
