@@ -39,7 +39,6 @@ jobs:
           cat .env
 
       - name: Create firebase-amin json
-        working-directory: ./
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
