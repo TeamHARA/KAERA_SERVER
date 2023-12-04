@@ -5,6 +5,7 @@ import validate from "../middlewares/validate";
 import { body,query } from "express-validator";
 import { validateBody } from "../middlewares/validateDTO";
 import { worryCreateDTO, worryUpdateDTO,finalAnswerCreateDTO,deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
+import alarmController from "../controller/alarmController";
 
 const router = Router();
 
@@ -62,6 +63,7 @@ router.patch("/finalAnswer",
     validate,
     validateBody(finalAnswerCreateDTO),
     worryController.patchFinalAnswer,
+    alarmController.setFinishedAlarm
 );
 
 router.patch("/deadline",

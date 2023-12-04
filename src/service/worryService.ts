@@ -170,8 +170,17 @@ const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
     const quotes = await quoteRepository.findAllQuote();
     const random_quote = quotes[calculate_random_num(quotes.length)].content
 
-    const data = {
+    const quote_data = {
         "quote": random_quote
+    }
+
+    const alarm_data = {
+        "templateId": updatedWorry.template_id
+    }
+
+    const data = {
+        quote_data,
+        alarm_data
     }
 
     return data;
