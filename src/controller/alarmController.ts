@@ -3,6 +3,8 @@ import admin from '../modules/firebaseAdmin';
 import { userService } from "../service";
 import tokenService from "../service/tokenService";
 import { alarm } from "../constants";
+import moment from "moment";
+import alarmService from "../service/alarmService";
 
 const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -37,10 +39,6 @@ const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) 
             "contents": msg,
             "deviceToken": token
         }
-        // req.body.title = title;
-        // req.body.contents = msg;
-        // req.body.deviceToken = token;
-        // next();
 
         pushAlarm(data,next);
 
@@ -49,15 +47,43 @@ const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) 
     }
 }
 
-const setDeadlineAlarm = async(req: Request, res: Response, next: NextFunction) => {
+const setOnDeadlineAlarm = async() => {
     try{
+        const today = moment().format('YYYY-MM-DD');
+        const deviceTokens = await alarmService.getUserListByDeadline(new Date(today));
 
+        const data = {
+            "title": alarm.DEADLINE_ALARM_TITLE,
+            "contents": alarm.ON_DEADLINE_ALARM,
+            "deviceTokens": deviceTokens
+        }
 
+        await pushAlarmToMany(data);
 
     }catch (error) {
-        next(error);
+  
     }
 }
+
+
+const setBeforeDeadlineAlarm = async() => {
+    try{
+        const deadline = moment().add(3,"days").format('YYYY-MM-DD');
+        const deviceTokens =  await alarmService.getUserListByDeadline(new Date(deadline));
+
+        const data = {
+            "title": alarm.DEADLINE_ALARM_TITLE,
+            "contents": alarm.BEFORE_DEADLINE_ALARM,
+            "deviceTokens": deviceTokens
+        }
+
+        await pushAlarmToMany(data);
+
+    }catch (error) {
+        
+    }
+}
+
 
 const pushAlarm = (data: any, next: NextFunction) => {
     try{
@@ -87,8 +113,40 @@ const pushAlarm = (data: any, next: NextFunction) => {
 
 }
 
+const pushAlarmToMany = async (data: any) => {
+    try{
+        const { deviceTokens, title, contents } = data;
+
+
+        let message = {
+            notification: {
+            title: title,
+            body: contents,
+            },
+            tokens: deviceTokens,
+        };
+
+        await admin
+        .messaging()
+        .sendMulticast(message)
+        .then(function (response:Response) {
+            console.log('Successfully sent messages');
+            // return res.status(200).json({success : true})
+            })
+            .catch(function (err:Error) {
+                console.log('Error Sending message!!! : ', err)
+                // return res.status(400).json({success : false})
+            });
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 export default{
     setFinishedAlarm,
-    setDeadlineAlarm,
+    setOnDeadlineAlarm,
+    setBeforeDeadlineAlarm,
+    // setNoDeadlineAlarm,
     pushAlarm
 }

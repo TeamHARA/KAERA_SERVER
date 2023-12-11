@@ -1031,6 +1031,18 @@
   "resolved" "https://registry.npmjs.org/@types/minimatch/-/minimatch-5.1.2.tgz"
   "version" "5.1.2"
 
+"@types/node-cron@^3.0.11":
+  "integrity" "sha512-0ikrnug3/IyneSHqCBeslAhlK2aBfYek1fGo4bP4QnZPmiqSGRK+Oy7ZMisLWkesffJvQ1cqAcBnJC+8+nxIAg=="
+  "resolved" "https://registry.npmjs.org/@types/node-cron/-/node-cron-3.0.11.tgz"
+  "version" "3.0.11"
+
+"@types/node-schedule@^2.1.5":
+  "integrity" "sha512-bN0MiplDBUxNMmlEi4iykjLYD7+Ze3DEevzliCn8WYuDwYSPj/5XFh8wZw+YXPLpLxiNWlIONYiQ67g/vowSMA=="
+  "resolved" "https://registry.npmjs.org/@types/node-schedule/-/node-schedule-2.1.5.tgz"
+  "version" "2.1.5"
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@^18.15.11", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   "integrity" "sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-18.15.11.tgz"
