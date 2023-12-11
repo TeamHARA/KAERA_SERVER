@@ -43,6 +43,17 @@ const findIdByRefreshToken = async (refreshToken: string) => {
     });
 };
 
+const findDeviceTokenListByIds = async (userId: number[]) => {
+    return await prisma.token.findMany({
+        select: {
+            device_token:true
+        },
+        where: {
+            user_id: { in: userId },
+        }
+    });
+};
+
 const updateTokenById = async (userId: number, refreshToken: string, deviceToken: string) => {
     return await prisma.token.update({
         where: {
@@ -73,6 +84,7 @@ export default {
     findRefreshTokenById,
     findDeviceTokenById,
     findIdByRefreshToken,
+    findDeviceTokenListByIds,
     updateTokenById,
     disableRefreshTokenById
 

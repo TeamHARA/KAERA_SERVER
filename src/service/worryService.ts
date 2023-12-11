@@ -7,7 +7,7 @@ import templateRepository from "../repository/templateRepository";
 import { calculate_d_day, calculate_random_num } from "../common/utils/calculate";
 import reviewRepository from "../repository/reviewRepository";
 import quoteRepository from "../repository/quoteRepository";
-const moment = require('moment');
+import moment from "moment";
 
 const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     const date = new Date(); // utc기준 현재시간
