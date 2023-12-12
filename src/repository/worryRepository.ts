@@ -1,7 +1,7 @@
 import prisma from "./prismaClient"
 import { worryCreateDAO,deadlineUpdateDAO } from "../interfaces/DAO/worryDAO";
 import { finalAnswerCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
-import { wrap } from "module";
+
 // created_at, updated_at 은 디비에 저장시 utc 값으로 저장
 // deadline은 kst 값으로 저장
 
@@ -237,6 +237,23 @@ const findUserListByDeadline = async(date: Date) => {
 
 }
 
+const findUserListWithNoDeadline = async(date: string) => {
+
+    console.log("date: ",date)
+    // const test=  await prisma.$queryRaw`SELECT user_id FROM worry `;
+    // console.log("test: ",test);
+    // const query = `SELECT user_id FROM worry WHERE DATE(created_at) = '${date}'`
+
+    // console.log(query1);
+
+
+    const queryPromise=  await prisma.$queryRaw`SELECT user_id FROM worry WHERE DATE(created_at) = '${date}'`;
+    
+    console.log("query: ",queryPromise);
+
+    return queryPromise;
+}
+
 
 export default {
     createWorry,
@@ -250,6 +267,7 @@ export default {
     findAllWorryListSolved,
     findWorryListUnsolved,
     findWorryListByTemplate,
-    findUserListByDeadline
+    findUserListByDeadline,
+    findUserListWithNoDeadline
 
 }
