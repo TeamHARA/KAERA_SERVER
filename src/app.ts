@@ -3,6 +3,8 @@ import globalExceptionHandler from "./common/error/handler";
 import router from './router';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
+import scheduler from './modules/scheduler';
+
 
 class App {
   public setup(): Express {
@@ -22,6 +24,12 @@ class App {
     });
 
     app.use(globalExceptionHandler);
+
+
+    scheduler.deadline_alarm_1.start();
+    // scheduler.deadline_alarm_2.start();
+    scheduler.deadline_alarm_3.start();
+
     return app;
   }
 }
