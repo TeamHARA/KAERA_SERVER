@@ -84,6 +84,24 @@ const setBeforeDeadlineAlarm = async() => {
     }
 }
 
+const setNoDeadlineAlarm = async() => {
+    try{
+        const createdAt = moment().subtract(30,"days").format('YYYY-MM-DD');
+        const deviceTokens =  await alarmService.getUserListWithNoDeadline(createdAt);
+
+        const data = {
+            "title": alarm.NO_DEADLINE_ALARM_TITLE,
+            "contents": alarm.NO_DEADLINE_ALARM,
+            "deviceTokens": deviceTokens
+        }
+
+        await pushAlarmToMany(data);
+
+    }catch (error) {
+        
+    }
+}
+
 
 const pushAlarm = (data: any, next: NextFunction) => {
     try{
@@ -147,6 +165,6 @@ export default{
     setFinishedAlarm,
     setOnDeadlineAlarm,
     setBeforeDeadlineAlarm,
-    // setNoDeadlineAlarm,
+    setNoDeadlineAlarm,
     pushAlarm
 }

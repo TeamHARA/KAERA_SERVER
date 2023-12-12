@@ -28,6 +28,7 @@ class App {
 
     scheduler.deadline_alarm_1.start();
     scheduler.deadline_alarm_2.start();
+    scheduler.deadline_alarm_3.start();
 
     return app;
   }
