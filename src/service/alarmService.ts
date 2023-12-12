@@ -4,7 +4,10 @@ import { tokenRepository } from "../repository";
 const getUserListByDeadline =async (date: Date) => {
 
     const data = await worryRepository.findUserListByDeadline(date);
-          
+    if(data.length == 0){
+        return null;
+    }
+
     const user_ids :Array<number> = [];
     for (var i =0;i<data.length;i++){
         user_ids.push(data[i].user_id);
@@ -23,6 +26,9 @@ const getUserListWithNoDeadline =async (date: string) => {
     console.log("created at:", date);
 
     const data:any = await worryRepository.findUserListWithNoDeadline(date);
+    if(data.length == 0){
+        return null;
+    }
     
     const user_ids :Array<number> = [];
     for (var i =0;i<data.length;i++){

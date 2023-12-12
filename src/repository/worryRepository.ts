@@ -239,7 +239,7 @@ const findUserListByDeadline = async(date: Date) => {
 
 const findUserListWithNoDeadline = async(date: string) => {
 
-    console.log("date: ",date)
+
     // const test=  await prisma.$queryRaw`SELECT user_id FROM worry `;
     // console.log("test: ",test);
     // const query = `SELECT user_id FROM worry WHERE DATE(created_at) = '${date}'`

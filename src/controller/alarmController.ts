@@ -51,6 +51,10 @@ const setOnDeadlineAlarm = async() => {
     try{
         const today = moment().format('YYYY-MM-DD');
         const deviceTokens = await alarmService.getUserListByDeadline(new Date(today));
+        if(!deviceTokens){
+            console.log("no device tokens");
+            return;
+        }
 
         const data = {
             "title": alarm.DEADLINE_ALARM_TITLE,
@@ -70,6 +74,10 @@ const setBeforeDeadlineAlarm = async() => {
     try{
         const deadline = moment().add(3,"days").format('YYYY-MM-DD');
         const deviceTokens =  await alarmService.getUserListByDeadline(new Date(deadline));
+        if(!deviceTokens){
+            console.log("no device tokens");
+            return;
+        }
 
         const data = {
             "title": alarm.DEADLINE_ALARM_TITLE,
@@ -88,6 +96,10 @@ const setNoDeadlineAlarm = async() => {
     try{
         const createdAt = moment().subtract(30,"days").format('YYYY-MM-DD');
         const deviceTokens =  await alarmService.getUserListWithNoDeadline(createdAt);
+        if(!deviceTokens){
+            console.log("no device tokens");
+            return;
+        }
 
         const data = {
             "title": alarm.NO_DEADLINE_ALARM_TITLE,
