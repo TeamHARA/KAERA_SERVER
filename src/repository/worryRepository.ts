@@ -1,5 +1,5 @@
 import prisma from "./prismaClient"
-import { worryCreateDAO,deadlineUpdateDAO } from "../interfaces/DAO/worryDAO";
+import { worryCreateDAO,deadlineUpdateDAO, finalAnswerCreateDAO } from "../interfaces/DAO/worryDAO";
 import { finalAnswerCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
 
 // created_at, updated_at 은 디비에 저장시 utc 값으로 저장
@@ -7,7 +7,7 @@ import { finalAnswerCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO
 
 const createWorry = async(worryCreateDAO: worryCreateDAO) => {
     
-    const createdWorry = prisma.worry.create({
+    return prisma.worry.create({
         data: {
             template_id: worryCreateDAO.templateId,
             user_id: worryCreateDAO.userId,
@@ -19,36 +19,6 @@ const createWorry = async(worryCreateDAO: worryCreateDAO) => {
         }
     })
 
-    const user = await prisma.user.findUnique({
-        select:{
-            used_template: true
-        },
-        where:{
-            id: worryCreateDAO.userId
-        }
-    })
-    if(!user){
-        return null
-    }
-    
-    const usedTemplate = user.used_template    
-    // 이미 usedTemplate에 해당 templateId가 저장되어 있는 경우 (usedTemplate update 필요 x)
-    if(usedTemplate != null && usedTemplate.includes(worryCreateDAO.templateId)){
-        return await prisma.$transaction([createdWorry])
-    }
-
-    const updateUsedTemplate =  prisma.user.update({
-        where: {
-            id: worryCreateDAO.userId
-        },
-        data: {
-            used_template: {
-                push: worryCreateDAO.templateId
-            }
-        }
-    })
-
-    return await prisma.$transaction([createdWorry,updateUsedTemplate])
 }
 
 const updateWorry = async(worryUpdateDTO: worryUpdateDTO) => {
@@ -105,17 +75,49 @@ const findWorryById = async(worryId:number) => {
 
 }
 
-const createFinalAnswer = async(finalAnswerCreateDTO: finalAnswerCreateDTO) => {
+const createFinalAnswer = async(finalAnswerCreateDAO: finalAnswerCreateDAO) => {
 
-    return await prisma.worry.update({
+    const user = await prisma.user.findUnique({
+        select:{
+            used_template: true
+        },
+        where:{
+            id: finalAnswerCreateDAO.userId
+        }
+    })
+    if(!user){
+        return null;
+    }
+
+    const createdFinalAnswer = prisma.worry.update({
         where: {
-            id: finalAnswerCreateDTO.worryId
+            id: finalAnswerCreateDAO.worryId
         },
         data: {
             updated_at: new Date(),
-            final_answer: finalAnswerCreateDTO.finalAnswer
+            final_answer: finalAnswerCreateDAO.finalAnswer
         }
     })
+
+    const usedTemplate = user.used_template    
+    // 이미 usedTemplate에 해당 templateId가 저장되어 있는 경우 (usedTemplate update 필요 x)
+    if(usedTemplate.includes(finalAnswerCreateDAO.templateId)){
+        return await prisma.$transaction([createdFinalAnswer])
+    }
+
+    const updateUsedTemplate = prisma.user.update({
+        where: {
+            id: finalAnswerCreateDAO.userId
+        },
+        data: {
+            used_template: {
+                push: finalAnswerCreateDAO.templateId
+            }
+        }
+    })
+
+    return await prisma.$transaction([createdFinalAnswer,updateUsedTemplate])
+
 }
 
 const updateDeadline = async(deadlineUpdateDAO: deadlineUpdateDAO) => {
