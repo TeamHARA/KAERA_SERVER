@@ -2,7 +2,7 @@ import { ClientException } from "../common/error/exceptions/customExceptions";
 import { rm } from "../constants";
 import worryRepository from "../repository/worryRepository"
 import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO } from "../interfaces/DTO/worryDTO";
-import { deadlineUpdateDAO, worryCreateDAO } from "../interfaces/DAO/worryDAO";
+import { deadlineUpdateDAO, finalAnswerCreateDAO, worryCreateDAO } from "../interfaces/DAO/worryDAO";
 import templateRepository from "../repository/templateRepository";
 import { calculate_d_day, calculate_random_num } from "../common/utils/calculate";
 import reviewRepository from "../repository/reviewRepository";
@@ -30,13 +30,11 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     }
     // console.log(worryCreateDAO)
 
-    const result = await worryRepository.createWorry(worryCreateDAO);
-    if (!result) {
+    const worry = await worryRepository.createWorry(worryCreateDAO);
+    if (!worry) {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
-
-    // result[0]: createdWorry | result[1]: updatedUsedTemplate 
-    const worry = result[0]
+   
     const data = {
         createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
         deadline: "데드라인이 없습니다."
@@ -162,7 +160,11 @@ const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
         throw new ClientException("한 번 내린 최종결정은 수정 불가합니다.");
     }
 
-    const updatedWorry = await worryRepository.createFinalAnswer(finalAnswerCreateDTO);
+    const finalAnswerCreateDAO: finalAnswerCreateDAO = {
+        ...finalAnswerCreateDTO,
+        templateId: worry.template_id
+    }
+    const updatedWorry = await worryRepository.createFinalAnswer(finalAnswerCreateDAO);
     if (!updatedWorry) {
         throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
     }
@@ -175,7 +177,7 @@ const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
     }
 
     const alarm_data = {
-        "templateId": updatedWorry.template_id
+        "templateId": worry.template_id
     }
 
     const data = {
