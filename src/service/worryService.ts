@@ -62,7 +62,7 @@ const patchWorry =async (worryUpdateDTO: worryUpdateDTO) => {
     }
 
     const data = {
-        updatedAt: moment(worry.updated_at).utc().utcOffset(9).format('YYYY-MM-DD'),
+        updatedAt: moment(updatedWorry.updated_at).utc().utcOffset(9).format('YYYY-MM-DD'),
     }
 
     return data;
