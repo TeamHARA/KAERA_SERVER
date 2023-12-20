@@ -134,7 +134,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         "period": "아직 고민중인 글입니다.",
         "updatedAt": kst_updated_at,
         "deadline": "데드라인이 없습니다.",
-        "d-day": gap,
+        "dDay": gap,
         "finalAnswer": worry.final_answer,
         "review": null
     }
@@ -233,7 +233,7 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
     
     const data = {
         "deadline": "데드라인이 없습니다.",
-        "d-day": gap,
+        "dDay": gap,
     }
 
     if(worry.deadline != null)
