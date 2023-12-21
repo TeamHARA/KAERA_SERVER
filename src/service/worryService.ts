@@ -103,9 +103,6 @@ const getWorryDetail =async (worryId: number,userId: number) => {
 
     const review = await reviewRepository.findreviewById(worry.id);
 
-    
-
-
     const gap = calculate_d_day(worry.deadline);
    
 
@@ -123,20 +120,25 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         "deadline": "데드라인이 없습니다.",
         "d-day": gap,
         "finalAnswer": worry.final_answer,
-        "review": null
-    }
-
-    // if(!review)
-    //     data.review = "등록된 리뷰가 없습니다."
-    if(review != null){
-        data.review = {
-            "content" : review.content,
-            "updatedAt" : moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD')
+        "review":{
+            "content" : null,
+            "updatedAt": null
         }
     }
+
    
-    if(worry.final_answer != null)
+    // 최종 결정 내린 고민
+    if(worry.final_answer != null){
         data.period = kst_created_at+" ~ "+kst_updated_at;
+        data.review.updatedAt = kst_updated_at
+    }
+
+    // 최종 결정 이후
+    // 리뷰 작성한 경우
+    if(review != null){
+        data.review.content = review.content,
+        data.review.updatedAt = moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD')
+    }
 
     if(worry.deadline != null)
         data.deadline = worry.deadline.toISOString().substring(0,10)
