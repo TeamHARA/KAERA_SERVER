@@ -9,6 +9,8 @@ import alarmService from "../service/alarmService";
 const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { templateId, userId } = req.body;
+
+        console.log(userId)
         const user = await userService.getUserById(userId);
         const userName = user.name;
         const token = await tokenService.getDeviceToken(userId);
