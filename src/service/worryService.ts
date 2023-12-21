@@ -35,21 +35,16 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
 
-    const template = await templateRepository.findTemplateById(worry.template_id);
-    if (!template) {
-        throw new ClientException(rm.CREATE_WORRY_FAIL);
-    }
-       
     const data:any = {
         worryId: worry.id,
         title: worry.title,
         templateId: worry.template_id,
-        subtitles: template.subtitles,
         answers: worry.answers,
         createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
         deadline: "데드라인이 없습니다.",
         dDay: -888
     }
+    
     if(worry.deadline != null){
         data.deadline = worry.deadline.toISOString().substring(0,10)
         data.dDay = deadline
