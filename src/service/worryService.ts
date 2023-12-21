@@ -11,13 +11,13 @@ import moment from "moment";
 
 const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     const date = new Date(); // utc기준 현재시간
-    const d_day = worryCreateDTO.deadline;
+    const deadline = worryCreateDTO.deadline;
     // const moment = require('moment');   // moment() = kst기준 현재시간
     
     let deadlineDate;
-    if(d_day != -1){
-        const deadline = moment().add(d_day, 'days').format('YYYY-MM-DD');
-        deadlineDate = new Date(deadline);
+    if(deadline != -1){
+        const today_plus_deadline = moment().add(deadline, 'days').format('YYYY-MM-DD');
+        deadlineDate = new Date(today_plus_deadline);
     }
     else{
         deadlineDate = null;
@@ -34,13 +34,26 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     if (!worry) {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
-   
-    const data = {
-        createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
-        deadline: "데드라인이 없습니다."
+
+    const template = await templateRepository.findTemplateById(worry.template_id);
+    if (!template) {
+        throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
-    if(worry.deadline != null)
+       
+    const data:any = {
+        worryId: worry.id,
+        title: worry.title,
+        templateId: worry.template_id,
+        subtitles: template.subtitles,
+        answers: worry.answers,
+        createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
+        deadline: "데드라인이 없습니다.",
+        dDay: -888
+    }
+    if(worry.deadline != null){
         data.deadline = worry.deadline.toISOString().substring(0,10)
+        data.dDay = deadline
+    }
 
     return data;
     
@@ -62,7 +75,7 @@ const patchWorry =async (worryUpdateDTO: worryUpdateDTO) => {
     }
 
     const data = {
-        updatedAt: moment(worry.updated_at).utc().utcOffset(9).format('YYYY-MM-DD'),
+        updatedAt: moment(updatedWorry.updated_at).utc().utcOffset(9).format('YYYY-MM-DD'),
     }
 
     return data;
@@ -121,7 +134,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         "period": "아직 고민중인 글입니다.",
         "updatedAt": kst_updated_at,
         "deadline": "데드라인이 없습니다.",
-        "d-day": gap,
+        "dDay": gap,
         "finalAnswer": worry.final_answer,
         "review": null
     }
@@ -220,7 +233,7 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
     
     const data = {
         "deadline": "데드라인이 없습니다.",
-        "d-day": gap,
+        "dDay": gap,
     }
 
     if(worry.deadline != null)
