@@ -127,17 +127,18 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         "updatedAt": kst_updated_at,
         "deadline": "데드라인이 없습니다.",
         "dDay": gap,
-        "finalAnswer": worry.final_answer,
+        "finalAnswer": "",
         "review":{
-            "content" : null,
-            "updatedAt": null
+            "content" : "",
+            "updatedAt": ""
         }
     }
 
    
     // 최종 결정 내린 고민
     if(worry.final_answer != null){
-        data.period = kst_created_at+" ~ "+kst_updated_at;
+        data.finalAnswer = worry.final_answer
+        data.period = kst_created_at+" ~ "+kst_updated_at
         data.review.updatedAt = kst_updated_at
     }
 
@@ -208,7 +209,6 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
         throw new ClientException("고민글 작성자만 데드라인을 수정할 수 있습니다.");
     }
 
-    
     const d_day = deadlineUpdateDTO.dayCount;
     const moment = require('moment');   // moment() = kst기준 현재시간
     
