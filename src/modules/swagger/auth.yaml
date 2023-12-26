@@ -13,7 +13,8 @@
           schema:
             type: object     
             example: {
-              "accessToken" : "카카오 액세스토큰"
+              "accessToken" :"카카오 액세스토큰",
+              "deviceToken" :"fcm 디바이스토큰"
             }
     responses:
       '200':
@@ -176,6 +177,30 @@
                 "status": 200,
                 "success": true,
                 "message": "로그아웃 성공",          
+              }
+      '400':
+        $ref: './openapi.yaml#/components/responses/BadRequest'
+      '500':
+        $ref: './openapi.yaml#/components/responses/InternalServerError'
+
+/auth/unregister:
+  delete:
+    tags:
+      - Auth
+    summary: 회원탈퇴하기
+    consumes:
+      - application/json
+    responses:
+      '200':
+        description: 회원 탈퇴 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "status": 200,
+                "success": true,
+                "message": "회원 탈퇴 성공",          
               }
       '400':
         $ref: './openapi.yaml#/components/responses/BadRequest'

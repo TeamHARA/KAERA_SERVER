@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "api-docs": "swagger-cli bundle ./src/modules/swagger/openapi.yaml --outfile swagger.yaml --type yaml",
-    "predev": "npm run api-docs",
+    "preproduction": "npm run api-docs",
     "development": "dotenv -e .env.development nodemon",
     "production": "dotenv -e .env.production nodemon",
     "build": "tsc",
