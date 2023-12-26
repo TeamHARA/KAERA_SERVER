@@ -17,8 +17,12 @@ paths:
   #auth  
   /auth/kakao/login:
     $ref: './auth.yaml#/~1auth~1kakao~1login'
+  /auth/apple/login:
+    $ref: './auth.yaml#/~1auth~1apple~1login'
   /auth/token/refresh:
     $ref: './auth.yaml#/~1auth~1token~1refresh'
+  /auth/unregister:
+    $ref: './auth.yaml#/~1auth~1unregister'
 
   #template
   /template:
@@ -35,8 +39,8 @@ paths:
     $ref: './worry.yaml#/~1worry~1finalAnswer'
   /worry/deadline:
     $ref: './worry.yaml#/~1worry~1deadline'
-  /worry/list/{isSolved}:
-    $ref: './worry.yaml#/~1worry~1list~1{isSolved}'
+  /worry/{isSolved}/list?page={page}&limit={limit}:
+    $ref: './worry.yaml#/~1worry~1{isSolved}~1list'
   /worry?templateId={templateId}:
     $ref: './worry.yaml#/~1worry?templateId={templateId}'
 

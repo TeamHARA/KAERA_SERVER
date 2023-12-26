@@ -61,25 +61,25 @@ components:
   examples:
     postWorryBodyExampleDeadline: 
       value: {
-        "templateId": 1,
-        "title": "졸업후의 나",
+        "templateId": 2,
+        "title": "고민고민",
         "answers": [
-          "11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-          "22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-          "33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-          "44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다."
+          "a",
+          "b",
+          "c",
+          "d"
         ],
-        "deadline": 5
+        "deadline": 6
       }
     postWorryBodyExampleNoDeadline: 
       value: {
-        "templateId": 1,
-        "title": "졸업후의 나",
+        "templateId": 2,
+        "title": "고민고민",
         "answers": [
-          "11이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-          "22이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-          "33이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.",
-          "44이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다.이번 시험 망칠까봐 걱정된다."
+          "a",
+          "b",
+          "c",
+          "d"
         ],
         "deadline": -1
       }
@@ -137,15 +137,47 @@ components:
           application/json:
             schema:
               type: object
-              example: {
-                "status": 200,
-                "success": true,
-                "message": "고민 작성 성공",
-                "data":  {
-                  "createdAt": "2023-07-22",
-                  "deadline": "2023-07-27" 
+            examples: 
+              withDeadline:
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "고민 생성 성공",
+                  "data": {
+                    "worryId": 524,
+                    "title": "고민고민",
+                    "templateId": 2,
+                    "answers": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "createdAt": "2023-12-21",
+                    "deadline": "2023-12-27",
+                    "dDay": -6
+                  }
                 }
-              }
+              withNoDeadline:
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "고민 생성 성공",
+                  "data": {
+                    "worryId": 524,
+                    "title": "고민고민",
+                    "templateId": 2,
+                    "answers": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "createdAt": "2023-12-21",
+                    "deadline": "데드라인이 없습니다",
+                    "dDay": -888
+                  }
+                }
       '400':
         $ref: './openapi.yaml#/components/responses/BadRequest'
       '500':
@@ -242,35 +274,101 @@ components:
           application/json:
             schema:
               type: object
-              example: {
-                "status": 200,
-                "success": true,
-                "message": "고민 상세조회 성공",
-                "data":  {
-                  "title": "고민1",
-                  "templateId": 1,
-                  "subtitles":[
-                    "소제목1",
-                    "소제목2",
-                    "소제목3",
-                    "소제목4",
-                  ],
-                  "answers":[
-                    "답변1",
-                    "답변2",
-                    "답변3",
-                    "답변4",
-                  ],
-                  "period": "2020-01-01 ~ 2020-03-03",
-                  "updatedAt": "2020-03-03",
-                  "deadline": "2020-03-02",
-                  "finalAnswer": "해카라쿠배 지원하기",
-                  "review":{
-                    "content":"나의 후기~!~!",
-                    "updatedAt": "2020-04-23"
-			            }
+            examples:
+              notFinishedWorry:
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "고민 상세조회 성공",
+                  "data": {
+                    "title": "고민고민",
+                    "templateId": 2,
+                    "subtitles": [
+                      "고민의 선택지",
+                      "선택지의 장점",
+                      "선택지의 단점",
+                      "장점과 단점의 비교"
+                    ],
+                    "answers": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "period": "아직 고민중인 글입니다.",
+                    "updatedAt": "2023-12-21",
+                    "deadline": "2023-12-27",
+                    "dDay": -6,
+                    "finalAnswer": "",
+                    "review": {
+                      "content": "",
+                      "updatedAt": ""
+                    }
+                  }
                 }
-              }
+              finishedWorryWithNoReview:
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "고민 상세조회 성공",
+                  "data": {
+                    "title": "12/21일에 생성",
+                    "templateId": 4,
+                    "subtitles": [
+                      "고민의 최종 목표",
+                      "목표를 위한 준비",
+                      "올해 안에 할 수 있는 실천",
+                      "오늘 당장 할 수 있는 실천"
+                    ],
+                    "answers": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "period": "2023-12-21 ~ 2023-12-21",
+                    "updatedAt": "2023-12-21",
+                    "deadline": "데드라인이 없습니다.",
+                    "dDay": -888,
+                    "finalAnswer": "결정했다..!",
+                    "review": {
+                      "content": "",
+                      "updatedAt": "2023-12-21"
+                    }
+                  }
+                }   
+              finishedWorryWithReview:
+                value: {
+                  "status": 200,
+                  "success": true,
+                  "message": "고민 상세조회 성공",
+                  "data": {
+                    "title": "12/20일에 생성",
+                    "templateId": 4,
+                    "subtitles": [
+                      "고민의 최종 목표",
+                      "목표를 위한 준비",
+                      "올해 안에 할 수 있는 실천",
+                      "오늘 당장 할 수 있는 실천"
+                    ],
+                    "answers": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "period": "2023-12-20 ~ 2023-12-21",
+                    "updatedAt": "2023-12-21",
+                    "deadline": "2023-12-26",
+                    "dDay": 0,
+                    "finalAnswer": "결정했다..!",
+                    "review": {
+                      "content": "리뷰",
+                      "updatedAt": "2023-12-21"
+                    }
+                  }
+                }
+       
       '400':
         $ref: './openapi.yaml#/components/responses/BadRequest'
       '500':
@@ -344,15 +442,16 @@ components:
             schema:
               type: object
               example: {
-              "status": 200,
+                "status": 200,
                 "success": true,
                 "message": "데드라인 수정 성공",
                 "data": {
-                  "deadline": "2023-12-12"
+                  "deadline": "2023-12-31",
+                  "dDay": -5
                 }
               }
 
-/worry/list/{isSolved}:
+/worry/{isSolved}/list:
   get:
     tags:
       - Worry
@@ -364,6 +463,16 @@ components:
         description: 고민해결 여부
         schema:
           type: string
+      - in: query
+        name: page
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: limit
+        schema:
+          type: string
+        required: true       
     responses:
       '200':
         description: 고민목록 조회 성공
