@@ -45,7 +45,7 @@ components:
               example: {
               "status": 200,
                 "success": true,
-                "message": "나의 기록 등록 및 수정 성공",
+                "message": "나의 기록 등록/수정 성공",
                 "data": {
                   "updatedAt" : "2019-10-01"           
                 }
