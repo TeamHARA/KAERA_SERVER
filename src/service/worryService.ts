@@ -200,6 +200,14 @@ const patchFinalAnswer =async (finalAnswerCreateDTO: finalAnswerCreateDTO) => {
 }
 
 const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
+    const worry = await worryRepository.findWorryById(deadlineUpdateDTO.worryId)
+    if(!worry){
+        throw new ClientException("해당 id의 고민글이 존재하지 않습니다.");
+    }
+    if (worry.user_id != deadlineUpdateDTO.userId) {
+        throw new ClientException("고민글 작성자만 데드라인을 수정할 수 있습니다.");
+    }
+
     
     const d_day = deadlineUpdateDTO.dayCount;
     const moment = require('moment');   // moment() = kst기준 현재시간
@@ -219,22 +227,19 @@ const patchDeadline =async (deadlineUpdateDTO: deadlineUpdateDTO) => {
     const gap = calculate_d_day(deadlineDate)
 
 
+    const updatedWorry = await worryRepository.updateDeadline(deadlineUpdateDAO);
+    if (!updatedWorry) {
+        throw new ClientException(rm.UPDATE_DEADLINE_FAIL);
+    }
 
-    const worry = await worryRepository.updateDeadline(deadlineUpdateDAO);
-    if (!worry) {
-        throw new ClientException(rm.MAKE_FINAL_ANSWER_FAIL);
-    }
-    if (worry.user_id != deadlineUpdateDTO.userId) {
-        throw new ClientException("고민글 작성자만 데드라인을 수정할 수 있습니다.");
-    }
     
     const data = {
         "deadline": "데드라인이 없습니다.",
         "dDay": gap,
     }
 
-    if(worry.deadline != null)
-        data.deadline = worry.deadline.toISOString().substring(0,10)
+    if(updatedWorry.deadline != null)
+        data.deadline = updatedWorry.deadline.toISOString().substring(0,10)
 
 
     return data;    
