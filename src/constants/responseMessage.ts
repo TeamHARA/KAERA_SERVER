@@ -86,4 +86,10 @@ export default {
   READ_KAKAO_TOKEN_SUCCESS: "카카오 토큰 조회 성공",
   READ_KAKAO_TOKEN_FAIL: "카카오 토큰 조회 실패",
 
+  //알람
+  ALARM_ENABLE_SUCCESS: "알림 활성화 성공",
+  ALARM_ENABLE_FAIL: "알림 활성화 실패",
+  ALARM_DISABLE_SUCCESS: "알림 비활성화 성공",
+  ALARM_DISABLE_FAIL: "알림 비활성화 실패",
+
 };
