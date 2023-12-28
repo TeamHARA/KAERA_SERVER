@@ -2,9 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import admin from '../modules/firebaseAdmin';
 import { userService } from "../service";
 import tokenService from "../service/tokenService";
-import { alarm } from "../constants";
 import moment from "moment";
 import alarmService from "../service/alarmService";
+import { alarm, rm, sc } from "../constants";
+import { fail, success } from "../constants/response";
+import statusCode from "../constants/statusCode"
 
 const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -175,10 +177,34 @@ const pushAlarmToMany = async (data: any) => {
 
 }
 
+const settingAlarm = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { isTrue } = req.params
+        const { userId, deviceToken } = req.body
+
+        if(+isTrue == 1){
+            await tokenService.setDeviceToken(userId, deviceToken)
+            return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_ENABLE_SUCCESS));
+
+        }
+        if(+isTrue == 0){
+            await tokenService.disableDeviceToken(userId, deviceToken)
+            return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_DISABLE_SUCCESS));
+        }
+  
+  
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
 export default{
     setFinishedAlarm,
     setOnDeadlineAlarm,
     setBeforeDeadlineAlarm,
     setNoDeadlineAlarm,
-    pushAlarm
+    pushAlarm,
+    settingAlarm
 }
