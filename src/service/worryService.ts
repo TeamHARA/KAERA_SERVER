@@ -28,19 +28,23 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
         updatedAt: date,
         deadlineDate: deadlineDate
     }
-    // console.log(worryCreateDAO)
 
     const worry = await worryRepository.createWorry(worryCreateDAO);
     if (!worry) {
         throw new ClientException(rm.CREATE_WORRY_FAIL);
     }
 
+    const template = await templateRepository.findTemplateById(worry.template_id);
+    if (!template) {
+        throw new ClientException(rm.CREATE_WORRY_FAIL);
+    }
     const gap = calculate_d_day(deadlineDate)
 
     const data:any = {
         worryId: worry.id,
         title: worry.title,
         templateId: worry.template_id,
+        subtitles: template.subtitles,
         answers: worry.answers,
         createdAt: moment(worry.created_at).utc().utcOffset(9).format('YYYY-MM-DD'),
         deadline: "데드라인이 없습니다.",
