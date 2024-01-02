@@ -28,8 +28,33 @@ const getDeviceToken =async (userId: number) => {
 }
 
 
+const setDeviceToken =async (userId: number, deviceToken: string) => {
+   
+
+    const data = await tokenRepository.enableDeviceToken(userId, deviceToken)
+    
+
+    return
+}
+
+const disableDeviceToken =async (userId: number, deviceToken: string) => {
+    const isValidToken = await tokenRepository.findDeviceTokenById(userId)
+    if(!isValidToken){
+        throw new ClientException("device token not found in database");
+    }
+
+    if(isValidToken.device_token != deviceToken){
+        throw new ClientException("wrong device token")
+    }
+
+    return await tokenRepository.disableDeviceToken(userId)
+    
+}
+
 
 export default{
     refreshAccessToken,
-    getDeviceToken
+    getDeviceToken,
+    setDeviceToken,
+    disableDeviceToken
 }
