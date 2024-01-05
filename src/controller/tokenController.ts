@@ -4,6 +4,8 @@ import { fail, success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import jwtHandler from "../modules/jwtHandler";
 import tokenService from "../service/tokenService";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
 
 
 const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -11,6 +13,9 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
       const { accessToken, refreshToken} = req.body;
       const access_decoded = jwtHandler.accessVerify(accessToken);
       const refresh_decoded = jwtHandler.refreshVerify(refreshToken);
+      const access_decoded_without_verification = jwt.decode(accessToken);
+      const userId: number = (access_decoded_without_verification as JwtPayload).userId
+
   
       // 잘못된 accessToken or refreshToken 일 경우
       if ((access_decoded === tokenType.ACCESS_TOKEN_INVALID) || (refresh_decoded === tokenType.REFRESH_TOKEN_INVALID))
@@ -21,8 +26,8 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
         // refresh token도 만료된 경우 (access,refresh 모두 만료)
         if (refresh_decoded === tokenType.REFRESH_TOKEN_EXPIRED)
           return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_ALL_TOKEN));
-  
-        const new_access_token = await tokenService.refreshAccessToken(refreshToken);
+        
+        const new_access_token = await tokenService.refreshAccessToken(userId, refreshToken);
         return res.status(sc.OK).send(success(statusCode.OK, rm.REFRESH_TOKEN_SUCCESS, new_access_token));
   
       }
