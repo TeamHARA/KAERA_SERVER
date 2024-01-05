@@ -2,14 +2,18 @@ import { ClientException } from "../common/error/exceptions/customExceptions";
 import jwtHandler from "../modules/jwtHandler";
 import tokenRepository from "../repository/tokenRepository";
 
-const refreshAccessToken =async (refreshToken:string) => {
-   
-    const user = await tokenRepository.findIdByRefreshToken(refreshToken)
-    if(!user){
-        throw new ClientException("refresh token not found in database");
-    }
+const refreshAccessToken =async (userId: number, refreshToken:string) => {
 
-    const token = jwtHandler.access(user.user_id);
+    const user = await tokenRepository.findRefreshTokenById(userId)
+    if(!user){
+        throw new ClientException("Invlalid userId | accessToken");
+    }
+    if(user.refresh_token != refreshToken){
+        throw new ClientException("Invalid refreshToken(refreshToken doesn't match with user)");
+    }
+    console.log("here: ", user.refresh_token)
+
+    const token = jwtHandler.access(userId);
     const data = {
         "accessToken": token
     }

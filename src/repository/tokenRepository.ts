@@ -32,16 +32,6 @@ const findDeviceTokenById = async (userId: number) => {
     });
 };
 
-const findIdByRefreshToken = async (refreshToken: string) => {
-    return await prisma.token.findUnique({
-        select:{
-            user_id:true
-        },
-        where: {
-            refresh_token: refreshToken
-        }
-    });
-};
 
 const findDeviceTokenListByIds = async (userId: number[]) => {
     return await prisma.token.findMany({
@@ -105,7 +95,6 @@ export default {
     createRefreshToken,
     findRefreshTokenById,
     findDeviceTokenById,
-    findIdByRefreshToken,
     findDeviceTokenListByIds,
     updateTokenById,
     disableRefreshTokenById,
