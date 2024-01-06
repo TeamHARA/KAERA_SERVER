@@ -4,7 +4,7 @@ import alarmController from "../controller/alarmController";
 
 const router = Router();
 
-router.get("/enable/:isTrue", 
+router.post("/enable/:isTrue", 
     auth,
     alarmController.settingAlarm
 )
