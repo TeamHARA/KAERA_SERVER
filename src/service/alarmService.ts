@@ -8,18 +8,16 @@ const getUserListByDeadline =async (date: Date) => {
         return null;
     }
 
-    const user_ids :Array<number> = [];
+    const result :Array<any> = [];
     for (var i =0;i<data.length;i++){
-        user_ids.push(data[i].user_id);
+        result.push({
+            worryId: data[i].id,
+            deviceToken: data[i].user.token?.device_token
+        })
     }
 
-    const token = await tokenRepository.findDeviceTokenListByIds(user_ids);
-    const user_deviceTokens :Array<string|null>  = [];
-    for (var i =0;i<token.length;i++){
-        user_deviceTokens.push(token[i].device_token);
-    }
+    return result;
 
-    return user_deviceTokens;
 }
 
 const getUserListWithNoDeadline =async (date: string) => {

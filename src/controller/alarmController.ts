@@ -7,6 +7,7 @@ import alarmService from "../service/alarmService";
 import { alarm, rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import statusCode from "../constants/statusCode"
+import { tokenRepository } from "../repository";
 
 const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -51,25 +52,28 @@ const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) 
     }
 }
 
-const setOnDeadlineAlarm = async() => {
+const setOnDeadlineAlarm = async(next: NextFunction) => {
     try{
         const today = moment().format('YYYY-MM-DD');
-        const deviceTokens = await alarmService.getUserListByDeadline(new Date(today));
-        if(!deviceTokens){
-            console.log("no device tokens");
+        const user = await alarmService.getUserListByDeadline(new Date(today));
+        if(!user){
             return;
         }
 
-        const data = {
-            "title": alarm.DEADLINE_ALARM_TITLE,
-            "contents": alarm.ON_DEADLINE_ALARM,
-            "deviceTokens": deviceTokens
+        // console.log(user[i].worryId)
+        for(var i =0;i<user.length;i++){
+            const data = {
+                "payload": user[i].worryId,
+                "title": alarm.DEADLINE_ALARM_TITLE,
+                "contents": alarm.ON_DEADLINE_ALARM,
+                "deviceToken": String(user[i].deviceToken)
+            }
+
+            pushAlarm(data,next);
         }
 
-        await pushAlarmToMany(data);
-
     }catch (error) {
-  
+        next(error)
     }
 }
 
@@ -121,14 +125,19 @@ const setNoDeadlineAlarm = async() => {
 
 const pushAlarm = (data: any, next: NextFunction) => {
     try{
-        const { deviceToken, title, contents } = data;
+        const { payload, deviceToken, title, contents } = data;
+
         let message = {
-            notification: {
-            title: title,
-            body: contents,
-            },
             token: deviceToken,
+            notification: {
+                title: title,
+                body: contents,
+            },
+            data: {
+                worryId: payload
+            }
         }
+        console.log(message)
 
         admin
             .messaging()
@@ -142,7 +151,7 @@ const pushAlarm = (data: any, next: NextFunction) => {
                 // return res.status(400).json({success : false})
             });
     } catch (error) {
-        next(error);
+       next(error)
     }
 
 }
@@ -181,6 +190,16 @@ const settingAlarm = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { isTrue } = req.params
         const { userId, deviceToken } = req.body
+
+        const data = await tokenService.getDeviceToken(userId)
+        // 알람 비활성화 상태에서 알람 비활성화하려 할 때
+        if(data == "" && +isTrue == 0){
+            return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_DISABLE_SUCCESS))
+        }
+        // 알람 활성화 상태에서 알람 활성화하려 할 때
+        if(data != "" && +isTrue == 1){
+            return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_ENABLE_SUCCESS));
+        }
 
         if(+isTrue == 1){
             await tokenService.setDeviceToken(userId, deviceToken)
