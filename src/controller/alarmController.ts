@@ -54,22 +54,23 @@ const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) 
 const setOnDeadlineAlarm = async() => {
     try{
         const today = moment().format('YYYY-MM-DD');
-        const deviceTokens = await alarmService.getUserListByDeadline(new Date(today));
-        if(!deviceTokens){
-            console.log("no device tokens");
+        const user = await alarmService.getUserListByDeadline(new Date(today));
+        if(!user){
             return;
         }
 
-        const data = {
-            "title": alarm.DEADLINE_ALARM_TITLE,
-            "contents": alarm.ON_DEADLINE_ALARM,
-            "deviceTokens": deviceTokens
+        for(var i =0;i<user.length;i++){
+            const data = {
+                "payload": user[i].worryId,
+                "title": alarm.DEADLINE_ALARM_TITLE,
+                "contents": alarm.ON_DEADLINE_ALARM,
+                "deviceToken": user[i].deviceToken
+            }
+            pushAlarmWithPayload(data);
         }
 
-        await pushAlarmToMany(data);
-
     }catch (error) {
-  
+        console.log(error)
     }
 }
 
@@ -77,22 +78,23 @@ const setOnDeadlineAlarm = async() => {
 const setBeforeDeadlineAlarm = async() => {
     try{
         const deadline = moment().add(3,"days").format('YYYY-MM-DD');
-        const deviceTokens =  await alarmService.getUserListByDeadline(new Date(deadline));
-        if(!deviceTokens){
-            console.log("no device tokens");
+        const user = await alarmService.getUserListByDeadline(new Date(deadline));
+        if(!user){
             return;
         }
 
-        const data = {
-            "title": alarm.DEADLINE_ALARM_TITLE,
-            "contents": alarm.BEFORE_DEADLINE_ALARM,
-            "deviceTokens": deviceTokens
+        for(var i =0;i<user.length;i++){
+            const data = {
+                "payload": user[i].worryId,
+                "title": alarm.DEADLINE_ALARM_TITLE,
+                "contents": alarm.BEFORE_DEADLINE_ALARM,
+                "deviceToken": user[i].deviceToken
+            }
+            pushAlarmWithPayload(data);
         }
 
-        await pushAlarmToMany(data);
-
     }catch (error) {
-        
+        console.log(error)
     }
 }
 
@@ -114,7 +116,7 @@ const setNoDeadlineAlarm = async() => {
         await pushAlarmToMany(data);
 
     }catch (error) {
-        
+        console.log(error)
     }
 }
 
@@ -122,12 +124,13 @@ const setNoDeadlineAlarm = async() => {
 const pushAlarm = (data: any, next: NextFunction) => {
     try{
         const { deviceToken, title, contents } = data;
+
         let message = {
-            notification: {
-            title: title,
-            body: contents,
-            },
             token: deviceToken,
+            notification: {
+                title: title,
+                body: contents,
+            }
         }
 
         admin
@@ -142,7 +145,41 @@ const pushAlarm = (data: any, next: NextFunction) => {
                 // return res.status(400).json({success : false})
             });
     } catch (error) {
-        next(error);
+       next(error)
+    }
+
+}
+
+const pushAlarmWithPayload = (data: any) => {
+    try{
+        const { payload, deviceToken, title, contents } = data;
+        
+        // data must only contain string values
+        let message = {
+            token: deviceToken,
+            notification: {
+                title: title,
+                body: contents,
+            },
+            data: {
+                worryId: String(payload)
+            }
+        }
+        console.log(message)
+
+        admin
+            .messaging()
+            .send(message)
+            .then(function (response:Response) {
+            console.log('Successfully sent message: : ', response)
+            // return res.status(200).json({success : true})
+            })
+            .catch(function (err:Error) {
+                console.log('Error Sending message!!! : ', err)
+                // return res.status(400).json({success : false})
+            });
+    } catch (error) {
+       console.log(error)
     }
 
 }
@@ -182,6 +219,16 @@ const settingAlarm = async (req: Request, res: Response, next: NextFunction) => 
         const { isTrue } = req.params
         const { userId, deviceToken } = req.body
 
+        const data = await tokenService.getDeviceToken(userId)
+        // 알람 비활성화 상태에서 알람 비활성화하려 할 때
+        if(data == "" && +isTrue == 0){
+            return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_DISABLE_SUCCESS))
+        }
+        // 알람 활성화 상태에서 알람 활성화하려 할 때
+        if(data != "" && +isTrue == 1){
+            return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_ENABLE_SUCCESS));
+        }
+
         if(+isTrue == 1){
             await tokenService.setDeviceToken(userId, deviceToken)
             return res.status(sc.OK).send(success(statusCode.OK, rm.ALARM_ENABLE_SUCCESS));
@@ -206,5 +253,6 @@ export default{
     setBeforeDeadlineAlarm,
     setNoDeadlineAlarm,
     pushAlarm,
+    pushAlarmWithPayload,
     settingAlarm
 }

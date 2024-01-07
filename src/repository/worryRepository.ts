@@ -228,8 +228,12 @@ const findWorryListByTemplate = async(templateId: number,userId: number) => {
 const findUserListByDeadline = async(date: Date) => {
 
     return await prisma.worry.findMany({
-        select:{
-            user_id:true,
+       include:{
+            user:{
+                include:{
+                    token:true
+                }
+            }
         },
         where: {
             deadline: date,
