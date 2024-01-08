@@ -100,19 +100,20 @@ const setBeforeDeadlineAlarm = async() => {
 const setNoDeadlineAlarm = async() => {
     try{
         const createdAt = moment().subtract(30,"days").format('YYYY-MM-DD');
-        const deviceTokens =  await alarmService.getUserListWithNoDeadline(createdAt);
-        if(!deviceTokens){
-            console.log("no device tokens");
+        const user =  await alarmService.getUserListWithNoDeadline(createdAt);
+        if(!user){
             return;
         }
 
-        const data = {
-            "title": alarm.NO_DEADLINE_ALARM_TITLE,
-            "contents": alarm.NO_DEADLINE_ALARM,
-            "deviceTokens": deviceTokens
+        for(var i =0;i<user.length;i++){
+            const data = {
+                "payload": user[i].worryId,
+                "title": alarm.NO_DEADLINE_ALARM_TITLE,
+                "contents": alarm.NO_DEADLINE_ALARM,
+                "deviceToken": user[i].deviceToken
+            }
+            pushAlarmWithPayload(data);
         }
-
-        await pushAlarmToMany(data);
 
     }catch (error) {
         console.log(error)
