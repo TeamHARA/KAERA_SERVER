@@ -1,5 +1,5 @@
 import worryRepository from "../repository/worryRepository";
-import { tokenRepository } from "../repository";
+import tokenService from "./tokenService";
 
 const getUserListByDeadline =async (date: Date) => {
 
@@ -29,19 +29,18 @@ const getUserListWithNoDeadline =async (date: string) => {
         return null;
     }
     
-    const user_ids :Array<number> = [];
+    const result :Array<any> = [];
     for (var i =0;i<data.length;i++){
-        user_ids.push(data[i].user_id);
+        const deviceToken = await tokenService.getDeviceToken(data[i].user_id)       
+        if(deviceToken != ""){
+            result.push({
+                worryId: data[i].id,
+                deviceToken: deviceToken
+            })
+        }
     }
 
-    const token = await tokenRepository.findDeviceTokenListByIds(user_ids);
-    const user_deviceTokens :Array<string|null>  = [];
-    for (var i =0;i<token.length;i++){
-        if(token[i].device_token != "")
-            user_deviceTokens.push(token[i].device_token)
-    }
-
-    return user_deviceTokens;
+    return result
 }
 
 export default{
