@@ -4,6 +4,7 @@ import router from './router';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import scheduler from './modules/scheduler';
+import alarmController from './controller/alarmController';
 
 
 class App {
@@ -27,7 +28,7 @@ class App {
 
 
     scheduler.deadline_alarm_1.start();
-    // scheduler.deadline_alarm_2.start();
+    scheduler.deadline_alarm_2.start();
     scheduler.deadline_alarm_3.start();
 
     return app;

@@ -12,7 +12,6 @@ const setFinishedAlarm = async(req: Request, res: Response, next: NextFunction) 
     try{
         const { templateId, userId } = req.body;
 
-        console.log(userId)
         const user = await userService.getUserById(userId);
         const userName = user.name;
         const token = await tokenService.getDeviceToken(userId);
@@ -165,7 +164,6 @@ const pushAlarmWithPayload = (data: any) => {
                 worryId: String(payload)
             }
         }
-        console.log(message)
 
         admin
             .messaging()
