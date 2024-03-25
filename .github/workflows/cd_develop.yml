@@ -55,7 +55,7 @@ jobs:
         run: yarn run build  
 
       - name: Zip file
-        run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./swagger.yaml ./.firebase-admin.json
+        run: zip -r kaera.zip ./dist ./scripts ./appspec.yml ./.env ./package.json ./prisma ./swagger.yaml ./firebase-admin.json
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
