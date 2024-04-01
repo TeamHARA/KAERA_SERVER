@@ -6,7 +6,6 @@ interface worryCreateDAO extends worryCreateDTO{
     updatedAt: Date;
 }
   
-
 interface deadlineUpdateDAO{
   worryId: number;
   deadline: Date | null;

@@ -1,4 +1,4 @@
-import { IsDefined, IsNumber, IsString, isString } from "class-validator";
+import { IsDefined, IsNumber, IsString } from "class-validator";
 
 class reviewDTO {
     @IsDefined()

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { rm , sc} from "../constants";
+import { rm, sc } from "../constants";
 import { success } from "../constants/response";
 import statusCode from "../constants/statusCode";
 import worryService from "../service/worryService";
@@ -7,11 +7,10 @@ import { finalAnswerCreateDTO, worryCreateDTO, worryUpdateDTO, deadlineUpdateDTO
 import { ClientException } from "../common/error/exceptions/customExceptions";
 
 
-
 const postWorry = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const  worryCreateDTO: worryCreateDTO = req.body;
+        const worryCreateDTO: worryCreateDTO = req.body;
         // console.log(worryCreateDTO)
         const data = await worryService.postWorry(worryCreateDTO);
 
@@ -38,9 +37,9 @@ const patchWorry = async (req: Request, res: Response, next: NextFunction) => {
 const deleteWorry = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { worryId } = req.params;
-        const { userId }= req.body;
+        const { userId } = req.body;
 
-        await worryService.deleteWorry(+worryId,userId);
+        await worryService.deleteWorry(+worryId, userId);
 
         return res.status(sc.OK).send(success(statusCode.OK, rm.DELETE_WORRY_SUCCESS));
 
@@ -52,11 +51,11 @@ const deleteWorry = async (req: Request, res: Response, next: NextFunction) => {
 const getWorryDetail = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { worryId } = req.params;
-        const { userId }= req.body;
+        const { userId } = req.body;
 
-        const data = await worryService.getWorryDetail(+worryId,userId);
+        const data = await worryService.getWorryDetail(+worryId, userId);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_DETAIL_SUCCESS,data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_DETAIL_SUCCESS, data));
 
     } catch (error) {
         next(error);
@@ -72,8 +71,8 @@ const patchFinalAnswer = async (req: Request, res: Response, next: NextFunction)
 
         req.body.templateId = data.alarm_data.templateId;
         next();
-        
-        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS,data.quote_data));
+
+        return res.status(sc.OK).send(success(statusCode.OK, rm.MAKE_FINAL_ANSWER_SUCCESS, data.quote_data));
 
     } catch (error) {
         next(error);
@@ -84,10 +83,8 @@ const patchDeadline = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const deadlineUpdateDTO: deadlineUpdateDTO = req.body;
 
-
         const data = await worryService.patchDeadline(deadlineUpdateDTO);
-
-        return res.status(sc.OK).send(success(statusCode.OK, rm.UPDATE_DEADLINE_SUCCESS,data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.UPDATE_DEADLINE_SUCCESS, data));
 
     } catch (error) {
         next(error);
@@ -98,11 +95,11 @@ const getWorryList = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { isSolved } = req.params;
         const { page, limit } = req.query;
-        const { userId }= req.body;
+        const { userId } = req.body;
 
         const data = await worryService.getWorryList(+isSolved, +page!, +limit!, userId);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_SUCCESS,data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_SUCCESS, data));
 
     } catch (error) {
         next(error);
@@ -112,12 +109,12 @@ const getWorryList = async (req: Request, res: Response, next: NextFunction) => 
 const getWorryListByTemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { templateId } = req.query;
-        if(!templateId)
+        if (!templateId)
             throw new ClientException("templateId 값이 존재하지 않습니다.");
-        const { userId }= req.body;
-        const data = await worryService.getWorryListByTemplate(+templateId,userId);
+        const { userId } = req.body;
+        const data = await worryService.getWorryListByTemplate(+templateId, userId);
 
-        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_BY_TEMPLATE_SUCCESS,data));
+        return res.status(sc.OK).send(success(statusCode.OK, rm.GET_WORRY_LIST_BY_TEMPLATE_SUCCESS, data));
 
     } catch (error) {
         next(error);
@@ -125,7 +122,7 @@ const getWorryListByTemplate = async (req: Request, res: Response, next: NextFun
 };
 
 
-export default{
+export default {
     postWorry,
     patchWorry,
     deleteWorry,

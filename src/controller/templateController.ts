@@ -16,12 +16,12 @@ const getTemplateById = async (req: Request, res: Response, next: NextFunction) 
     } catch (error) {
         next(error);
     }
-};
+}
 
-const getAllTemplate =async (req: Request, res: Response, next: NextFunction) => {
+const getAllTemplate = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {userId} = req.body;
-        
+        const { userId } = req.body;
+
         const data = await templateService.getAllTemplate(userId);
 
         return res.status(sc.OK).send(success(statusCode.OK, rm.READ_ALL_TEMPLATES_SUCCESS, data));
@@ -31,7 +31,8 @@ const getAllTemplate =async (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-export default{
+
+export default {
     getTemplateById,
     getAllTemplate,
 }

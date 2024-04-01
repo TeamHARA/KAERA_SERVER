@@ -5,13 +5,14 @@ import statusCode from "../constants/statusCode";
 import { reviewDTO } from "../interfaces/DTO/reviewDTO"
 import reviewService from "../service/reviewService";
 
+
 const patchReview = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const reviewDTO: reviewDTO = req.body;
         const data = await reviewService.patchReview(reviewDTO);
-        
+
         let message;
-        if(data.isNew)
+        if (data.isNew)
             message = rm.CREATE_REVIEW_SUCCESS
         else
             message = rm.UPDATE_REVIEW_SUCCESS
@@ -22,8 +23,9 @@ const patchReview = async (req: Request, res: Response, next: NextFunction) => {
     } catch (error) {
         next(error);
     }
-};
+}
 
-export default{
+
+export default {
     patchReview
 }
