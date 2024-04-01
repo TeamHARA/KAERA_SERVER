@@ -11,7 +11,6 @@ const refreshAccessToken =async (userId: number, refreshToken:string) => {
     if(user.refresh_token != refreshToken){
         throw new ClientException("Invalid refreshToken(refreshToken doesn't match with user)");
     }
-    console.log("here: ", user.refresh_token)
 
     const token = jwtHandler.access(userId);
     const data = {
