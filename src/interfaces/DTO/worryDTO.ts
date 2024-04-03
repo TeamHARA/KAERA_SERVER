@@ -1,4 +1,4 @@
-import { IsString, IsDefined, IsNumber, IsArray, IsNotEmpty, isNumber, ArrayNotEmpty} from 'class-validator';
+import { IsString, IsDefined, IsNumber, IsArray, ArrayNotEmpty } from 'class-validator';
 
 class worryCreateDTO {
 
@@ -24,7 +24,7 @@ class worryCreateDTO {
   deadline!: number;
 }
 
-class worryUpdateDTO{
+class worryUpdateDTO {
   @IsDefined()
   @IsNumber()
   worryId!: number;
@@ -46,7 +46,7 @@ class worryUpdateDTO{
   answers!: Array<string>;
 }
 
-class finalAnswerCreateDTO{
+class finalAnswerCreateDTO {
   @IsDefined()
   @IsNumber()
   worryId!: number;
@@ -60,7 +60,7 @@ class finalAnswerCreateDTO{
   finalAnswer!: string;
 }
 
-class deadlineUpdateDTO{
+class deadlineUpdateDTO {
   @IsDefined()
   @IsNumber()
   worryId!: number;
@@ -73,6 +73,7 @@ class deadlineUpdateDTO{
   @IsNumber()
   dayCount!: number;
 }
+
 
 export {
   worryCreateDTO,
