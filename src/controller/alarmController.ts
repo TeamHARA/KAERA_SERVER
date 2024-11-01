@@ -30,6 +30,11 @@ const serviceEndAlarm = async () => {
 
             const postedWorry = await worryService.postWorry(worryCreateDTO)
             const token = await tokenService.getDeviceToken(userIds[i])
+            if (token == "") {
+                console.log("skip")
+                continue;
+            }
+
             const data = {
                 "payload": postedWorry.worryId,
                 "title": title,
