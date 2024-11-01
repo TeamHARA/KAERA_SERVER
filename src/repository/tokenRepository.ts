@@ -90,6 +90,15 @@ const disableDeviceToken = async (userId: number) => {
     });
 };
 
+const findAllDeviceTokens = async () => {
+    return await prisma.token.findMany({
+        select:{
+            device_token: true
+        }
+    });
+};
+
+
 
 export default { 
     createRefreshToken,
@@ -99,5 +108,6 @@ export default {
     updateTokenById,
     disableRefreshTokenById,
     enableDeviceToken,
-    disableDeviceToken
+    disableDeviceToken,
+    findAllDeviceTokens
 }

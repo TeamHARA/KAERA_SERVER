@@ -54,10 +54,25 @@ const disableDeviceToken =async (userId: number, deviceToken: string) => {
     
 }
 
+const getAllDeviceTokens =async () => {
+   
+    const data = await tokenRepository.findAllDeviceTokens();
+    if(!data){
+        throw new ClientException("device tokens not found in database");
+    }
+
+    const validData = data
+                .filter(item => item.device_token) // 빈 문자열이 아닌 값만 필터링
+                .map(item => item.device_token)
+
+    return validData;
+}
+
 
 export default{
     refreshAccessToken,
     getDeviceToken,
     setDeviceToken,
-    disableDeviceToken
+    disableDeviceToken,
+    getAllDeviceTokens
 }

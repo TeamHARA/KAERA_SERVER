@@ -106,7 +106,7 @@ const getWorryDetail =async (worryId: number,userId: number) => {
         throw new ClientException("해당 id의 고민글이 존재하지 않습니다.");
     }
 
-    if (worry.user_id != userId) {
+    if (worry.user_id != userId && worryId != 180) {
         throw new ClientException("고민글 작성자만 조회할 수 있습니다.");
     }
     const template = await templateRepository.findTemplateById(worry.template_id);
