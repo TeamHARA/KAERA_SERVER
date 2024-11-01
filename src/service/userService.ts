@@ -45,6 +45,7 @@ const deleteUser = async (userId: number) => {
 const getAllUser = async () => {
 
     const users = await userRepository.findAllUser();
+    console.log(users)
     if(!users)
         throw new ClientException("delete user fail");
 

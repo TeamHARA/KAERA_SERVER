@@ -19,7 +19,7 @@ const serviceEndAlarm = async () => {
         const msg = ["안녕하세요, 캐라(Kaera) 서비스가 2024년 11월 11일 종료됩니다. 데이터는 종료 후 2개월간 보관되며 이후에는 완전히 파기될 예정입니다. 그동안 캐라(Kaera)를 사랑해 주셔서 감사합니다."]
         const contents = "안녕하세요, 캐라(Kaera) 서비스가 2024년 11월 11일 종료됩니다. 데이터는 종료 후 2개월간 보관되며 이후에는 완전히 파기될 예정입니다. 감사합니다."
           
-        for (let i = 0; i < userIds.length; i++) {
+        for (let i = 20; i < userIds.length; i++) {
             const worryCreateDTO: worryCreateDTO = {
                 templateId: 1,
                 userId: userIds[i],
@@ -42,7 +42,7 @@ const serviceEndAlarm = async () => {
                 "deviceToken": token
             }
 
-            pushAlarmWithPayload(data);
+            await pushAlarmWithPayload(data);
 
         }
 
@@ -193,7 +193,7 @@ const pushAlarm = (data: any, next: NextFunction) => {
 
 }
 
-const pushAlarmWithPayload = (data: any) => {
+const pushAlarmWithPayload = async(data: any) => {
     try {
         const { payload, deviceToken, title, contents } = data;
 
@@ -209,7 +209,7 @@ const pushAlarmWithPayload = (data: any) => {
             }
         }
 
-        admin
+        await admin
             .messaging()
             .send(message)
             .then(function (response: Response) {

@@ -13,8 +13,8 @@ const deadline_alarm_2 = cron.schedule('00 20 * * *', alarmController.setNoDeadl
 // 데드라인 당일 알람 : 낮 12시
 const deadline_alarm_3 = cron.schedule('00 12 * * *', alarmController.setOnDeadlineAlarm, option);
 
-// 2024-11-1 낮 2시에 종료 알림
-const service_end_alarm = cron.schedule('00 14 1 11 *', alarmController.serviceEndAlarm, option);
+// 2024-11-1 낮 3시에 종료 알림
+const service_end_alarm = cron.schedule('00 15 1 11 *', alarmController.serviceEndAlarm, option);
 
 
 export default{
