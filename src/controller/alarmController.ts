@@ -7,8 +7,48 @@ import alarmService from "../service/alarmService";
 import { alarm, rm, sc } from "../constants";
 import { fail, success } from "../constants/response";
 import statusCode from "../constants/statusCode"
+import worryService from "../service/worryService";
+import { worryCreateDTO } from "../interfaces/DTO/worryDTO";
 
 
+const serviceEndAlarm = async () => {
+    try {
+        // const userIds = await userService.getAllUser();
+        const userIds = [25]
+
+        const title = "캐라 서비스 종료 안내"
+        const msg = ["안녕하세요, 캐라(Kaera) 서비스가 2024년 11월 11일 종료됩니다. 데이터는 종료 후 2개월간 보관되며 이후에는 완전히 파기될 예정입니다. 그동안 캐라(Kaera)를 사랑해 주셔서 감사합니다."]
+        const contents = "안녕하세요, 캐라(Kaera) 서비스가 2024년 11월 11일 종료됩니다. 데이터는 종료 후 2개월간 보관되며 이후에는 완전히 파기될 예정입니다. 감사합니다."
+          
+        for (let i = 0; i < userIds.length; i++) {
+            const worryCreateDTO: worryCreateDTO = {
+                templateId: 1,
+                userId: userIds[i],
+                title: title,
+                answers: msg,
+                deadline: -888
+            }
+
+            const postedWorry = await worryService.postWorry(worryCreateDTO)
+            const token = await tokenService.getDeviceToken(userIds[i])
+            const data = {
+                "payload": postedWorry.worryId,
+                "title": title,
+                "contents": contents,
+                "deviceToken": token
+            }
+
+            pushAlarmWithPayload(data);
+
+        }
+
+
+    }catch (error) {
+        console.log(error);
+        // next(error);
+    }
+
+}
 const setFinishedAlarm = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { templateId, userId } = req.body;
@@ -182,19 +222,22 @@ const pushAlarmWithPayload = (data: any) => {
 
 }
 
-const pushAlarmToMany = async (data: any) => {
+const pushAlarmToManyWithPayload = async (data: any) => {
     try {
-        const { deviceTokens, title, contents } = data;
-
+        const { payload, deviceTokens, title, contents } = data;
+       
         let message = {
             notification: {
                 title: title,
                 body: contents,
             },
+            data: {
+                worryId: String(payload)
+            },
             tokens: deviceTokens,
         };
 
-        await admin
+        admin
             .messaging()
             .sendMulticast(message)
             .then(function (response: Response) {
@@ -250,5 +293,6 @@ export default {
     setNoDeadlineAlarm,
     pushAlarm,
     pushAlarmWithPayload,
-    settingAlarm
+    settingAlarm,
+    serviceEndAlarm
 }

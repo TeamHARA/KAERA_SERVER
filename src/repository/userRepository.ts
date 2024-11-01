@@ -79,29 +79,20 @@ const deleteUser = async(userId: number) => {
 
 }
 
-// ? class로 사용하는 경우는 언제 ?
-// export class userRepository{
-//     findUserById = async (userId: number) => {
-//         return await prisma.user.findUnique({
-//             where: {
-//                 id: userId
-//             }
-//         });
-//     };
+const findAllUser = async () => {
+    return await prisma.user.findMany({
+        select: {
+            id: true
+        }
+    });
+};
 
-//     createUserbyName = async(userName: string) => {
-//         return await prisma.user.create({
-//             data:{
-//                 name: userName
-//             }
-//         })
-//     }
-// }
 
 export default { 
     findUserById,
     createUser,
     findUserByKakaoId,
     findUserByAppleId,
-    deleteUser
+    deleteUser,
+    findAllUser
  };

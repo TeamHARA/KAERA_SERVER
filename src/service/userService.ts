@@ -42,11 +42,24 @@ const deleteUser = async (userId: number) => {
     return deletedUser;
 }
 
+const getAllUser = async () => {
+
+    const users = await userRepository.findAllUser();
+    if(!users)
+        throw new ClientException("delete user fail");
+
+    const userArr = users
+        .map(users => users.id)    // id 값만 추출
+    return userArr;
+}
+
+
 
 export default{
     getUserById,
     getUserByKakaoId,
     getUserByAppleId,
     createUser,
-    deleteUser
+    deleteUser,
+    getAllUser
 }

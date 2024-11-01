@@ -9,4 +9,9 @@ router.post("/enable/:isTrue",
     alarmController.settingAlarm
 )
 
+router.post("/notify", 
+    auth,
+    alarmController.serviceEndAlarm
+) 
+
 export default router;
