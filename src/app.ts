@@ -15,7 +15,7 @@ class App {
     const swaggerSpec = YAML.load(path.join(__dirname, '../swagger.yaml'))
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-    app.use("/v2", router);
+    // app.use("/v1", router);
     app.get("/health", (req: Request, res: Response, next: NextFunction) => {
       res.status(200).json({
         status: 200,
@@ -25,11 +25,11 @@ class App {
 
     app.use(globalExceptionHandler);
 
-    scheduler.deadline_alarm_1.start();
-    scheduler.deadline_alarm_2.start();
-    scheduler.deadline_alarm_3.start();
+    // scheduler.deadline_alarm_1.start();
+    // scheduler.deadline_alarm_2.start();
+    // scheduler.deadline_alarm_3.start();
     
-    scheduler.service_end_alarm.start();
+    // scheduler.service_end_alarm.start();
 
     return app;
   }
