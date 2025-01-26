@@ -1,5 +1,5 @@
 import { userCreateDTO } from "../interfaces/DTO/userDTO";
-import prisma from "./prismaClient";
+import prisma from "../../prisma/prismaClient";
 
 
 const findUserById = async (userId: number) => {

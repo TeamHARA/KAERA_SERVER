@@ -1,55 +1,42 @@
-import request from "supertest"
-import testApp from "./testApp";
 import { prismaMock } from './singleton';
 import worryService from "../src/service/worryService";
-import worryRepository from "../src/repository/worryRepository";
+import { worryCreateDTO } from "../src/interfaces/DTO/worryDTO";
+import { worryCreateDAO } from "../src/interfaces/DAO/worryDAO";
+
+import worryRepository from '../src/repository/worryRepository';
 
 
 describe("[POST] /worry", () => {
 
   test("should save worry to the database", async () => {
     
-    // const dto = {
-    //     templateId: 1,
-    //     userId: 5,
-    //     title: 'test~!~!~!',
-    //     answers: ['답변1','답변2','답변3'],
-    //     deadline: -1
-    // }
-
-    // mock db 에 생성된 worry   (service단에 짜놓은 로직에 따라 계산된 값들이 저장되어야 하는데 그냥 임의의 값들이 저장된 것)
-    const worry = {
-      id: 100,
-      template_id: 2,
-      user_id: 5,
-      title: 'test~!~!~!',
+    const newWorry: worryCreateDTO = {
+      templateId: 2,
+      userId: 5,
+      title: 'new_worry',
       answers: ['답변1','답변2','답변3'],
-      created_at: new Date('2020-01-01'),
-      updated_at: new Date('2020-01-01'),
-      deadline: new Date('2020-01-11'),
-      final_answer: null,
+      deadline: -888,
     };
-    prismaMock.worry.create.mockResolvedValue(worry);
-    prismaMock.worry.findUnique.mockResolvedValue(worry);
-    // const data = await worryRepository.findWorryById(100)
-    // console.log(data)
 
-    await expect(worryRepository.findWorryById(100)).resolves.toEqual({
-      id: 100,
-      template_id: 2,
-      user_id: 5,
-      title: 'test~!~!~!',
-      answers: ['답변1','답변2','답변3'],
-      created_at: new Date('2020-01-01'),
-      updated_at: new Date('2020-01-01'),
-      deadline: new Date('2020-01-11'),
+    const newWorryDAO: worryCreateDAO = {
+      ...newWorry,
+      deadlineDate: null
+  }
+
+    const createdNewWorry = {
+      id: 1,
+      template_id: newWorry.templateId,
+      user_id: newWorry.userId,
+      title: newWorry.title,
+      answers: newWorry.answers,
+      created_at: new Date(),
+      updated_at: new Date(),
+      deadline: null,
       final_answer: null,
-    })
-    // const created = await worryService.postWorry(dto);
-    // console.log(created)
-    // console.log(new Date('2020-01-01'))
+    }
 
-  
+    prismaMock.worry.create.mockResolvedValue(createdNewWorry);
+    await expect(worryRepository.createWorry(newWorryDAO)).resolves.toEqual(createdNewWorry)
   
   })
 

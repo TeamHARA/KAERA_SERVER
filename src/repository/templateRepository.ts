@@ -1,4 +1,4 @@
-import prisma from "./prismaClient";
+import prisma from "../../prisma/prismaClient";
 
 const findTemplateById = async (templateId: number) => {
     return await prisma.template.findUnique({

@@ -1,4 +1,4 @@
-import prisma from "./prismaClient";
+import prisma from "../../prisma/prismaClient";
 
 
 const createRefreshToken = async (userId: number, token: string) => {

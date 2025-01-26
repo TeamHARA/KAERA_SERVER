@@ -2,8 +2,6 @@ import { finalAnswerCreateDTO, worryCreateDTO } from "../DTO/worryDTO";
 
 interface worryCreateDAO extends worryCreateDTO{
     deadlineDate: Date | null;
-    createdAt: Date;
-    updatedAt: Date;
 }
   
 interface deadlineUpdateDAO{

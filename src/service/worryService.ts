@@ -24,8 +24,6 @@ const postWorry =async (worryCreateDTO: worryCreateDTO) => {
     }
     const worryCreateDAO: worryCreateDAO = {
         ...worryCreateDTO,
-        createdAt: date,
-        updatedAt: date,
         deadlineDate: deadlineDate
     }
 

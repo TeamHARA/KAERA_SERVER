@@ -1,4 +1,4 @@
-import prisma from "./prismaClient";
+import prisma from "../../prisma/prismaClient";
 import { reviewDTO } from "../interfaces/DTO/reviewDTO";
 
 const createReview = async (reviewDTO: reviewDTO) => {

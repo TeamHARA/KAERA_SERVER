@@ -1,4 +1,4 @@
-import prisma from "./prismaClient"
+import prisma from "../../prisma/prismaClient"
 import { worryCreateDAO,deadlineUpdateDAO, finalAnswerCreateDAO } from "../interfaces/DAO/worryDAO";
 import { finalAnswerCreateDTO, worryUpdateDTO } from "../interfaces/DTO/worryDTO";
 
@@ -13,8 +13,8 @@ const createWorry = async(worryCreateDAO: worryCreateDAO) => {
             user_id: worryCreateDAO.userId,
             title: worryCreateDAO.title,
             answers: worryCreateDAO.answers,
-            created_at: worryCreateDAO.createdAt,
-            updated_at: worryCreateDAO.updatedAt,
+            created_at: new Date(),
+            updated_at: new Date(),
             deadline: worryCreateDAO.deadlineDate
         }
     })
