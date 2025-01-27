@@ -8,7 +8,7 @@ import templateController from "../controller/templateController";
 const router = Router();
 
 router.get("/",
-    auth,
+    // auth,
     templateController.getAllTemplate
 );
 

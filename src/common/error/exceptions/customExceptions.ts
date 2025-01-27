@@ -5,7 +5,7 @@ class ClientException extends Error {
     this.statusCode = statusCode;
   }
 }
-class CustomException extends Error {
+class ServerException extends Error {
   statusCode: number;
   constructor(msg: string | undefined = undefined, statusCode: number = 500) {
     super(msg);
@@ -13,4 +13,4 @@ class CustomException extends Error {
   }
 }
 
-export { ClientException, CustomException };
+export { ClientException, ServerException };
