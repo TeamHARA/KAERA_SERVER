@@ -21,6 +21,11 @@ beforeEach(async () => {
     prismaMock.worry.findUnique.mockResolvedValue(worry);
 })
 
+afterEach(() => {
+    // 각 테스트 후에 spyOn 리셋
+    jest.restoreAllMocks();
+  });
+
 describe("[PUT] /review  리뷰 등록 및 수정", () => {
 
     describe("올바른 요청일 경우", () => {
@@ -28,36 +33,37 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
         const DTO = {
             worryId: 1,
             userId: 1,
-            review: "후기이이ㅣㅣㅣㅣㅣ~!",
+            review: "후기1",
         };
         const review = {
             worry_id: 1,
             user_id:3,
-            content: "후기이이ㅣㅣㅣㅣㅣ~!",
-            created_at: new Date(),
-            updated_at: new Date()
+            content: "후기1!",
+            created_at: new Date('2020-01-01'),
+            updated_at: new Date('2020-01-01'),
         };
-    
-        // test("리뷰가 존재하지 않을 경우, 리뷰를 생성", async () => {
-        //     prismaMock.review.findUnique.mockResolvedValue(null);
-        //     prismaMock.review.create.mockResolvedValue(review);
-        //     const moment = require('moment');
-        //     const kst_updated_at = moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
-            
-        //     await expect(reviewService.patchReview(DTO)).resolves.toEqual({
-        //         isNew: 1,
-        //         result:{
-        //             updatedAt: kst_updated_at
-        //         }
-        //     })
 
-        // })
+        const kst_updated_at = '2020-01-01'
+    
+        test("리뷰가 존재하지 않을 경우, 리뷰를 생성", async () => {
+            prismaMock.review.findUnique.mockResolvedValue(review);
+    
+            const data = {
+                isNew: 1,
+                result:{
+                    updatedAt: kst_updated_at
+                }
+                
+            }
+            // jest.spyOn(reviewService, 'patchReview').mockResolvedValue(data);
+            
+            
+            await expect(reviewService.patchReview(DTO)).resolves.toEqual(data);
+
+        })
 
         test("리뷰가 존재할 경우, 리뷰를 수정", async () => {
             prismaMock.review.findUnique.mockResolvedValue(review);
-            prismaMock.review.update.mockResolvedValue(review);
-            const moment = require('moment');
-            const kst_updated_at = moment(review.updated_at).utc().utcOffset(9).format('YYYY-MM-DD');
             
             await expect(reviewService.patchReview(DTO)).resolves.toEqual({
                 isNew: 0,
