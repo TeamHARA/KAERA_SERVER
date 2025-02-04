@@ -46,7 +46,8 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
         const kst_updated_at = '2020-01-01'
     
         test("리뷰가 존재하지 않을 경우, 리뷰를 생성", async () => {
-            prismaMock.review.findUnique.mockResolvedValue(review);
+            prismaMock.review.findUnique.mockResolvedValue(null);
+            prismaMock.review.create.mockResolvedValue(review);
     
             const data = {
                 isNew: 1,
@@ -55,8 +56,6 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
                 }
                 
             }
-            // jest.spyOn(reviewService, 'patchReview').mockResolvedValue(data);
-            
             
             await expect(reviewService.patchReview(DTO)).resolves.toEqual(data);
 
@@ -64,13 +63,16 @@ describe("[PUT] /review  리뷰 등록 및 수정", () => {
 
         test("리뷰가 존재할 경우, 리뷰를 수정", async () => {
             prismaMock.review.findUnique.mockResolvedValue(review);
-            
-            await expect(reviewService.patchReview(DTO)).resolves.toEqual({
+            prismaMock.review.update.mockResolvedValue(review);
+
+            const data = {
                 isNew: 0,
                 result:{
                     updatedAt: kst_updated_at
                 }
-            })
+                
+            }
+            await expect(reviewService.patchReview(DTO)).resolves.toEqual(data)
 
         })    
     })
