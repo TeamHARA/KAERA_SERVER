@@ -1,5 +1,4 @@
 import { prismaMock } from './singleton';
-import worryService from "../src/service/worryService";
 import { worryCreateDTO } from "../src/interfaces/DTO/worryDTO";
 import { worryCreateDAO } from "../src/interfaces/DAO/worryDAO";
 

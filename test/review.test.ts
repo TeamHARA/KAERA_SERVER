@@ -1,6 +1,5 @@
 import { prismaMock } from './singleton';
 import  reviewService  from '../src/service/reviewService';
-import worryService from '../src/service/worryService';
 
 // valid한 worryId == 1
 beforeEach(async () => {
