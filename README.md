@@ -115,8 +115,11 @@ KAERA
 └── test
 ```
 
-## 스크린샷
+## 🌠 서비스 화면
 
-![3](https://github.com/TeamHARA/KAERA_Android/assets/70648111/119a06c3-51ee-4f3f-b58c-0673c849fd83)| ![4](https://github.com/TeamHARA/KAERA_Android/assets/70648111/1294ce26-ed41-412f-8322-601a1f6e14c5) | ![5](https://github.com/TeamHARA/KAERA_Android/assets/70648111/ca297a47-0af1-4559-a614-0190f9acf211)
+![3](https://github.com/TeamHARA/KAERA_Android/assets/70648111/119a06c3-51ee-4f3f-b58c-0673c849fd83)| ![4](https://github.com/TeamHARA/KAERA_Android/assets/70648111/1294ce26-ed41-412f-8322-601a1f6e14c5) | ![5](https://github.com/TeamHARA/KAERA_Android/assets/70648111/ca297a47-0af1-4559-a614-0190f9acf211) 
 ---| ---| ---|
+
+<img width="1920" alt="홍보용 최종" src="https://github.com/user-attachments/assets/90a1c28b-b7ab-4625-a14e-e0be9e72cdbd" />
+
 
